@@ -42,7 +42,7 @@ body {
   }
 
   img.openai,
-  img.aisdk {
+  img.vercel {
     @apply h-8 lg:h-12;
   }
 
