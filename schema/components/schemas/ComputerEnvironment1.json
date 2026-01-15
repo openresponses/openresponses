@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["windows", "mac", "linux", "ubuntu", "browser"],
+  "x-openai-class-name": "responses_common.api.resources.tools.ComputerEnvironment"
+}

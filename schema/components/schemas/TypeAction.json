@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["type"],
+      "description": "The type of the action. Always `type`.",
+      "default": "type",
+      "x-stainless-const": true
+    },
+    "text": {
+      "type": "string",
+      "description": "The text that was typed."
+    }
+  },
+  "type": "object",
+  "required": ["type", "text"],
+  "title": "Type action",
+  "description": "A typing action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.TypeAction"
+}

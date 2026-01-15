@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["and"],
+      "default": "and",
+      "x-stainless-const": true
+    },
+    "filters": {
+      "items": {
+        "$ref": "./Filters.json"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object",
+  "required": ["type", "filters"],
+  "x-openai-class-name": "oai_api.resources.filter_resource.CompoundFilterFieldAND"
+}

@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "object": {
+      "type": "string",
+      "enum": ["video.deleted"],
+      "description": "The object type that signals the deletion response.",
+      "default": "video.deleted",
+      "x-stainless-const": true
+    },
+    "deleted": {
+      "type": "boolean",
+      "description": "Indicates that the video resource was deleted."
+    },
+    "id": {
+      "type": "string",
+      "description": "Identifier of the deleted video."
+    }
+  },
+  "type": "object",
+  "required": ["object", "deleted", "id"],
+  "title": "Deleted video response",
+  "description": "Confirmation payload returned after deleting a video.",
+  "x-openai-class-name": "responsesapi.api.resources.deleted_video_resource.DeletedVideoBody"
+}

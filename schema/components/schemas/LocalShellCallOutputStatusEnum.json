@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["in_progress", "completed", "incomplete"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.LocalShellCallOutputStatusEnum"
+}

@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the conversation that this response was associated with."
+    }
+  },
+  "type": "object",
+  "required": ["id"],
+  "title": "Conversation",
+  "description": "The conversation that this response belonged to. Input items and output items from this response were automatically added to this conversation.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.Conversation"
+}

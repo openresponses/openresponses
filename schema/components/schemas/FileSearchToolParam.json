@@ -1,0 +1,84 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["file_search"],
+      "description": "The type of the tool. Always `file_search`.",
+      "default": "file_search",
+      "x-stainless-const": true
+    },
+    "vector_store_ids": {
+      "items": {
+        "type": "string",
+        "pattern": "vs_*"
+      },
+      "type": "array",
+      "maxItems": 5,
+      "minItems": 1,
+      "description": "The vector store IDs to search over."
+    },
+    "max_num_results": {
+      "type": "integer",
+      "maximum": 50,
+      "minimum": 1,
+      "description": "The maximum number of results to return."
+    },
+    "ranking_options": {
+      "$ref": "./FileSearchRankingOptionsParam.json",
+      "description": "Options that control ranking and filtering of file search results."
+    },
+    "filters": {
+      "oneOf": [
+        {
+          "$ref": "./ComparisonFilterParamEQParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamNEParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamGTParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamGTEParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamLTParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamLTEParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamINParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamNINParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamContainsParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamNContainsParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamContainsAnyParam.json"
+        },
+        {
+          "$ref": "./ComparisonFilterParamNContainsAnyParam.json"
+        },
+        {
+          "$ref": "./CompoundFilterParamAndParam.json"
+        },
+        {
+          "$ref": "./CompoundFilterParamOrParam.json"
+        }
+      ],
+      "description": "A filter expression that can be a comparison or a compound logical filter.",
+      "discriminator": {
+        "propertyName": "type"
+      }
+    }
+  },
+  "type": "object",
+  "required": ["type", "vector_store_ids"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.FileSearchToolParam"
+}

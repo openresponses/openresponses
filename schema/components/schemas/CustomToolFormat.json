@@ -1,0 +1,14 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./CustomTextFormatField.json"
+    },
+    {
+      "$ref": "./CustomGrammarFormatField.json"
+    }
+  ],
+  "description": "The input format for the custom tool. Default is unconstrained text.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

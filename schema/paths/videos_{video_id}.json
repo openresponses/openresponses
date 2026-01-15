@@ -1,0 +1,66 @@
+{
+  "get": {
+    "tags": ["Videos"],
+    "summary": "Retrieve a video",
+    "description": "Fetch the latest metadata for a generated video.",
+    "operationId": "GetVideo",
+    "parameters": [
+      {
+        "name": "video_id",
+        "in": "path",
+        "description": "The identifier of the video to retrieve.",
+        "required": true,
+        "schema": {
+          "example": "video_123",
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/VideoResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.videos.get_video_method.GetVideoMethod",
+    "x-openai-secret-internal": "openapi-flag-devday2025"
+  },
+  "delete": {
+    "tags": ["Videos"],
+    "summary": "Delete a video",
+    "description": "Permanently delete a completed or failed video and its stored assets.",
+    "operationId": "DeleteVideo",
+    "parameters": [
+      {
+        "name": "video_id",
+        "in": "path",
+        "description": "The identifier of the video to delete.",
+        "required": true,
+        "schema": {
+          "example": "video_123",
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/DeletedVideoResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.videos.delete_video_method.DeleteVideoMethod",
+    "x-openai-secret-internal": "openapi-flag-devday2025"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "properties": {},
+  "type": "object",
+  "required": [],
+  "title": "Empty action",
+  "description": "An empty action that was emitted for actions without a discriminator.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.EmptyAction"
+}

@@ -1,0 +1,59 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.image_generation_call.partial_image"],
+      "description": "The type of the event, always `response.image_gen_call.partial_image`.",
+      "default": "response.image_generation_call.partial_image",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "partial_image_index": {
+      "type": "integer",
+      "description": "The index of the partial image that was emitted."
+    },
+    "partial_image_b64": {
+      "type": "string",
+      "description": "The base64-encoded partial image that was emitted."
+    },
+    "size": {
+      "type": "string",
+      "description": "The image size that was used."
+    },
+    "quality": {
+      "type": "string",
+      "description": "The image quality that was used."
+    },
+    "background": {
+      "type": "string",
+      "description": "The background setting that was used."
+    },
+    "output_format": {
+      "type": "string",
+      "description": "The output format that was used."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "output_index",
+    "item_id",
+    "partial_image_index",
+    "partial_image_b64"
+  ],
+  "title": "Response image generation call partial image event",
+  "description": "A streaming event that indicated a partial image was emitted for an image generation call.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseImageGenCallPartialImageStreamingEvent"
+}

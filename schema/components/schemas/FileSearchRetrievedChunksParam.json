@@ -1,0 +1,44 @@
+{
+  "properties": {
+    "file_id": {
+      "type": "string",
+      "description": "The ID of the retrieved file."
+    },
+    "filename": {
+      "type": "string",
+      "description": "The filename of the retrieved file."
+    },
+    "text": {
+      "type": "string",
+      "description": "The retrieved text chunk."
+    },
+    "attributes": {
+      "description": "Additional attributes associated with this chunk."
+    },
+    "score": {
+      "anyOf": [
+        {
+          "type": "number",
+          "description": "The relevance score for this chunk."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "vector_store_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The vector store ID the chunk was retrieved from."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["file_id", "filename", "text", "attributes"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.FileSearchRetrievedChunksParam"
+}

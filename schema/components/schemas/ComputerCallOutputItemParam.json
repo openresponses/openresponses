@@ -1,0 +1,63 @@
+{
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of the computer tool call output.",
+          "example": "cuo_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "call_id": {
+      "type": "string",
+      "maxLength": 64,
+      "minLength": 1,
+      "description": "The ID of the computer tool call that produced the output."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["computer_call_output"],
+      "description": "The type of the computer tool call output. Always `computer_call_output`.",
+      "default": "computer_call_output",
+      "x-stainless-const": true
+    },
+    "output": {
+      "$ref": "./ComputerScreenshotParam.json",
+      "description": "The output of a computer tool call."
+    },
+    "acknowledged_safety_checks": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./ComputerCallSafetyCheckParam.json"
+          },
+          "type": "array",
+          "description": "The safety checks reported by the API that have been acknowledged by the developer."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "anyOf": [
+        {
+          "$ref": "./FunctionCallItemStatus.json",
+          "description": "The status of the message input. One of `in_progress`, `completed`, or `incomplete`. Populated when input items are returned via API."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["call_id", "type", "output"],
+  "title": "Computer tool call output",
+  "description": "The output of a computer tool call.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ComputerCallOutputItemParam"
+}

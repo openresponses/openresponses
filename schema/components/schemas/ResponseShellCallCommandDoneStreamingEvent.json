@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.shell_call_command.done"],
+      "description": "The type of the event, always `response.function_shell_command.done`.",
+      "default": "response.shell_call_command.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "command_index": {
+      "type": "integer",
+      "description": "The index of the shell command that was completed."
+    },
+    "command": {
+      "type": "string",
+      "description": "The final shell command that was emitted."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "output_index",
+    "command_index",
+    "command"
+  ],
+  "title": "Response shell command done event",
+  "description": "A streaming event that indicated a shell command was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseShellCallCommandDoneStreamingEvent"
+}

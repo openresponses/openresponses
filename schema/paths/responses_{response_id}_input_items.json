@@ -1,0 +1,72 @@
+{
+  "get": {
+    "summary": "List Response input items",
+    "description": "Lists a response's input items.",
+    "operationId": "ListResponseinputitems",
+    "parameters": [
+      {
+        "name": "response_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "example": "resp_123",
+          "type": "string"
+        }
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of items to retrieve",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      {
+        "name": "order",
+        "in": "query",
+        "description": "Sort order of results by timestamp. Use `asc` for ascending order or `desc` for descending order.",
+        "required": false,
+        "schema": {
+          "$ref": "../components/schemas/OrderEnum.json"
+        }
+      },
+      {
+        "name": "after",
+        "in": "query",
+        "description": "Identifier for the last item from the previous pagination request",
+        "required": false,
+        "schema": {
+          "description": "Identifier for the last item from the previous pagination request",
+          "type": "string"
+        }
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "../components/schemas/IncludeEnum.json"
+          }
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ItemListResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.responses.list_input_items_method.ListInputItemsMethod"
+  }
+}

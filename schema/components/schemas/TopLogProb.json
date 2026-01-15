@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "token": {
+      "type": "string"
+    },
+    "logprob": {
+      "type": "number"
+    },
+    "bytes": {
+      "items": {
+        "type": "integer"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object",
+  "required": ["token", "logprob", "bytes"],
+  "title": "Top log probability",
+  "description": "The top log probability of a token.",
+  "x-openai-class-name": "responses_common.api.resources.content_resource.TopLogProb"
+}

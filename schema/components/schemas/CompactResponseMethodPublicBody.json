@@ -1,0 +1,59 @@
+{
+  "properties": {
+    "model": {
+      "type": "string",
+      "description": "Model ID used to generate the response, like `gpt-5` or `o3`. OpenAI offers a wide range of models with different capabilities, performance characteristics, and price points. Refer to the [model guide](/docs/models) to browse and compare available models."
+    },
+    "input": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "string",
+              "maxLength": 10485760,
+              "description": "A text input to the model, equivalent to a text input with the `user` role."
+            },
+            {
+              "items": {
+                "$ref": "./ItemParam.json"
+              },
+              "type": "array",
+              "description": "A list of one or many input items to the model, containing different content types."
+            }
+          ],
+          "description": "Text, image, or file inputs to the model, used to generate a response",
+          "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/InputParam.yaml"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previous_response_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of the previous response to the model. Use this to create multi-turn conversations. Learn more about [conversation state](/docs/guides/conversation-state). Cannot be used in conjunction with `conversation`.",
+          "example": "resp_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "instructions": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "A system (or developer) message inserted into the model's context.\nWhen used along with `previous_response_id`, the instructions from a previous response will not be carried over to the next response. This makes it simple to swap out system (or developer) messages in new responses."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["model"],
+  "x-openai-class-name": "responsesapi.api.params.compress_body.CompressBody"
+}

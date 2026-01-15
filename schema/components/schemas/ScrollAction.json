@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["scroll"],
+      "description": "The type of the action. Always `scroll`.",
+      "default": "scroll",
+      "x-stainless-const": true
+    },
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate where scrolling was performed."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate where scrolling was performed."
+    },
+    "scroll_x": {
+      "type": "integer",
+      "description": "The horizontal scroll delta that was applied."
+    },
+    "scroll_y": {
+      "type": "integer",
+      "description": "The vertical scroll delta that was applied."
+    }
+  },
+  "type": "object",
+  "required": ["type", "x", "y", "scroll_x", "scroll_y"],
+  "title": "Scroll action",
+  "description": "A scroll action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.ScrollAction"
+}

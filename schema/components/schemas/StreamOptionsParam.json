@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "include_obfuscation": {
+      "type": "boolean",
+      "description": "Whether to obfuscate sensitive information in streamed output. Defaults to `true`."
+    }
+  },
+  "type": "object",
+  "required": [],
+  "description": "Options that control streamed response behavior.",
+  "x-openai-class-name": "responsesapi.api.params.create_response_body.StreamOptionsParam"
+}

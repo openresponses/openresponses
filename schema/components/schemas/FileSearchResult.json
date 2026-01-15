@@ -1,0 +1,44 @@
+{
+  "properties": {
+    "file_id": {
+      "type": "string"
+    },
+    "filename": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "attributes": {},
+    "score": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "vector_store_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "file_id",
+    "filename",
+    "text",
+    "attributes",
+    "score",
+    "vector_store_id"
+  ],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.FileSearchResult"
+}

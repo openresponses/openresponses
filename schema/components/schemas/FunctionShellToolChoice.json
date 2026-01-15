@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["shell"],
+      "description": "The selected tool. Always `shell`.",
+      "default": "shell",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Shell tool choice",
+  "description": "Require the assistant to call the shell tool.",
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.FunctionShellToolChoice"
+}

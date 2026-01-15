@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["keypress"],
+      "description": "Specifies the event type. For a keypress action, this property is always set to `keypress`.",
+      "default": "keypress",
+      "x-stainless-const": true
+    },
+    "keys": {
+      "items": {
+        "type": "string",
+        "description": "One of the keys the model is requesting to be pressed."
+      },
+      "type": "array",
+      "description": "The combination of keys the model is requesting to be pressed. This is an array of strings, each representing a key."
+    }
+  },
+  "type": "object",
+  "required": ["type", "keys"],
+  "title": "KeyPress",
+  "description": "A collection of keypresses the model would like to perform.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.KeyPressAction"
+}

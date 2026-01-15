@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["shell"],
+      "description": "The tool to call. Always `shell`.",
+      "default": "shell",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Specific shell tool choice",
+  "description": "Forces the model to call the shell tool when a tool call is required.",
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificFunctionShellParam"
+}

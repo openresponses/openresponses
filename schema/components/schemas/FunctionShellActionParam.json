@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "commands": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "Ordered shell commands for the execution environment to run."
+    },
+    "timeout_ms": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Maximum wall-clock time in milliseconds to allow the shell commands to run."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "max_output_length": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Maximum number of UTF-8 characters to capture from combined stdout and stderr output."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["commands"],
+  "title": "Shell action",
+  "description": "Commands and limits describing how to run the shell tool call.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.FunctionShellActionParam"
+}

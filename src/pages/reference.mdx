@@ -1,0 +1,59 @@
+---
+layout: ../layouts/DocsLayout.astro
+title: Reference
+---
+
+import { loadOpenApiDocument } from "../lib/openapi/load";
+import { findOperation } from "../lib/openapi/operation";
+import { derefSchema } from "../lib/openapi/resolve";
+import Reference from "../components/openapi/Reference.astro";
+import ReferenceSections from "../components/openapi/ReferenceSections.astro";
+
+export const doc = await loadOpenApiDocument();
+export const operation = findOperation(doc, "POST", "/responses");
+export const jsonRequestBodyDef = operation?.content?.["application/json"];
+export const schema = derefSchema(doc, jsonRequestBodyDef?.$ref);
+
+<h1 class="page-title">Reference</h1>
+
+<a href="/openapi/openapi.json" class="text-slate-500" target="_blank">Full OpenAPI Schema</a>
+
+<div class="mt-8 not-prose flex flex-row items-center gap-2 rounded-lg border-1 border-slate-300 bg-slate-100 p-2">
+  <span class="rounded border-1 border-blue-400 bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600">
+    POST
+  </span>
+  <span class="font-mono">/v1/responses</span>
+</div>
+
+## Request Parameters
+
+The Responses API allows you to generate text, execute tools, and handle multi-turn conversations. It supports both synchronous requests and streaming for real-time output.
+
+Parameters may be supplied as either `application/json` or `application/x-www-form-urlencoded`.
+
+### Headers
+
+| Header          | Values                                                              | Required? |
+| --------------- | ------------------------------------------------------------------- | --------- |
+| `Content-Type`  | `application/json` or `application/x-www-form-urlencoded`           | Yes       |
+| `Authorization` | Authorization token, usually in the form of `Bearer [secret token]` | Yes       |
+
+### Body
+
+<Reference includeSections={false} />
+
+## Response Parameters
+
+### Headers
+
+| Header         | Values                                    | Required? |
+| -------------- | ----------------------------------------- | --------- |
+| `Content-Type` | `application/json` or `text/event-stream` | Yes       |
+
+### Body
+
+<Reference schemaName="ResponseResource" header="Response" includeSections={false} />
+
+# API Objects
+
+<ReferenceSections schemaNames={["CreateResponseBody", "ResponseResource"]} />

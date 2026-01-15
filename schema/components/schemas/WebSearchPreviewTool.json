@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["web_search_preview"],
+      "description": "The type of the web search tool. One of `web_search_preview` or `web_search_preview_2025_03_11`.",
+      "default": "web_search_preview",
+      "x-stainless-const": true
+    },
+    "user_location": {
+      "anyOf": [
+        {
+          "$ref": "./ApproximateLocation.json",
+          "description": "The user's location."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "search_context_size": {
+      "$ref": "./SearchContextSize.json",
+      "description": "High level guidance for the amount of context window space to use for the search. One of `low`, `medium`, or `high`. `medium` is the default."
+    }
+  },
+  "type": "object",
+  "required": ["type", "user_location", "search_context_size"],
+  "title": "Web search preview",
+  "description": "This tool searches the web for relevant results to use in a response. Learn more about the [web search tool](https://platform.openai.com/docs/guides/tools-web-search).",
+  "x-openai-class-name": "responses_common.api.resources.tools.WebSearchPreviewTool"
+}

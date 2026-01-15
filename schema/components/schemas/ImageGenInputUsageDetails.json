@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "text_tokens": {
+      "type": "integer",
+      "description": "The number of text tokens in the input prompt."
+    },
+    "image_tokens": {
+      "type": "integer",
+      "description": "The number of image tokens in the input prompt."
+    }
+  },
+  "type": "object",
+  "required": ["text_tokens", "image_tokens"],
+  "title": "Input usage details",
+  "description": "The input tokens detailed information for the image generation.",
+  "x-openai-class-name": "responsesapi.api.resources.image_resource.InputUsageDetails"
+}

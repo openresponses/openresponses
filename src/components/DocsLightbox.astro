@@ -1,0 +1,11 @@
+---
+const { scrollable = true } = Astro.props;
+---
+
+<div
+  class={scrollable ? "diagram-scroll" : undefined}
+  data-lightbox
+  data-scrollable={scrollable ? "" : undefined}
+>
+  <slot />
+</div>

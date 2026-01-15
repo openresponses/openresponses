@@ -1,0 +1,63 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique ID of this code interpreter tool call.",
+      "example": "ci_123"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["code_interpreter_call"],
+      "description": "The item type. Always `code_interpreter_call`.",
+      "default": "code_interpreter_call",
+      "x-stainless-const": true
+    },
+    "container_id": {
+      "type": "string",
+      "description": "The ID of the container used for code execution."
+    },
+    "code": {
+      "type": "string",
+      "description": "The code that was executed."
+    },
+    "outputs": {
+      "anyOf": [
+        {
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "./CodeInterpreterToolCallOutputLogsParam.json"
+              },
+              {
+                "$ref": "./CodeInterpreterToolCallOutputImageParam.json"
+              }
+            ],
+            "description": "An individual output emitted by a code interpreter tool call.",
+            "discriminator": {
+              "propertyName": "type"
+            }
+          },
+          "type": "array",
+          "description": "Outputs produced by the code interpreter tool call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The status of the code interpreter tool call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["id", "type", "container_id", "code"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.CodeInterpreterCallItemParam"
+}

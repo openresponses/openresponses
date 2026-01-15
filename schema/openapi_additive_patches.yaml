@@ -1,0 +1,249 @@
+version: 1
+add:
+  schemas:
+    InputVideoContent:
+      type: object
+      description: A content block representing a video input to the model.
+      properties:
+        type:
+          type: string
+          enum:
+            - input_video
+          description: The type of the input content. Always `input_video`.
+        video_url:
+          type: string
+          description: A base64 or remote url that resolves to a video file.
+      required:
+        - type
+        - video_url
+    JsonSchemaResponseFormatParam:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of response format being defined. Always `json_schema`.
+          enum:
+            - json_schema
+        description:
+          type: string
+          description:
+            "A description of what the response format is for, used by
+            the model to
+
+            determine how to respond in the format.
+
+            "
+        name:
+          type: string
+          description:
+            "The name of the response format. Must be a-z, A-Z, 0-9, or
+            contain
+
+            underscores and dashes, with a maximum length of 64.
+
+            "
+        schema:
+          type: object
+          title: JSON schema
+          description:
+            "The schema for the response format, described as a JSON Schema
+            object.
+
+            "
+          additionalProperties: true
+        strict:
+          anyOf:
+            - type: boolean
+              default: false
+              description:
+                "Whether to enable strict schema adherence when generating
+                the output.
+
+                If set to true, the model will always follow the exact schema defined
+
+                in the `schema` field. Only a subset of JSON Schema is supported when
+
+                `strict` is `true`.
+
+                "
+            - type: "null"
+    TextFormatParam:
+      oneOf:
+        - $ref: "#/components/schemas/TextResponseFormat"
+        - $ref: "#/components/schemas/JsonSchemaResponseFormatParam"
+  schema_lists:
+    - schema: Message
+      keyword: oneOf
+      path: /properties/content/items/oneOf
+      refs:
+        - InputVideoContent
+    - schema: FunctionCallOutput
+      path: /properties/output/oneOf[1]/items/oneOf
+      refs:
+        - InputVideoContent
+    - schema: FunctionCallOutputItemParam
+      path: /properties/output/oneOf[1]/items/oneOf
+      refs:
+        - InputVideoContent
+  schema_fields:
+    - schema: CreateResponseBody
+      path: /properties/reasoning
+    - schema: CreateResponseBody
+      path: /properties/text
+    - schema: CreateResponseBody
+      path: /properties/tool_choice
+      merge:
+        x-unionTitle: ToolChoiceParam
+    - schema: CreateResponseBody
+      path: /properties/stream_options
+    - schema: FunctionCallOutput
+      path: /properties/output/oneOf[1]/items
+      merge:
+        oneOf:
+          - $ref: "#/components/schemas/InputTextContent"
+          - $ref: "#/components/schemas/InputImageContent"
+          - $ref: "#/components/schemas/InputFileContent"
+    - schema: ItemParam
+      path: ""
+      merge:
+        x-unionDisplay: section
+        x-unionTitle: Input Item Types
+    - schema: ResponsesToolParam
+      path: ""
+      merge:
+        x-unionDisplay: section
+        x-unionTitle: Tool Types
+    - schema: InputTextContentParam
+      path: ""
+      merge:
+        x-unionDisplay: section
+        x-unionTitle: Content Type
+    - schema: IncludeEnum
+      path: ""
+      merge:
+        description: ""
+    - schema: TruncationEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          auto: Let the service decide how to truncate.
+          disabled:
+            Disable service truncation. Context over the model's context limit
+            will result in a 400 error.
+    - schema: TextParam
+      path: /properties/format
+      merge:
+        oneOf:
+          - $ref: "#/components/schemas/TextFormatParam"
+          - type: "null"
+    - schema: DetailEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          auto: Choose the detail level automatically.
+          high:
+            Allows the model to "see" a higher-resolution version of the image,
+            usually increasing input token costs.
+          low: Restricts the model to a lower-resolution version of the image.
+    - schema: FunctionCallItemParam
+      path: /properties/status/anyOf[0]/allOf[0]
+      merge:
+        $ref: "#/components/schemas/FunctionCallStatus"
+    - schema: InputImageContentParamAutoParam
+      path: /properties/detail/anyOf[0]/allOf[0]
+      merge:
+        $ref: "#/components/schemas/ImageDetail"
+    - schema: FunctionCallOutputItemParam
+      path: /properties/status/anyOf[0]/allOf[0]
+      merge:
+        $ref: "#/components/schemas/FunctionCallStatus"
+    - schema: FunctionCallStatus
+      path: ""
+      merge:
+        x-enumDescriptions:
+          completed: Model has finished sampling this item.
+          in_progress: Model is currently sampling this item.
+          incomplete:
+            Model was interrupted from sampling this item partway through.
+            This can occur, for example, if the model encounters a stop token or exhausts
+            its output_token budget.
+    - schema: ImageDetail
+      path: ""
+      merge:
+        x-enumDescriptions:
+          auto: Choose the detail level automatically.
+          high:
+            Allows the model to "see" a higher-resolution version of the image,
+            usually increasing input token costs.
+          low: Restricts the model to a lower-resolution version of the image.
+    - schema: IncludeEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          message.output_text.logprobs: includes sampled logprobs in assistant messages.
+          reasoning.encrypted_content:
+            includes encrypted reasoning content so that
+            it may be rehydrated on a subsequent request.
+    - schema: MessageRole
+      path: ""
+      merge:
+        x-enumDescriptions:
+          assistant: "Model-generated content in the conversation."
+          developer: "Developer-supplied guidance that shapes the assistant’s behavior."
+          system: "System-level instructions that set global behavior."
+          user: "End‑user input in the conversation."
+    - schema: FunctionCallOutputStatusEnum
+      path: ""
+      merge:
+        description:
+          Similar to `FunctionCallStatus`. All three options are allowed here for compatibility, but because in practice
+          these items will be provided by developers, only `completed` should be used.
+    - schema: MessageStatus
+      path: ""
+      merge:
+        x-enumDescriptions:
+          completed: Model has finished sampling this item.
+          in_progress: Model is currently sampling this item.
+          incomplete:
+            Model was interrupted from sampling this item partway through.
+            This can occur, for example, if the model encounters a stop token or exhausts
+            its output_token budget.
+    - schema: ReasoningEffortEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          high: "Use a higher reasoning effort to improve answer quality."
+          medium: "Use a balanced reasoning effort."
+          low: "Use a lower reasoning effort for faster responses."
+          minimal: "Use the lowest non-zero reasoning effort."
+          none: "Restrict the model from performing any reasoning before emitting a final answer."
+          xhigh: "Use the maximum reasoning effort available."
+    - schema: ReasoningSummaryEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          auto: "Allow the model to decide when to summarize."
+          concise: "Emit concise summaries of reasoning content."
+          detailed: "Emit details summaries of reasoning content."
+    - schema: ServiceTierEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          auto: Choose a service tier automatically based on current account state.
+          default: Choose the default service tier.
+          flex: Choose the flex service tier.
+          priority: Choose the priority service tier.
+    - schema: ToolChoiceValueEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          auto: "Let the model choose the tools from among the provided set."
+          none: "Restrict the model from calling any tools."
+          required: "Require the model to call a tool."
+    - schema: VerbosityEnum
+      path: ""
+      merge:
+        x-enumDescriptions:
+          high: "Instruct the model to emit more verbose final responses."
+          low: "Instruct the model to emit less verbose final responses."
+          medium: "Use the model's default verbosity setting."

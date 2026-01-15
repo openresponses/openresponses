@@ -1,0 +1,68 @@
+{
+  "properties": {
+    "filters": {
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "./ComparisonFilterParamEQParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamNEParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamGTParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamGTEParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamLTParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamLTEParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamINParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamNINParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamContainsParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamNContainsParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamContainsAnyParam.json"
+          },
+          {
+            "$ref": "./ComparisonFilterParamNContainsAnyParam.json"
+          },
+          {
+            "$ref": "./CompoundFilterParamAndParam.json"
+          },
+          {
+            "$ref": "./CompoundFilterParamOrParam.json"
+          }
+        ],
+        "description": "A filter expression that can be a comparison or a compound logical filter.",
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "type": "array",
+      "description": "The list of filters to combine."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["or"],
+      "description": "The filter type. Always `or`.",
+      "default": "or",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["filters", "type"],
+  "x-openai-class-name": "oai_api.params.filter_param.CompoundFilterParamOr"
+}

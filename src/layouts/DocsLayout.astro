@@ -1,0 +1,373 @@
+---
+import "../styles/global.css";
+import DocsNavbar from "../components/DocsNavbar.astro";
+import DocsLightboxRoot from "../components/DocsLightboxRoot.astro";
+
+const { frontmatter } = Astro.props;
+const title = frontmatter?.title ?? "Docs";
+const description = frontmatter?.description ?? "";
+const sidebar = [
+  { label: "Overview", href: "/" },
+  { label: "Specification", href: "/specification" },
+  { label: "Reference", href: "/reference" },
+  { label: "Acceptance Tests", href: "/compliance" },
+  { label: "Governance", href: "/governance" },
+  { label: "Changelog", href: "/changelog" },
+];
+const showToc = frontmatter?.showToc ?? true;
+const landingTitleRaw = frontmatter?.landingTitle ?? "";
+const landingTitleHtml = frontmatter?.landingTitleHtml ?? "";
+const landingTitle = landingTitleHtml || landingTitleRaw;
+const renderLandingTitleHtml =
+  Boolean(landingTitleHtml) ||
+  (typeof landingTitleRaw === "string" && landingTitleRaw.includes("<"));
+const currentPath = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link
+      rel="preload"
+      href="/fonts/openaiSansVariableVF.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="icon" type="image/svg+xml" href="/svg/favicon.svg" />
+  </head>
+  <body class="bg-orange-50 text-slate-900">
+    <div class="min-h-screen">
+      <DocsNavbar sidebar={sidebar} currentPath={currentPath} />
+
+      <main
+        class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[200px_1fr_220px]"
+      >
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 space-y-2 text-sm text-slate-600">
+            <nav class="space-y-1">
+              {
+                sidebar.map((item) => {
+                  const hrefPath = item.href.split("#")[0] || "/";
+                  const isActive =
+                    hrefPath === currentPath ||
+                    (hrefPath !== "/" && currentPath.startsWith(hrefPath));
+                  return (
+                    <a
+                      class:list={[
+                        "block rounded-lg px-3 py-1.5 transition hover:text-amber-500",
+                        {
+                          "rounded bg-slate-100 font-medium text-slate-900 shadow-inner outline outline-slate-300":
+                            isActive,
+                        },
+                      ]}
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                })
+              }
+            </nav>
+          </div>
+        </aside>
+
+        <section class="min-w-0" data-toc-content>
+          {
+            landingTitle && (
+              <div class="mb-12">
+                {renderLandingTitleHtml ? (
+                  <h1 class="landing-title" set:html={landingTitle} />
+                ) : (
+                  <h1 class="landing-title font-instrument">{landingTitle}</h1>
+                )}
+              </div>
+            )
+          }
+
+          <article class="prose prose-slate article-container max-w-none">
+            <slot />
+          </article>
+        </section>
+
+        <aside
+          class:list={["hidden", { "lg:block": showToc, hidden: !showToc }]}
+        >
+          <div class="sticky top-24">
+            <div
+              class="text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase"
+            >
+              On this page
+            </div>
+            <div class="toc-wrap mt-4 text-sm text-slate-600">
+              <div class="toc-rail" aria-hidden="true">
+                <span class="toc-rail-track"></span>
+                <span class="toc-rail-fill"></span>
+                <span class="toc-indicator">•</span>
+              </div>
+              <div class="toc-list" data-toc-list></div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <DocsLightboxRoot />
+    <script is:inline>
+      (() => {
+        const root = document.body;
+        const setScrolled = () => {
+          root.classList.toggle("is-scrolled", window.scrollY > 0);
+        };
+        setScrolled();
+        window.addEventListener("scroll", setScrolled, { passive: true });
+
+        const lightbox = document.getElementById("lightbox");
+        const article = document.querySelector("article.prose");
+
+        if (lightbox && article) {
+          const lightboxContent = lightbox.querySelector(".lightbox-content");
+          const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+          const openLightbox = (node) => {
+            lightboxContent.replaceChildren(node);
+            lightbox.classList.add("is-open");
+            lightbox.setAttribute("aria-hidden", "false");
+          };
+
+          const closeLightbox = () => {
+            lightbox.classList.remove("is-open");
+            lightbox.setAttribute("aria-hidden", "true");
+            lightboxContent.replaceChildren();
+          };
+
+          lightbox.addEventListener("click", (event) => {
+            if (event.target === lightbox) closeLightbox();
+          });
+
+          lightboxClose?.addEventListener("click", closeLightbox);
+
+          window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeLightbox();
+          });
+
+          const lightboxTargets = Array.from(
+            article.querySelectorAll("[data-lightbox]"),
+          );
+
+          for (const target of lightboxTargets) {
+            if (target.hasAttribute("data-scrollable")) {
+              if (!target.closest(".diagram-scroll")) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "diagram-scroll";
+                target.parentNode?.insertBefore(wrapper, target);
+                wrapper.appendChild(target);
+              }
+            }
+
+            target.style.cursor = "zoom-in";
+            target.addEventListener("click", () => {
+              const clone = target.cloneNode(true);
+              clone.removeAttribute("data-lightbox");
+              clone.style.cursor = "default";
+              openLightbox(clone);
+            });
+          }
+        }
+
+        const anchorScope = document.querySelector("[data-toc-content]");
+        const anchorHeadings = Array.from(
+          anchorScope?.querySelectorAll(
+            "h1[id]:not(.no-toc), h2[id]:not(.no-toc), h3[id]:not(.no-toc)",
+          ) ?? [],
+        );
+
+        const copyText = async (value) => {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(value);
+            return;
+          }
+
+          const temp = document.createElement("textarea");
+          temp.value = value;
+          temp.setAttribute("readonly", "true");
+          temp.style.position = "absolute";
+          temp.style.left = "-9999px";
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand("copy");
+          temp.remove();
+        };
+
+        for (const heading of anchorHeadings) {
+          if (heading.querySelector(".heading-anchor")) continue;
+          const anchor = document.createElement("a");
+          anchor.className = "heading-anchor";
+          anchor.href = `#${heading.id}`;
+          anchor.setAttribute("aria-label", "Copy link to this section");
+          anchor.textContent = "#";
+          heading.addEventListener("click", async (event) => {
+            event.preventDefault();
+            const url = `${window.location.origin}${window.location.pathname}#${heading.id}`;
+            try {
+              await copyText(url);
+            } catch (error) {
+              console.error("Failed to copy heading link", error);
+            }
+            history.replaceState(null, "", anchor.href);
+            anchor.classList.add("is-copied");
+            setTimeout(() => anchor.classList.remove("is-copied"), 1400);
+          });
+          heading.insertBefore(anchor, heading.firstChild);
+        }
+
+        const tocWrap = document.querySelector(".toc-wrap");
+        const tocIndicator = document.querySelector(".toc-indicator");
+        const tocList = tocWrap?.querySelector("[data-toc-list]");
+        const tocScope = document.querySelector("[data-toc-content]");
+        const headings = Array.from(
+          tocScope?.querySelectorAll(
+            "h1[id]:not(.no-toc), h2[id]:not(.no-toc)",
+          ) ?? [],
+        );
+
+        if (!tocWrap || !tocList || !headings.length) {
+          tocWrap?.classList.add("hidden");
+          return;
+        }
+
+        tocList.replaceChildren();
+        for (const heading of headings) {
+          const depth = heading.tagName === "H1" ? 1 : 2;
+          const link = document.createElement("a");
+          link.className = `toc-link block depth-${depth}`;
+          link.dataset.tocLink = "";
+          link.href = `#${heading.id}`;
+          const text = document.createElement("span");
+          text.className = "toc-text";
+          const headingClone = heading.cloneNode(true);
+          headingClone.querySelectorAll(".heading-anchor").forEach((node) => {
+            node.remove();
+          });
+          text.textContent = headingClone.textContent?.trim() || heading.id;
+          link.append(text);
+          tocList.append(link);
+        }
+
+        const tocLinks = Array.from(
+          tocWrap.querySelectorAll("[data-toc-link]"),
+        );
+
+        const updateActiveToc = () => {
+          let activeId = headings[0]?.id;
+          for (const heading of headings) {
+            const { top } = heading.getBoundingClientRect();
+            if (top <= 140) activeId = heading.id;
+          }
+          for (const link of tocLinks) {
+            const hash = link.getAttribute("href")?.replace("#", "");
+            const isActive = hash === activeId;
+            link.classList.toggle("is-active", isActive);
+          }
+        };
+
+        const getHeadingTops = () =>
+          headings.map(
+            (heading) => heading.getBoundingClientRect().top + window.scrollY,
+          );
+
+        const getLinkOffsets = () => {
+          if (!tocWrap) return [];
+          return tocLinks.map((link) => ({
+            top: link.offsetTop,
+            height: link.offsetHeight,
+          }));
+        };
+
+        let tocRailStart = 0;
+
+        const updateProgress = () => {
+          if (!tocWrap || !tocIndicator || !headings.length) return;
+          const headingTops = getHeadingTops();
+          const linkOffsets = getLinkOffsets();
+          if (!linkOffsets.length || !tocIndicator) return;
+          const indicatorHeight = tocIndicator.offsetHeight || 0;
+
+          const scrollY = window.scrollY + 140;
+          let index = 0;
+          for (let i = 0; i < headingTops.length; i += 1) {
+            if (scrollY >= headingTops[i]) index = i;
+          }
+          const nextIndex = Math.min(index + 1, headingTops.length - 1);
+          const startTop = headingTops[index];
+          const endTop = headingTops[nextIndex] || startTop;
+          const span = Math.max(endTop - startTop, 1);
+          const progress = Math.min(
+            1,
+            Math.max(0, (scrollY - startTop) / span),
+          );
+
+          const startOffset = linkOffsets[index] ??
+            linkOffsets[0] ?? { top: 0, height: 0 };
+          const endOffset = linkOffsets[nextIndex] ??
+            startOffset ?? { top: 0, height: 0 };
+
+          const startPosition =
+            startOffset.top + (startOffset.height - indicatorHeight) / 2;
+          const endPosition =
+            endOffset.top + (endOffset.height - indicatorHeight) / 2;
+          const position =
+            startPosition + (endPosition - startPosition) * progress;
+          tocIndicator.style.transform = `translateY(${position}px)`;
+          requestAnimationFrame(() => {
+            if (!tocWrap || !tocIndicator) return;
+            const wrapRect = tocWrap.getBoundingClientRect();
+            const indicatorRect = tocIndicator.getBoundingClientRect();
+            const center =
+              indicatorRect.top - wrapRect.top + indicatorRect.height / 2;
+            const fill = Math.max(0, center - tocRailStart);
+            tocWrap.style.setProperty("--toc-indicator", `${fill}px`);
+          });
+        };
+
+        const updateToc = () => {
+          updateActiveToc();
+          updateProgress();
+          if (tocWrap && tocIndicator && tocLinks.length) {
+            const offsets = getLinkOffsets();
+            if (offsets.length) {
+              const indicatorHeight = tocIndicator.offsetHeight || 0;
+              const first = offsets[0];
+              const last = offsets[offsets.length - 1];
+              const start = first.top + (first.height - indicatorHeight) / 2;
+              const end =
+                last.top +
+                (last.height - indicatorHeight) / 2 +
+                indicatorHeight;
+              const bottom = Math.max(0, tocWrap.offsetHeight - end);
+              tocRailStart = start;
+              tocWrap.style.setProperty("--toc-rail-start", `${start}px`);
+              tocWrap.style.setProperty("--toc-rail-end", `${bottom}px`);
+            }
+          }
+        };
+
+        updateToc();
+        window.addEventListener("scroll", updateToc, { passive: true });
+        window.addEventListener("resize", updateToc);
+        window.addEventListener("hashchange", updateToc);
+        tocLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            requestAnimationFrame(updateToc);
+            setTimeout(updateToc, 80);
+            setTimeout(updateToc, 200);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

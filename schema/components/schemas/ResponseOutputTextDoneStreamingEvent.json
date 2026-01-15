@@ -1,0 +1,51 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.output_text.done"],
+      "description": "The type of the event, always `response.output_text.done`.",
+      "default": "response.output_text.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "content_index": {
+      "type": "integer",
+      "description": "The index of the content part that was completed."
+    },
+    "text": {
+      "type": "string",
+      "description": "The final text that was emitted."
+    },
+    "logprobs": {
+      "items": {
+        "$ref": "./LogProb.json"
+      },
+      "type": "array",
+      "description": "The token log probabilities that were emitted with the final text, if any."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "item_id",
+    "output_index",
+    "content_index",
+    "text",
+    "logprobs"
+  ],
+  "title": "Response output text done event",
+  "description": "A streaming event that indicated output text was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseOutputTextDoneStreamingEvent"
+}

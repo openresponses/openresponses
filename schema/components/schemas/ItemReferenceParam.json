@@ -1,0 +1,27 @@
+{
+  "properties": {
+    "type": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["item_reference"],
+          "description": "The type of item to reference. Always `item_reference`.",
+          "default": "item_reference",
+          "x-stainless-const": true
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "id": {
+      "type": "string",
+      "description": "The ID of the item to reference."
+    }
+  },
+  "type": "object",
+  "required": ["id"],
+  "title": "Item reference",
+  "description": "An internal identifier for an item to reference.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ItemReferenceParam"
+}

@@ -1,0 +1,35 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./FileSearchTool.json"
+    },
+    {
+      "$ref": "./FunctionTool.json"
+    },
+    {
+      "$ref": "./WebSearchPreviewTool.json"
+    },
+    {
+      "$ref": "./MCPTool.json"
+    },
+    {
+      "$ref": "./ComputerUsePreviewTool.json"
+    },
+    {
+      "$ref": "./ImageGenTool.json"
+    },
+    {
+      "$ref": "./FunctionShellTool.json"
+    },
+    {
+      "$ref": "./CustomTool.json"
+    },
+    {
+      "$ref": "./ApplyPatchTool.json"
+    }
+  ],
+  "description": "A tool that can be used to generate a response.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

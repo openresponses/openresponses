@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["create_file"],
+      "description": "Create a new file with the provided diff.",
+      "default": "create_file",
+      "x-stainless-const": true
+    },
+    "path": {
+      "type": "string",
+      "description": "Path of the file to create."
+    },
+    "diff": {
+      "type": "string",
+      "description": "Diff to apply."
+    }
+  },
+  "type": "object",
+  "required": ["type", "path", "diff"],
+  "title": "Apply patch create file operation",
+  "description": "Instruction describing how to create a file via the apply_patch tool.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.ApplyPatchCreateFileOperation"
+}

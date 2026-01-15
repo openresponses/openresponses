@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "url": {
+      "type": "string"
+    },
+    "b64_json": {
+      "type": "string"
+    },
+    "revised_prompt": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "responsesapi.api.resources.image_resource.Image"
+}

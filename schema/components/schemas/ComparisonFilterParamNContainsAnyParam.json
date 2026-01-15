@@ -1,0 +1,57 @@
+{
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "The metadata key to filter on."
+    },
+    "value": {
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 512
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "type": "array"
+        }
+      ],
+      "description": "The value to compare the metadata key against."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["ncontainsany"],
+      "description": "The filter type. Always `ncontainsany`.",
+      "default": "ncontainsany",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["key", "type"],
+  "x-openai-class-name": "oai_api.params.filter_param.ComparisonFilterParamNContainsAny"
+}

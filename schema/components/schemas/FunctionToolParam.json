@@ -1,0 +1,42 @@
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parameters": {
+      "anyOf": [
+        {
+          "$ref": "./EmptyModelParam.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "strict": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["function"],
+      "default": "function",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["name", "type"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.FunctionTool"
+}

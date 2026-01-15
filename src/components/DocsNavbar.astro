@@ -1,0 +1,114 @@
+---
+type SidebarItem = {
+  label: string;
+  href: string;
+};
+
+type Props = {
+  sidebar?: SidebarItem[];
+  currentPath?: string;
+};
+
+const { sidebar = [], currentPath = "" } = Astro.props as Props;
+const getActiveHref = (href: string, path: string) => {
+  const hrefPath = href.split("#")[0] || "/";
+  return hrefPath === path || (hrefPath !== "/" && path.startsWith(hrefPath));
+};
+const activeItem =
+  sidebar.find((item) => getActiveHref(item.href, currentPath)) ?? sidebar[0];
+---
+
+<header class="site-header">
+  <div
+    class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
+  >
+    <div class="flex items-center gap-3">
+      <a href="/">
+        <img src="/svg/openresponses.svg" class="h-5" />
+      </a>
+    </div>
+    <div class="flex flex-row-reverse items-center gap-3 text-sm lg:flex-row">
+      <a
+        class="inline-flex items-center gap-2 rounded-full font-semibold text-slate-600 transition hover:text-slate-900"
+        href="https://github.com/openresponses/openresponses"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img src="/svg/github.svg" alt="" class="h-6 w-6" />
+        <p class="hidden lg:block">GitHub</p>
+      </a>
+      {
+        sidebar.length > 0 && (
+          <div class="lg:hidden">
+            <div class="relative">
+              <button
+                id="docs-mobile-nav-trigger"
+                class="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-1 text-sm font-medium text-slate-700 transition hover:border-slate-300"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span>{activeItem?.label ?? "Navigate"}</span>
+                <span class="text-lg text-slate-400">▾</span>
+              </button>
+              <div
+                id="docs-mobile-nav-menu"
+                class="absolute right-0 z-20 mt-2 hidden min-w-[200px] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+                role="menu"
+              >
+                <div class="px-2 py-2">
+                  {sidebar.map((item) => (
+                    <a
+                      class:list={[
+                        "block rounded-xl px-3 py-2 text-sm text-slate-700",
+                        {
+                          "bg-slate-100 text-slate-900":
+                            activeItem?.href === item.href,
+                        },
+                      ]}
+                      href={item.href}
+                      role="menuitem"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </div>
+  <script is:inline>
+    (() => {
+      const navBar = document.querySelector(".site-header");
+      const setScrolled = () => {
+        navBar.classList.toggle("is-scrolled", window.scrollY > 0);
+      };
+      setScrolled();
+      window.addEventListener("scroll", setScrolled, { passive: true });
+
+      const trigger = document.getElementById("docs-mobile-nav-trigger");
+      const menu = document.getElementById("docs-mobile-nav-menu");
+      if (trigger && menu) {
+        const toggleMenu = (open) => {
+          menu.classList.toggle("hidden", !open);
+          trigger.setAttribute("aria-expanded", open ? "true" : "false");
+        };
+        trigger.addEventListener("click", (event) => {
+          event.preventDefault();
+          const isOpen = !menu.classList.contains("hidden");
+          toggleMenu(!isOpen);
+        });
+        document.addEventListener("click", (event) => {
+          if (!menu.contains(event.target) && !trigger.contains(event.target)) {
+            toggleMenu(false);
+          }
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") toggleMenu(false);
+        });
+      }
+    })();
+  </script>
+</header>

@@ -1,0 +1,48 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["file_search"],
+      "description": "The type of the file search tool. Always `file_search`.",
+      "default": "file_search",
+      "x-stainless-const": true
+    },
+    "vector_store_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "The IDs of the vector stores to search."
+    },
+    "max_num_results": {
+      "type": "integer",
+      "description": "The maximum number of results to return. This number should be between 1 and 50 inclusive."
+    },
+    "ranking_options": {
+      "$ref": "./RankingOptions.json",
+      "description": "Ranking options for search."
+    },
+    "filters": {
+      "anyOf": [
+        {
+          "$ref": "./Filters.json",
+          "description": "A filter to apply."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "vector_store_ids",
+    "max_num_results",
+    "ranking_options",
+    "filters"
+  ],
+  "title": "File search",
+  "description": "A tool that searches for relevant content from uploaded files. Learn more about the [file search tool](https://platform.openai.com/docs/guides/tools-file-search).",
+  "x-openai-class-name": "responses_common.api.resources.tools.FileSearchTool"
+}

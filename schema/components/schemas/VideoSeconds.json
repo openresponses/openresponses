@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["4", "8", "12"],
+  "x-openai-class-name": "responsesapi.api.params.video_param.VideoSeconds"
+}

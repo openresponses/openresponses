@@ -1,0 +1,19 @@
+# Define cURL examples to synthesize. Replace the empty list with your entries.
+#
+# Example structure:
+- name: create_response
+  description: >
+    Showcase how to create a streaming response with JSON input and auth header.
+  dependencies:
+    - CreateResponseBody
+  metadata:
+    method: POST
+    path: /v1/responses
+- name: create_response_with_image
+  description: >
+    Showcase how to create a response with image input
+  dependencies:
+    - CreateResponseBody
+  metadata:
+    method: POST
+    path: /v1/responses

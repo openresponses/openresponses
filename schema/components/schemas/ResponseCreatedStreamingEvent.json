@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.created"],
+      "description": "The type of the event, always `response.created`.",
+      "default": "response.created",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "response": {
+      "$ref": "./ResponseResource.json",
+      "description": "The response snapshot that was emitted with the event."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "response"],
+  "title": "Response created event",
+  "description": "A streaming event that indicated the response was created.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseCreatedStreamingEvent"
+}

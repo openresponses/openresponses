@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["memory"],
+      "description": "The type of the memory tool. Always `memory`.",
+      "default": "memory",
+      "x-stainless-const": true
+    },
+    "memory": {
+      "type": "string",
+      "description": "The provided memory."
+    },
+    "environment": {
+      "$ref": "./LocalFileEnvironmentParam.json",
+      "description": "Environment configuration for local file access."
+    }
+  },
+  "type": "object",
+  "required": ["type", "memory", "environment"],
+  "title": "Memory tool",
+  "description": "Provides memory context for the request.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.MemoryToolParam"
+}

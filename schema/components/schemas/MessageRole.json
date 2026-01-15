@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "enum": [
+    "unknown",
+    "user",
+    "assistant",
+    "system",
+    "critic",
+    "discriminator",
+    "developer",
+    "tool"
+  ],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.MessageRole"
+}

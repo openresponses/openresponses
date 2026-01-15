@@ -1,0 +1,58 @@
+{
+  "properties": {
+    "key": {
+      "type": "string"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["lte"],
+      "default": "lte",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["key", "value", "type"],
+  "x-openai-class-name": "oai_api.resources.filter_resource.ComparisonFilterFieldLTE"
+}

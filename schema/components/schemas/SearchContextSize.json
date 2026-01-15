@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["low", "medium", "high"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.SearchContextSize"
+}

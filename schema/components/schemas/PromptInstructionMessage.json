@@ -1,0 +1,59 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["message"],
+      "description": "The item type, which was always `message` for instruction items.",
+      "default": "message",
+      "x-stainless-const": true
+    },
+    "role": {
+      "$ref": "./MessageRole.json",
+      "description": "The role that was set for the instruction message."
+    },
+    "content": {
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "./InputTextContent.json"
+          },
+          {
+            "$ref": "./OutputTextContent.json"
+          },
+          {
+            "$ref": "./TextContent.json"
+          },
+          {
+            "$ref": "./SummaryTextContent.json"
+          },
+          {
+            "$ref": "./ReasoningTextContent.json"
+          },
+          {
+            "$ref": "./RefusalContent.json"
+          },
+          {
+            "$ref": "./InputImageContent.json"
+          },
+          {
+            "$ref": "./ComputerScreenshotContent.json"
+          },
+          {
+            "$ref": "./InputFileContent.json"
+          }
+        ],
+        "description": "A content part that makes up an input or output item.",
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "type": "array",
+      "description": "The content parts that were included in the instruction message."
+    }
+  },
+  "type": "object",
+  "required": ["type", "role", "content"],
+  "title": "Prompt instruction message",
+  "description": "A message item that was used as an instruction for generating the response.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.PromptInstructionMessage"
+}

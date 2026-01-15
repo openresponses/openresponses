@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "text_tokens": {
+      "type": "integer",
+      "description": "The number of text input tokens that was recorded."
+    },
+    "image_tokens": {
+      "type": "integer",
+      "description": "The number of image input tokens that was recorded."
+    }
+  },
+  "type": "object",
+  "required": ["text_tokens", "image_tokens"],
+  "title": "Image usage input tokens details",
+  "description": "A breakdown of input tokens that was recorded for an image request.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ImageUsageInputTokensDetails"
+}

@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["url_citation"],
+      "description": "The citation type. Always `url_citation`.",
+      "default": "url_citation",
+      "x-stainless-const": true
+    },
+    "start_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The index of the first character of the citation in the message."
+    },
+    "end_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The index of the last character of the citation in the message."
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL of the cited resource."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the cited resource."
+    }
+  },
+  "type": "object",
+  "required": ["type", "start_index", "end_index", "url", "title"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.UrlCitationParam"
+}

@@ -1,0 +1,15 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./FunctionShellCallOutputTimeoutOutcomeParam.json"
+    },
+    {
+      "$ref": "./FunctionShellCallOutputExitOutcomeParam.json"
+    }
+  ],
+  "title": "Shell call outcome",
+  "description": "The exit or timeout outcome associated with this shell call.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

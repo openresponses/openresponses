@@ -1,0 +1,63 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["exec"],
+      "description": "The action type. Always `exec`.",
+      "default": "exec",
+      "x-stainless-const": true
+    },
+    "command": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "The command to execute, expressed as an array of strings."
+    },
+    "timeout_ms": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "The maximum time to allow for the command, in milliseconds."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "working_directory": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The working directory to run the command in."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "env": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object",
+      "description": "Environment variables to set for the command.",
+      "x-oaiTypeLabel": "map"
+    },
+    "user": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The user to run the command as."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "command", "env"],
+  "description": "The action to execute in the local shell.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.LocalShellExecActionParam"
+}

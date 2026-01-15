@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of the approval response.",
+          "example": "mcpa_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["mcp_approval_response"],
+      "description": "The type of the item. Always `mcp_approval_response`.",
+      "default": "mcp_approval_response",
+      "x-stainless-const": true
+    },
+    "approval_request_id": {
+      "type": "string",
+      "description": "The ID of the approval request being answered."
+    },
+    "approve": {
+      "type": "boolean",
+      "description": "Whether the request was approved."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Optional reason for the decision."
+    }
+  },
+  "type": "object",
+  "required": ["type", "approval_request_id", "approve"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.MCPApprovalResponseItemParam"
+}

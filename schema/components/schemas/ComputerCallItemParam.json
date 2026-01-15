@@ -1,0 +1,92 @@
+{
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of the computer call.",
+          "example": "cu_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "call_id": {
+      "type": "string",
+      "maxLength": 64,
+      "minLength": 1,
+      "description": "An identifier used when responding to the tool call with output."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["computer_call"],
+      "description": "The type of the computer call. Always `computer_call`.",
+      "default": "computer_call",
+      "x-stainless-const": true
+    },
+    "action": {
+      "oneOf": [
+        {
+          "$ref": "./ScreenshotParam.json"
+        },
+        {
+          "$ref": "./WaitParam.json"
+        },
+        {
+          "$ref": "./ClickParam.json"
+        },
+        {
+          "$ref": "./DoubleClickParam.json"
+        },
+        {
+          "$ref": "./ScrollParam.json"
+        },
+        {
+          "$ref": "./TypeParam.json"
+        },
+        {
+          "$ref": "./KeyPressParam.json"
+        },
+        {
+          "$ref": "./DragParam.json"
+        },
+        {
+          "$ref": "./MoveParam.json"
+        }
+      ],
+      "description": "The action to perform with the computer tool.",
+      "discriminator": {
+        "propertyName": "type"
+      }
+    },
+    "pending_safety_checks": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./ComputerCallSafetyCheckParam.json"
+          },
+          "type": "array",
+          "description": "The pending safety checks for the computer call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The status of the item. One of `in_progress`, `completed`, or `incomplete`. Populated when items are returned via API."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["call_id", "type", "action"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.ComputerCallItemParam"
+}

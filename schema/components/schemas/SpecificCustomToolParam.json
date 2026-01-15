@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["custom"],
+      "description": "The tool to call. Always `custom`.",
+      "default": "custom",
+      "x-stainless-const": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the custom tool to call."
+    }
+  },
+  "type": "object",
+  "required": ["type", "name"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificCustomToolParam"
+}

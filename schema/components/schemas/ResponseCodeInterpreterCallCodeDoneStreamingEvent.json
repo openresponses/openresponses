@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.code_interpreter_call_code.done"],
+      "description": "The type of the event, always `response.code_interpreter_call.code.done`.",
+      "default": "response.code_interpreter_call_code.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "code": {
+      "type": "string",
+      "description": "The final code that was emitted."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "output_index", "item_id", "code"],
+  "title": "Response code interpreter call code done event",
+  "description": "A streaming event that indicated code interpreter input code was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseCodeInterpreterCallCodeDoneStreamingEvent"
+}

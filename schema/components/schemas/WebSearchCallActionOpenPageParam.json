@@ -1,0 +1,25 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["open_page"],
+      "description": "The action type. Always `open_page`.",
+      "default": "open_page",
+      "x-stainless-const": true
+    },
+    "url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The URL of the page to open."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.WebSearchCallActionOpenPage"
+}

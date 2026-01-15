@@ -1,0 +1,62 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["input_file"],
+      "description": "The type of the input item. Always `input_file`.",
+      "default": "input_file",
+      "x-stainless-const": true
+    },
+    "file_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of the file to be sent to the model.",
+          "example": "file-123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "filename": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The name of the file to be sent to the model."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "file_data": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 33554432,
+          "description": "The base64-encoded data of the file to be sent to the model."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "file_url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The URL of the file to be sent to the model."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Input file",
+  "description": "A file input to the model.",
+  "x-openai-class-name": "responses_common.api.params.input_content_param.InputFileContentParam"
+}

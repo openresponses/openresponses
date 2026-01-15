@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "cleared_input_tokens": {
+      "type": "integer",
+      "description": "The number of input tokens that were removed from the context."
+    },
+    "cleared_tool_call_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "The IDs of tool calls whose results were removed from the context."
+    }
+  },
+  "type": "object",
+  "required": [],
+  "title": "Context edit details",
+  "description": "Detailed counts for a context management edit that was applied.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.ContextEditDetails"
+}

@@ -1,0 +1,15 @@
+---
+layout: ../layouts/DocsLayout.astro
+title: Integration Tests
+showToc: false
+---
+
+import ComplianceTester from "../components/ComplianceTester";
+
+<h1 class="page-title">Acceptance Tests</h1>
+
+Test any API endpoint for Open Responses specification compliance.
+Configure your connection details and run the test suite to validate
+responses against the OpenAPI schema.
+
+<ComplianceTester client:load defaultApiKey={import.meta.env.OPENAI_API_KEY ?? ""} />

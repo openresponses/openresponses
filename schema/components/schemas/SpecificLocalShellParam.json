@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["local_shell"],
+      "description": "The tool to call. Always `local_shell`.",
+      "default": "local_shell",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificLocalShellParam"
+}

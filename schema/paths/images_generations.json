@@ -1,0 +1,52 @@
+{
+  "post": {
+    "summary": "Create Image",
+    "description": "Create images.",
+    "operationId": "CreateImage",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "oneOf": [
+              {
+                "$ref": "../components/schemas/GenerationsBodyDallE2Param.json"
+              },
+              {
+                "$ref": "../components/schemas/GenerationsBodyDallE3Param.json"
+              },
+              {
+                "$ref": "../components/schemas/CreateImageBody1Param.json"
+              },
+              {
+                "$ref": "../components/schemas/CreateImageBody1MiniParam.json"
+              },
+              {
+                "$ref": "../components/schemas/CreateImageBody15Param.json"
+              },
+              {
+                "$ref": "../components/schemas/CreateImageBodyChatGPTImageLatestParam.json"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "model"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ImageResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.images.create_image_method.CreateImageMethod"
+  }
+}

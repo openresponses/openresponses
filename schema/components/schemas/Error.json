@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "A machine-readable error code that was returned."
+    },
+    "message": {
+      "type": "string",
+      "description": "A human-readable description of the error that was returned."
+    }
+  },
+  "type": "object",
+  "required": ["code", "message"],
+  "title": "Error",
+  "description": "An error that occurred while generating the response.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.Error"
+}

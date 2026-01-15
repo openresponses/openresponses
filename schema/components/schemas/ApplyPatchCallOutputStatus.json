@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["completed", "failed"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.ApplyPatchCallOutputStatus"
+}

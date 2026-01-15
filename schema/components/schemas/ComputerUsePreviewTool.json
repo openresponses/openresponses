@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["computer_use_preview"],
+      "description": "The type of the computer use tool. Always `computer_use_preview`.",
+      "default": "computer_use_preview",
+      "x-stainless-const": true
+    },
+    "environment": {
+      "$ref": "./ComputerEnvironment1.json",
+      "description": "The type of computer environment to control."
+    },
+    "display_width": {
+      "type": "integer",
+      "description": "The width of the computer display."
+    },
+    "display_height": {
+      "type": "integer",
+      "description": "The height of the computer display."
+    }
+  },
+  "type": "object",
+  "required": ["type", "environment", "display_width", "display_height"],
+  "title": "Computer use preview",
+  "description": "A tool that controls a virtual computer. Learn more about the [computer tool](https://platform.openai.com/docs/guides/tools-computer-use).",
+  "x-openai-class-name": "responses_common.api.resources.tools.ComputerUsePreviewTool"
+}

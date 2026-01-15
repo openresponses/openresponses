@@ -1,0 +1,59 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["approximate"],
+      "description": "The location type. Always `approximate`.",
+      "default": "approximate",
+      "x-stainless-const": true
+    },
+    "country": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The country for the approximate user location."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The region or state for the approximate user location."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "city": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The city for the approximate user location."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "timezone": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The IANA time zone name for the approximate user location."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "description": "An approximate user location to bias web search results.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.ApproximateLocation"
+}

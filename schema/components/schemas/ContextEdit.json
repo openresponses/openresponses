@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "The type of context management strategy that was applied."
+    },
+    "summary": {
+      "type": "string",
+      "description": "A human-readable summary of the context edit that was provided."
+    },
+    "details": {
+      "$ref": "./ContextEditDetails.json",
+      "description": "Additional details about the context edit that were included, if available."
+    }
+  },
+  "type": "object",
+  "required": ["type", "summary"],
+  "title": "Context edit",
+  "description": "A record of context management changes that were applied during response generation.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.ContextEdit"
+}

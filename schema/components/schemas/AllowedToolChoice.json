@@ -1,0 +1,56 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["allowed_tools"],
+      "default": "allowed_tools",
+      "x-stainless-const": true
+    },
+    "tools": {
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "./CodeInterpreterToolChoice.json"
+          },
+          {
+            "$ref": "./FunctionToolChoice.json"
+          },
+          {
+            "$ref": "./MCPToolChoice.json"
+          },
+          {
+            "$ref": "./FileSearchToolChoice.json"
+          },
+          {
+            "$ref": "./WebSearchToolChoice.json"
+          },
+          {
+            "$ref": "./ImageGenToolChoice.json"
+          },
+          {
+            "$ref": "./ComputerToolChoice.json"
+          },
+          {
+            "$ref": "./LocalShellToolChoice.json"
+          },
+          {
+            "$ref": "./FunctionShellToolChoice.json"
+          },
+          {
+            "$ref": "./ApplyPatchToolChoice.json"
+          },
+          {
+            "$ref": "./CustomToolChoice.json"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "mode": {
+      "$ref": "./ToolChoiceValueEnum.json"
+    }
+  },
+  "type": "object",
+  "required": ["type", "tools", "mode"],
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.AllowedToolChoice"
+}

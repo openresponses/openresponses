@@ -1,0 +1,55 @@
+{
+  "get": {
+    "tags": ["Videos"],
+    "summary": "Download video content",
+    "description": "Download the generated video bytes or a derived preview asset.",
+    "operationId": "RetrieveVideoContent",
+    "parameters": [
+      {
+        "name": "video_id",
+        "in": "path",
+        "description": "The identifier of the video whose media to download.",
+        "required": true,
+        "schema": {
+          "example": "video_123",
+          "type": "string"
+        }
+      },
+      {
+        "name": "variant",
+        "in": "query",
+        "description": "Which downloadable asset to return. Defaults to the MP4 video.",
+        "required": false,
+        "schema": {
+          "$ref": "../components/schemas/VideoContentVariant.json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "The video bytes or preview asset that matches the requested variant.",
+        "content": {
+          "video/mp4": {
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+          "image/webp": {
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.videos.get_video_content_method.GetVideoContentMethod",
+    "x-openai-secret-internal": "openapi-flag-devday2025"
+  }
+}

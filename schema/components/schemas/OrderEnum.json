@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["asc", "desc"],
+  "x-openai-class-name": "oai_api.params.list_query_params_model.OrderEnum"
+}

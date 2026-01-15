@@ -1,0 +1,17 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./FileCitationBody.json"
+    },
+    {
+      "$ref": "./UrlCitationBody.json"
+    },
+    {
+      "$ref": "./ContainerFileCitationBody.json"
+    }
+  ],
+  "description": "An annotation that applies to a span of output text.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

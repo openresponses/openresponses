@@ -1,0 +1,55 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.output_text.delta"],
+      "description": "The type of the event, always `response.output_text.delta`.",
+      "default": "response.output_text.delta",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "content_index": {
+      "type": "integer",
+      "description": "The index of the content part that was updated."
+    },
+    "delta": {
+      "type": "string",
+      "description": "The text delta that was appended."
+    },
+    "logprobs": {
+      "items": {
+        "$ref": "./LogProb.json"
+      },
+      "type": "array",
+      "description": "The token log probabilities that were emitted with the delta, if any."
+    },
+    "obfuscation": {
+      "type": "string",
+      "description": "An obfuscation string that was added to pad the event payload."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "item_id",
+    "output_index",
+    "content_index",
+    "delta",
+    "logprobs"
+  ],
+  "title": "Response output text delta event",
+  "description": "A streaming event that indicated output text was incrementally added.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseOutputTextDeltaStreamingEvent"
+}

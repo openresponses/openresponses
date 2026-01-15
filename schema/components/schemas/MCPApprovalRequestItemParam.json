@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of the approval request.",
+          "example": "mcpr_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["mcp_approval_request"],
+      "description": "The type of the item. Always `mcp_approval_request`.",
+      "default": "mcp_approval_request",
+      "x-stainless-const": true
+    },
+    "server_label": {
+      "type": "string",
+      "description": "The label of the MCP server making the request."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the tool to run."
+    },
+    "arguments": {
+      "type": "string",
+      "description": "A JSON string of arguments for the tool."
+    }
+  },
+  "type": "object",
+  "required": ["type", "server_label", "name", "arguments"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.MCPApprovalRequestItemParam"
+}

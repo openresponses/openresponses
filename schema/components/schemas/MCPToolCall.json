@@ -1,0 +1,82 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp_call"],
+      "default": "mcp_call",
+      "x-stainless-const": true
+    },
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "./MCPToolCallStatus.json"
+    },
+    "approval_request_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "server_label": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "arguments": {
+      "type": "string"
+    },
+    "output": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "error": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "./MCPProtocolError.json"
+            },
+            {
+              "$ref": "./MCPToolExecutionError.json"
+            },
+            {
+              "$ref": "./HTTPError.json"
+            }
+          ],
+          "discriminator": {
+            "propertyName": "type"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "id",
+    "status",
+    "approval_request_id",
+    "server_label",
+    "name",
+    "arguments",
+    "output",
+    "error"
+  ],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.MCPToolCall",
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/MCPToolCall.yaml"
+}

@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["find_in_page"],
+      "description": "The action type. Always `find_in_page`.",
+      "default": "find_in_page",
+      "x-stainless-const": true
+    },
+    "url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The URL of the page to search within."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pattern": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The pattern to search for within the page."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.WebSearchCallActionFindInPage"
+}

@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["file_search"],
+      "description": "The tool to call. Always `file_search`.",
+      "default": "file_search",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificFileSearchParam"
+}

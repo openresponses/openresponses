@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "embedding_weight": {
+      "type": "number",
+      "description": "The weight of the embedding in the reciprocal ranking fusion."
+    },
+    "text_weight": {
+      "type": "number",
+      "description": "The weight of the text in the reciprocal ranking fusion."
+    }
+  },
+  "type": "object",
+  "required": ["embedding_weight", "text_weight"],
+  "x-openai-class-name": "responses_common.api.resources.tools.HybridSearchOptions"
+}

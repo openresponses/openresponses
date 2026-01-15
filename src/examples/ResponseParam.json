@@ -1,0 +1,17 @@
+{
+  "model": null,
+  "input": [
+    {
+      "id": "msg_12345",
+      "type": "message",
+      "role": "user",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "What's the weather like in Paris today?"
+        }
+      ],
+      "status": "received"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["vivid", "natural"],
+  "x-openai-class-name": "responsesapi.api.params.image_shared_params.ImageStyleDallE"
+}

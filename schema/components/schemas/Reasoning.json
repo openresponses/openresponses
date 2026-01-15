@@ -1,0 +1,46 @@
+{
+  "properties": {
+    "effort": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "./ReasoningEffortEnum.json"
+            }
+          ],
+          "description": "The reasoning effort that was requested for the model, if specified."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "summary": {
+      "anyOf": [
+        {
+          "$ref": "./ReasoningSummaryEnum.json",
+          "description": "A model-generated summary of its reasoning that was produced, if available."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "generate_summary": {
+      "anyOf": [
+        {
+          "$ref": "./ReasoningSummaryEnum.json",
+          "description": "Deprecated. `summary` was used instead."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["effort", "summary"],
+  "title": "Reasoning",
+  "description": "Reasoning configuration and metadata that were used for the response.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.Reasoning"
+}

@@ -1,0 +1,714 @@
+---
+layout: ../layouts/DocsLayout.astro
+title: Specification
+---
+
+import CreateResponseParam from '../examples/ResponseParam.json';
+import { Code } from 'astro-expressive-code/components';
+import DocsLightbox from '../components/DocsLightbox.astro';
+
+
+<h1 class="page-title">Specification</h1>
+
+**Open Responses** is an open-source specification and ecosystem for building **multi-provider, interoperable LLM interfaces** based on the OpenAI Responses API. It defines a **shared schema**, **client library**, and **tooling layer** that enable a unified experience for calling language models, streaming results, and composing agentic workflows—independent of provider.
+
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [**BCP 14**](https://datatracker.ietf.org/doc/html/bcp14) [[**RFC2119**](https://datatracker.ietf.org/doc/html/rfc2119)] [[**RFC8174**](https://datatracker.ietf.org/doc/html/rfc8174)] when, and only when, they appear in all capitals, as shown here.
+
+
+# Motivation and Overview
+
+Modern LLM systems have converged on similar primitives—messages, function calls, tool usage, and multimodal inputs—but each provider encodes them differently. Open Responses standardizes these concepts, enabling:
+
+- **One spec, many providers:** Describe inputs/outputs once; run on OpenAI, Anthropic, Gemini, or local models.
+- **Composable agentic loops:** Unified streaming, tool invocation, and message orchestration.
+- **Easier evaluation and routing:** Compare providers, route requests, and log results through a shared schema.
+- **Blueprints for provider APIs:** Labs and model providers wanting to expose their APIs in a common format can easily do so.
+
+# Key Principles
+
+## Agentic Loop
+
+All models, to some extent, exhibit agency — the ability to perceive input, reason, act through tools, and reflect on outcomes.
+
+Open Responses at is core is designed to expose the power of this agentic loop to developers, making requests that allow the model to do multiple things and yield back a result, whether this is developer-hosted tool calls where control is yielded back to the user, or provider-hosted tools where control is held by the model provider until the model signals an exit criteria.
+
+Open Responses defines a common pattern for defining control flow in the agent loop, a set of item definitions for developer-controlled tools, and pattern for defining provider and router-hosted tools.
+
+## Items → Items
+
+**Items** are the fundamental unit of context in Open Responses: they represent an atomic unit of model output, tool invocation, or reasoning state. Items are bidirectional, they can be provided as inputs to the model, or as outputs from the model.
+
+Each item type has a defined schema that binds it and contains properties specific to it’s unique purpose.
+
+Open Responses defines a common set of items supported by a quorum of model providers, and defines how provider-specific item types can be defined.
+
+## Semantic events
+
+Streaming is modeled as a series of semantic events, not raw text or object deltas.
+
+Events describe meaningful transitions. They are either state transitions–`response.in_progress`, `response.completed`–or they can represent a delta from a previous state–`response.output_item.added`, `response.output_text.delta`.
+
+Open Responses defines a common set of streaming events supported by a quorum of model providers, and defines how provider-specific streaming events can be defined.
+
+## State machines
+
+Objects in Open Responses are state machines, that is, they can live in one of a finite number of states, such as `in_progress`, `completed`, or `failed`. The spec defines the set of valid states for each state machine in the API.
+
+# Specification
+
+## HTTP Requests
+
+All messages MUST follow the HTTP protocol.
+
+**Headers**
+
+| **Header** | Description | **Required** |
+| --- | --- | --- |
+| `Authorization` | Authorization token identifying the developer | Yes |
+| `Content-Type` | Describes to the server **what kind of data is in the body of the request** and how to interpret it. | Yes |
+
+**HTTP Request Bodies**
+
+Clients MUST send request bodies encoded as `application/json`
+
+## HTTP Responses
+
+**Headers**
+
+| **Header** | Description | **Required** |
+| --- | --- | --- |
+| `Content-Type` | Describes to the client **what kind of data is in the body of the response** and how to interpret it. | Yes |
+
+**HTTP Response Bodies**
+
+When not streaming, servers MUST return data only as `application/json`.
+
+**Streaming HTTP Responses**
+
+When streaming, servers MUST return header `Content-Type: text/event-stream` , with individual `data` objects returned as JSON-encoded strings. The terminal event MUST be the literal string `[DONE]`.
+
+The `event` field MUST match the `type` in the event body. Servers SHOULD NOT use `id`.
+
+```tsx
+event: response.output_text.delta
+data: { "type":"response.output_text.delta","sequence_number":10,"item_id":"msg_07315d23576898080068e95daa2e34819685fb0a98a0503f78","output_index":0,"content_index":0,"delta":" a","logprobs":[],"obfuscation":"Wd6S45xQ7SyQLT"}
+```
+
+## Items
+
+Items are the core unit of context in Open Responses. Open Responses defines a few types of items that are common to all providers, such as `message` or `function_call`, and defines how to define additional, provider-specific item types. There are some general principles that apply to all items:
+
+### Items are polymorphic
+
+Item shapes can vary depending on what purpose they serve. A `message` item, for instance, has a different shape from a `function_call` , and so on. Items are discriminated based on the `type` field
+
+<details>
+    <summary>**Example: Message**</summary>
+
+  ```json
+  {
+    "type": "message",
+    "id": "msg_01A2B3C4D5E6F7G8H9I0J1K2L3M4N5O6",
+    "role": "assistant",
+    "status": "completed",
+    "content": [
+      {
+        "type": "output_text",
+        "text": "Hello! How can I assist you today?"
+      }
+    ]
+  }
+    ```
+</details>
+
+<details>
+    <summary>**Example: Function Call**</summary>
+
+  ```json
+  {
+    "type": "function_call",
+    "id": "fc_00123xyzabc9876def0gh1ij2klmno345",
+    "name": "sendEmail",
+    "call_id": "call_987zyx654wvu321",
+    "arguments": "{\"recipient\":\"jane.doe@example.com\",\"subject\":\"Meeting Reminder\",\"body\":\"Don't forget about our meeting tomorrow at 10am.\"}"
+  }
+    ```
+</details>
+
+### Items are state machines
+
+In Open Responses, all items have a lifecycle. They can be `in_progress` if the model is sampling the current item, `incomplete` if the model exhausts its token budget before sampling finishes, or `completed` when they are fully done sampling.
+
+It's important to note that while items follow a state machine model—transitioning through these defined states—this does not necessarily mean they are stateful in the sense of being persisted to disk or stored long-term. The state machine describes the item's status within the response flow, but persistence is a separate concern and is not implied by the item's state transitions.
+
+All item types should have these three basic status:
+
+- `in_progress` - the model is currently emitting tokens belonging to this item
+- `incomplete` - the model has exhausted its token budget while emitting tokens belonging to this item. This is a terminal state. If an item ends in a terminal state, it MUST be the last item emitted, and the containing response also MUST be in an `incomplete` state.
+- `completed` - the model has finished emitting tokens containing the item, and / or a tool call has completed successfully. This is a terminal status and no updates may be made to the item after the item has moved into this state.
+
+### Items are streamable
+
+As items change states or values w/in an item change, Open Responses defines how those updates should be communicated in a response stream.
+
+1. The first event MUST always be `response.output_item.added`. The item is echoed in the payload with as much detail as is available at that time. For `messages`, this means at least the `role`, and for `function_call`, this is at least the `name`. All fields not marked nullable MUST have a value. Use zero values where applicable.
+
+<details>
+    <summary>**Example**</summary>
+
+  ```json
+  {
+    "type": "response.output_item.added",
+    "sequence_number": 11,
+    "output_index": 3,
+    "item": {
+      "id": "msg_0f7983f1618f89d20068efe9b45d748191a5239d49c2971a65",
+      "type": "message",
+      "status": "in_progress",
+      "content": [],
+      "role": "assistant"
+    }
+  }
+    ```
+</details>
+
+2. Some items have *streamable content*. Usually this is text being emitted by the model, such as in the case of a `message`. Such content MUST be backed by a content part. The first event in such cases MUST be `response.content_part.added` , followed by events representing the delta to the content part, eg `response.<content_type>.delta` . The delta events MAY be repeated many times, and end with `response.<content_type>.done`. The content part is then closed with `response.content_part.done`.
+<details>
+    <summary>**Example**</summary>
+
+  ```json
+  {
+    "type": "response.content_part.added",
+    "sequence_number": 12,
+    "item_id": "msg_0f7983f1618f89d20068efe9b45d748191a5239d49c2971a65",
+    "output_index": 3,
+    "content_index": 0,
+    "part": {
+      "type": "output_text",
+      "annotations": [],
+      "text": ""
+    }
+  }
+
+  {
+    "type": "response.output_text.delta",
+    "sequence_number": 13,
+    "item_id": "msg_0f7983f1618f89d20068efe9b45d748191a5239d49c2971a65",
+    "output_index": 3,
+    "content_index": 0,
+    "delta": "Here",
+  }
+
+  ...
+
+  {
+    "type": "response.output_text.done",
+    "sequence_number": 25,
+    "item_id": "msg_0f7983f1618f89d20068efe9b45d748191a5239d49c2971a65",
+    "output_index": 3,
+    "content_index": 0,
+    "text": "Here\u2019s the current weather for San Francisco, CA (as of Wednesday, October 15, 2025):\n\n- Current conditions: Cloudy, 58\u00b0F (14\u00b0C).\n- Today\u2019s outlook: A shower in spots late this morning; oth
+  erwise a cloudy start with sunshine returning later. High near 67\u00b0F (19\u00b0C), low around 51\u00b0F (11\u00b0C).\n\nIf you\u2019d like wind speed, humidity, or hourly updates, I can pull those too. ",
+  }
+
+  {
+    "type": "response.content_part.done",
+    "sequence_number": 26,
+    "item_id": "msg_0f7983f1618f89d20068efe9b45d748191a5239d49c2971a65",
+    "output_index": 3,
+    "content_index": 0,
+    "part": {
+      "type": "output_text",
+      "annotations": [],
+      "text": "Here\u2019s the current weather for San Francisco, CA (as of Wednesday, October 15, 2025):\n\n- Current conditions: Cloudy, 58\u00b0F (14\u00b0C).\n- Today\u2019s outlook: A shower in spots late this morning; o
+  therwise a cloudy start with sunshine returning later. High near 67\u00b0F (19\u00b0C), low around 51\u00b0F (11\u00b0C).\n\nIf you\u2019d like wind speed, humidity, or hourly updates, I can pull those too. "
+    }
+  }
+    ```
+</details>
+
+3. Items with `content` MAY emit multiple content parts, following the pattern above. When finished, the item is closed with `response.output_item.done`
+<details>
+    <summary>**Example**</summary>
+
+  ```json
+  {
+    "type": "response.output_item.done",
+    "sequence_number": 27,
+    "output_index": 3,
+    "item": {
+      "id": "msg_0f7983f1618f89d20068efe9b45d748191a5239d49c2971a65",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "text": "Here\u2019s the current weather for San Francisco, CA (as of Wednesday, October 15, 2025):\n\n- Current conditions: Cloudy, 58\u00b0F (14\u00b0C).\n- Today\u2019s outlook: A shower in spots late this mornin
+  g; otherwise a cloudy start with sunshine returning later. High near 67\u00b0F (19\u00b0C), low around 51\u00b0F (11\u00b0C).\n\nIf you\u2019d like wind speed, humidity, or hourly updates, I can pull those too. "
+        }
+      ],
+      "role": "assistant"
+    }
+  }
+    ```
+</details>
+
+
+
+### Items are extensible
+
+Model providers may emit their own types of items not contained in the Open Responses spec. These items MUST be prefixed with the canonical provider slug, eg
+
+```json
+{
+  "id": "ws_0df093a2d268cd7f0068efe79ac9408190b9833ec01e5d05ed",
+  "type": "openai:web_search_call",
+  "status": "completed",
+  "action": {
+    "type": "search",
+    "query": "weather: San Francisco, CA"
+  }
+}
+```
+
+## Content
+
+In Open Responses, “content” represents the raw material exchanged between the user and the model within each message turn. It is deliberately modeled as a discriminated union rather than a single polymorphic type, allowing different shapes for user-authored input and model-generated output.
+
+### User Content vs Model Content
+
+There are two top-level content unions:
+
+- **`UserContent`**: structured data provided by the user or client application.
+- **`ModelContent`**: structured data returned by the model.
+
+This distinction reflects the asymmetric nature of conversation turns. User inputs can include multiple modalities (e.g. text, images, audio, video), while model outputs are usually restricted to text, at least in the base protocol. Keeping these unions separate allows model providers to evolve their output schemas independently (for example, adding `output_image` or `output_tool_call` in the future) without over-generalizing the user side.
+
+### Why User and Assistant Content Have Different Shapes
+
+Although both are called “content,” user and assistant payloads serve very different roles:
+
+- **User content** captures *what the model is being asked to process.* It can include one or more text segments, images, or other binary data that are meaningful inputs to the model’s inference step.
+- **Assistant (model) content** captures *what the model produced*—its textual completion or reasoning output. These are usually serializable as UTF-8 text, optionally with metadata like token logprobs.
+
+Because of this asymmetry:
+
+- User content must support multiple data types (text, base64-encoded or URL-sourced images, potentially other future modalities).
+- Model content is intentionally narrower to keep the protocol minimal and predictable across providers.
+
+This separation simplifies validation, streaming, and logging. For example, a client can safely assume every model message contains `output_text`, while user messages may contain arbitrary mixtures of text and image inputs.
+
+## Reasoning
+
+Reasoning items expose the model’s internal thought process in a controlled, provider-defined way. A reasoning item’s payload can include some or all of the following fields:
+
+- **`content` (raw reasoning content):** Providers MAY surface the model’s raw reasoning trace directly through the `content` field on `reasoning` items. This content is typically streamable and follows the same delta semantics as other text-like content parts. Exposing raw reasoning is optional and may be disabled or truncated for safety, privacy, or cost reasons.
+- **`encrypted_content` (protected reasoning content):** Providers MAY choose to never expose raw reasoning to the client. Instead, they can return an `encrypted_content` payload whose format and cryptographic properties are provider-specific. Clients are expected to treat this field as opaque and non-inspectable; it is intended for providers to protect reasoning content while allowing it to be round-trippable.
+- **`summary` (reasoning summaries):** Providers MAY implement a summarized view of the reasoning trace (for example, a short natural-language explanation of the key steps the model took) and expose it via the `summary` field. Summaries are designed to be safe to show to end users and can be used for transparency, debugging, or UI affordances without revealing the full raw trace.
+
+All three fields are optional (can be null or the zero-value), and providers are free to support any combination of them, depending on their safety policies, business requirements, and implementation details.
+
+<details>
+    <summary>**Example**</summary>
+
+  ```json
+  {
+    "type": "reasoning",
+    "status": "completed",
+    "summary": [
+  	  {
+  	    "type": "summary_text",
+  	    "text": "Determined that the user is asking for restaurant recommendations in a specific city, then filtered options by distance and rating before selecting three suggestions."
+  	  }
+  	],
+    "content": [
+      {
+        "type": "output_text",
+        "text": "User asked: \"Where should I eat dinner in downtown Seattle tonight?\"↵↵1. Interpreted task as a search for nearby restaurants suitable for dinner.↵2. Prioritized places within a short walking radius of downtown.↵3. Filtered candidates by overall rating and number of reviews.↵4. Preferred options with vegetarian choices and moderate price range.↵5. Selected three restaurants that best match the inferred preferences."
+      }
+    ],
+    "encrypted_content": null
+  }
+    ```
+</details>
+
+## Errors
+
+Error handling in Open Responses is designed to provide clear, actionable feedback to developers and users when requests fail or encounter issues.
+
+When an error occurs, the API responds with a structured error object that includes:
+
+- **Type**: The category of the error, such as `server_error`, `model_error`, `invalid_request`, or `not_found`. These generally, but not always, map to the status code of the response.
+- **Code**: An optional error code providing additional detail about the specific problem. All common error codes are enumerated in the spec.
+- **Param**: The input parameter related to the error, if applicable.
+- **Message**: A human-readable explanation of what went wrong.
+
+Errors are also emitted as events in the streaming protocol, allowing clients to detect and respond to issues in real time while processing streamed responses. Any error incurred while streaming will be followed by a `response.failed` event.
+
+It is recommended to check for error responses and handle them gracefully in your client implementation. Display user-friendly messages or trigger appropriate fallbacks where possible.
+
+Error types can indicate whether an error is recoverable or not, allowing your application to determine if it should retry, prompt the user, or halt the operation. The error’s `code` provide additional details, often including guidance or steps for recovery, which helps developers create more robust and responsive clients.
+
+```json
+{
+  "error": {
+    "message": "The requested model 'fake-model' does not exist.",
+    "type": "invalid_request_error",
+    "param": "model",
+    "code": "model_not_found"
+  }
+}
+```
+
+### Error Types
+
+| Error Type | Description | Status Code |
+| --- | --- | --- |
+| `server_error` | The server encountered an unexpected condition and could not complete the request. This is an internal failure and is not caused by the client. Retrying later may succeed. | 500 |
+| `invalid_request` | The request is malformed or semantically invalid. One or more parameters are missing, incorrectly formatted, or unsupported. This error is user-resolvable by fixing the request. | 400 |
+| `not_found` | The requested resource does not exist or is not accessible at the specified path or identifier. The client should verify the endpoint or resource ID. | 404 |
+| `model_error` | The model failed while processing an otherwise valid request. This indicates an internal model or execution error and is not user-resolvable. | 500 |
+| `too_many_requests` | The client has exceeded the allowed request rate. Requests are being temporarily throttled. The client should slow down and retry after a delay. | 429 |
+
+## Streaming
+
+Open Responses defines two major types of streaming events into which all events MUST fall.
+
+**Delta Events**
+
+A delta event represents a change to an object since its last update. This mechanism allows updates to be communicated incrementally as they happen, making streamed responses possible and efficient.
+
+Common examples of delta events include:
+
+- Adding a new item to a list (`response.output_item.added`)—for example, when a new message is generated and appended to a conversation.
+- Appending more text to an ongoing output (`response.output_text.delta` or `response.function_call_arguments.delta`)—such as when a language model is generating a reply word by word.
+- Signaling that no further changes will occur to a content part (`response.content_part.done`)—for example, when the model has finished generating a sentence or paragraph.
+
+All streamable objects must follow this delta event pattern. For instance, the flow of delta events on an output item could start with the item being added, followed by several text deltas as content is generated, and ending with a "done" event to indicate completion.
+
+<div data-lightbox data-scrollable>
+![simple-streaming.svg](/streaming/simple-streaming.svg)
+</div>
+
+**State Machine events**
+
+A state machine event represents a change in the *status* of an object as it progresses through its lifecycle. For example, when a response changes status from `in_progress` to `completed`, a `response.completed` event is triggered.
+
+Other examples include:
+
+- When a `Response` moves from `queued` to `in_progress`, a `response.in_progress` event is emitted.
+- If an Response encounters an error and its status changes to `failed`, a `response.failed` event is generated.
+
+## Tools
+
+Tool-use is at the heart of modern LLM’s agentic capabilities. There are generally two types of tools that can be exposed in Open Responses:
+
+### Externally-hosted tools
+
+Externally hosted tools are ones where the implementation lives outside of the model provider’s system. Functions are a great example, where the LLM is able to call the function, but the developer must run the function and return the output back to the LLM in a second request. MCP is another example, where external servers host the implementations, although control is not first yielded back to the developer.
+
+### Internally-hosted tools
+
+Internally hosted tools are ones where the implementation lives inside the model provider’s system. An example is OpenAI’s file search tool, where the model is able to call file search, and the tool can execute and return results to the LLM without yielding control back to the developer.
+
+## `previous_response_id`
+
+The `previous_response_id` field allows a client to resume or extend an existing response without having to resend its entire transcript.
+
+When `previous_response_id` is provided, the server MUST load both the input and output associated with that prior response and treat them as part of the new request’s context.
+
+Conceptually, the model is sampled over the concatenation:
+
+`previous_response.input` + `previous_response.output` + `input`
+
+where:
+
+- `previous_response.input` is the full, structured input that was sent with the referenced response (including any messages, tools, and configuration relevant to the model’s reasoning).
+- `previous_response.output` is the model-produced content from that response (e.g., messages, tool calls, and other output items).
+- `input` is the new request payload supplied alongside `previous_response_id`, which is logically appended after the prior input + output.
+
+The server is responsible for translating this logical concatenation into whatever internal representation it uses (e.g., messages, events, or tokens). Providers MAY apply truncation or compaction as needed (subject to their truncation policies) but MUST preserve the semantic order of:
+
+`previous_response.input` → `previous_response.output` → `input`
+
+From the client’s perspective, using `previous_response_id` is equivalent to asking the model to “continue the conversation” from the point where the prior response ended, with additional instructions or messages layered on top.
+
+## `tool_choice`
+
+The `tool_choice` field controls whether, and how, the model is allowed to invoke tools during a response. It applies to all tools exposed in the request (functions, hosted tools, etc.) and lets the client shape the model’s behavior from “never call tools” to “must call this specific tool.”
+
+- `"auto"` (default): The model may either call a tool or respond directly, based on its judgment of what best satisfies the request. This is the most flexible mode and is recommended for most general-purpose use cases.
+- `"required"`: The model MUST call at least one tool and should not respond directly without doing so. Use this when a tool call is the only valid way to fulfill the request (for example, “look up” or “execute” style actions that always require external data or side effects).
+- `"none"`: The model MUST NOT call any tools. It must rely solely on its internal knowledge and reasoning. This is useful for “model-only” completions, evaluations, or when tool side effects are undesirable.
+
+In addition to these simple modes, `tool_choice` also accepts a structured object to force a particular tool to be used:
+
+```json
+{
+  "tool_choice": {
+    "type": "function",
+    "name": "fn_name"
+  }
+}
+```
+
+In this form, the model is required to call the specified function tool `fn_name`. This is useful when the client has already decided which tool is appropriate (for example, after a UI selection or routing decision) and wants to bypass the model’s tool-selection step while still letting the model construct arguments and interpret results.
+
+### `allowed_tools`
+
+The `allowed_tools` field lets a client limit which tools the model is permitted to actually invoke, without changing the `tools` list itself. All tools are still surfaced to the model in context (preserving cacheability of the shared system prompt and tool schema), but the model MUST restrict its tool calls to the subset named in `allowed_tools`.
+
+This is primarily a cache-preserving control surface: instead of mutating the `tools` field (which typically invalidates any prompt or schema caches), a client can use `allowed_tools` to dynamically narrow or expand the effective tool menu for a given request while reusing the same underlying tool definitions.
+
+Servers MUST enforce `allowed_tools` as a hard constraint:
+
+- If `allowed_tools` is present, any tool call to a tool not listed MUST be rejected or suppressed by the server (e.g., by treating it as a model error, translating it into a direct reply, or applying provider-specific fallback behavior).
+- Providers MAY also use `allowed_tools` as a training or routing hint, but this MUST NOT weaken the enforcement guarantee.
+
+Conceptually, `tools` defines the full tool universe visible to the model, while `allowed_tools` defines the subset that is executable for this request. This separation enables fine-grained, per-request tool governance—such as tenant-level policies, user roles, or feature flags—without requiring the client to rebuild or re-send large tool schemas or system prompts.
+
+<details>
+    <summary>**Example:**</summary>
+
+```json
+{
+  "model": "gpt-openresponses-1",
+  "input": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "input_text", "text": "Summarize the latest sales data and then draft a follow-up email."}
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "name": "get_latest_sales_report",
+      "description": "Fetches the most recent sales report for the current quarter.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "description": "Geographic sales region identifier."
+          }
+        },
+        "required": ["region"]
+      }
+    },
+    {
+      "type": "function",
+      "name": "send_email",
+      "description": "Sends an email via the CRM.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "to": { "type": "string" },
+          "subject": { "type": "string" },
+          "body": { "type": "string" }
+        },
+        "required": ["to", "subject", "body"]
+      }
+    }
+  ],
+  "tool_choice": {
+	  "type": "allowed_tools",
+	  "tools": [
+		  { "type": "function", "name": "get_latest_sales_report" }
+		]
+  }
+}
+```
+    <caption>In this request, the model is free to decide whether to call tools at all (`tool_choice: "auto"`), but if it does, it can only invoke `get_latest_sales_report`, even though `send_email` is visible in the shared `tools` list.</caption>
+</details>
+
+## `truncation`
+
+The `truncation` parameter controls whether the server is allowed to shorten the effective context when the total input (including any `previous_response` content) would exceed the model’s context window.
+
+- `"auto"`: The server MAY truncate earlier parts of the context (for example, older messages or low-priority sections) in order to fit within the model’s context window. Providers SHOULD apply sensible heuristics when doing so (e.g., preserving system messages and recent turns) and MAY expose provider-specific policies for how truncation is performed.
+- `"disabled"`: The server MUST NOT truncate any input. If the combined context exceeds the model’s maximum context window, the request MUST fail with an error instead of silently dropping content. This mode is appropriate when the client prefers a hard failure over any loss of context.
+
+Clients that require predictable behavior under large-context workloads can use `truncation` to choose between graceful degradation (`auto`) and strict correctness guarantees (`disabled`).
+
+## `service_tier`
+
+The `service_tier` field is a hint to the provider about how urgently and reliably a given request should be processed. Conceptually, it expresses “priority processing” for a response: higher tiers should receive faster scheduling, more generous resource allocation, or stricter latency targets than lower tiers.
+
+Servers MAY expose multiple tiers (for example, `standard`, `priority`, or `batch`) and map them to different internal queues, SLAs, or pricing. Implementations SHOULD document which tiers they support, what behavior each tier implies (e.g., typical latency, throughput, or reliability characteristics), and any constraints or quotas tied to those tiers.
+
+
+# Implementing Open Responses
+
+
+In this example, the client requests the `custom_document_search` hosted tool exposed by the implementer. The implementer executes the tool directly, returning results to the client and abstracting away the internal workings.
+
+## The Agentic loop
+
+The agentic loop is the core principle that enables Open Responses to interact intelligently with users, reason about tasks, and invoke tools as needed to complete complex workflows. In this loop, the language model analyzes the user's request, determines whether it can answer directly or needs to use a tool, and issues tool calls as required.
+
+When a tool needs to be used, the model emits a tool invocation event, such as a function call or a hosted tool call, containing the necessary parameters. For externally-hosted tools, the execution happens outside the model provider, and the result is returned in a follow-up request. For internally-hosted tools, the model provider executes the tool and immediately streams back the results.
+
+This loop of reasoning, tool invocation, and response generation can repeat multiple times within a session, allowing the model to gather information, process data, or take actions through tools before producing a final answer for the user.
+
+<DocsLightbox>
+    ```mermaid
+    sequenceDiagram
+    autonumber
+    participant User
+    participant API as API Server
+    participant LLM
+    participant Tool
+
+    User->>API: user request
+
+    loop agentic loop
+    API->>LLM: sample from model
+    LLM-->>API: Sampled message
+    alt tool called by model
+    API->>Tool: sampled tool call arguments
+    Tool-->>API: tool result
+    else
+    Note right of API: loop finished
+    end
+    end
+
+    API-->>User: output items
+    ```
+</DocsLightbox>
+
+## Extending Open Responses
+
+Any implementer can be considered to have a Open Responses-compliant API if they have an API that implements this spect directly or is a proper superset of Open Responses. The spec acknowledges that providers will want to build features that are not part of the spec. Features that gain broad adoption among frontier models should be considered for standardization by [the TSC](https://www.openresponses.org/governance#6-responsibilities-of-the-tsc).
+
+### Extending tools
+
+Implementers can expose their own hosted tools—distinct from standard function tools—by providing new capabilities directly within their Open Responses implementation, such as custom search, retrieval, or workflow orchestration. When a user or model invokes a hosted tool, the implementor executes it within their own environment, often integrating with services or logic outside the model provider, and returns the result without exposing the implementation details. This enables implementors to add custom features while maintaining a consistent tool interface for both users and models.
+
+```json
+{
+  "model": "my-model",
+  "messages": [
+    {"role": "user", "content": "Find relevant documents about climate change."}
+  ],
+  "tools": [
+    {
+      "type": "implementor_slug:custom_document_search",
+      "documents": [
+        { "type": "external_file", "url": "https://arxiv.org/example.pdf" }
+	    ]
+    }
+  ]
+}
+```
+
+In this example, the client requests the `implementor_slug:custom_document_search` hosted tool exposed by the implementer. The implementer executes the tool directly, returning results to the client and abstracting away the internal workings.
+
+**Hosted tools must have corresponding item types**
+
+When building custom tools, the tool should have its own item type that provides developers a receipt of what occurred during tool call execution. The item at minimum should contain a representation of how the model invoked the tool, the status of the tool call, and the result from the tool.
+
+In the above example, as output the API may emit the following item as output:
+
+```json
+{
+	"type": "implementor_slug:custom_document_search",
+	"id": "cdc_759bd159770647a681a6ed186843fcca",
+	"query": ["climate change", "global warming"],
+	"status": "completed",
+	"results": [
+		{
+			"document_id": "result_6064c25dad6b4218b62e675234946de7",
+			"chunk": "Climate change threatens Cambodia’s crops, floods cities, heats temperatures, strains resources..."
+		}
+		...
+	]
+}
+
+```
+
+The item’s schema should allow for enough information to pass to the developer that it can be round-tripped back to the API for lossless rehydration on a followup request.
+
+### Extending Items
+
+Implementors MAY extend the `Item` union with new, non-standard item types to represent implementation-specific behaviors or data. However, any such extended item type—and any trajectory that contains it—SHOULD be treated as specific to that implementation and not assumed to be portable or interoperable across other Open Responses servers.
+
+New item types that are not part of this specification MUST be prefixed with the implementor slug (for example, `acme:search_result`), as outlined above. This prefixing convention helps avoid type-name collisions between implementors and makes ownership and semantics of extended item types explicit in logs, traces, and trajectories.
+
+When emitting or consuming extended item types, implementors SHOULD document their schemas and expected behaviors, and clients SHOULD be prepared to encounter unknown item types (for example, by ignoring them gracefully or treating them as opaque records) when interacting with multiple implementations.
+
+**Required item fields**
+
+Every `Item` in an Open Responses trajectory MUST include the following top-level fields, regardless of its specific `type`:
+
+| Field | Description |
+| --- | --- |
+| `id` | A unique, opaque identifier for this item within the trajectory or session. Servers MAY choose any stable identifier format, but it MUST be unique enough for clients to reference the item unambiguously (for example, via `ItemReference` objects or logs). |
+| `type` | A string that identifies the concrete item schema. Standard item types are defined by this specification (for example, `input_text`, `output_text`, or `tool_call`), while extension types MUST be prefixed with an implementor slug (for example, `acme:search_result`). |
+| `status` | A lifecycle indicator describing the current state of the item. Typical values include `"in_progress"`, `"completed"`, and `"failed"`. Implementors MAY define additional statuses, but they SHOULD document their semantics and treat unknown status values conservatively on the client side. |
+
+These required fields ensure that all items—standard and extension types—are addressable (`id`), interpretable (`type`), and debuggable (`status`) in logs, traces, and streaming responses.
+
+**Example**
+
+```json
+{
+  "type": "acme:telemetry_chunk",
+  "id": "tc_123",
+  "status": "completed"
+  "request_id": "req_123",
+  "sequence": 4,
+  "latency_ms": 72,
+  "cache_hit": true,
+  "notes": "Model responded from warm cache."
+}
+```
+
+In this example, an implementor introduces a custom streaming event type, `acme:telemetry_chunk`, to surface latency and cache information during a response stream. Clients that understand this extension can use it for observability or UX decisions, while other clients can safely ignore it and still process the standard tokens and items in the stream.
+
+### Extending streaming events
+
+Implementors MAY introduce new, non-standard streaming event types to surface implementation-specific metadata or behaviors during a response stream. These events can be useful for observability, debugging, UI adaptation, or coordinating external workflows, but they MUST NOT change the normative semantics of the core Open Responses stream (for example, token order or item lifecycle).
+
+As with custom item types, all extended streaming events MUST be prefixed with the implementor slug (for example, `acme:trace_event`) to avoid collisions and to make ownership and semantics explicit. Clients that do not understand a given extended event type MUST be able to ignore it safely without losing the ability to reconstruct the canonical response.
+
+**Required fields for extended streaming events**
+
+Extended streaming events SHOULD follow a consistent structure to make them easy to consume across implementations. At minimum, each event MUST include:
+
+- `type`: A string identifier for the event schema. Non-standard types MUST be prefixed with the implementor slug (for example, `acme:trace_event`).
+- `sequence_number`: A monotonically increasing number (within the stream or session) that allows clients to order events and detect gaps.
+
+Implementors MAY add additional fields specific to their use case (for example, timing metrics, cache information, or tool-invocation traces), but SHOULD document these fields and their semantics so that clients can make informed use of them.
+
+**Example**
+
+```json
+{
+  "type": "acme:trace_event",
+  "sequence_number": 1,
+  "phase": "tool_resolution",
+  "latency_ms": 34,
+  "related_item_id": "tc_789",
+  "details": "Resolved tool endpoint from local cache."
+}
+```
+
+In this example, an implementor introduces a custom streaming trace event, `acme:trace_event`, to expose internal timing and resolution details for tool calls. Clients that recognize this extension can enhance their dashboards or adapt UX in real time, while other clients can safely ignore the event and still process all standard items and tokens in the stream.
+
+### Extending existing schemas
+
+In addition to defining entirely new item or event types, implementors MAY extend existing schemas with additional, implementation-specific fields. This can be useful for surfacing richer metadata (for example, observability details, cache hints, or internal identifiers) without changing the core semantics of the specification.
+
+However, any such extensions inevitably reduce portability. Clients that rely on these extra fields will be more tightly coupled to a specific implementation, and trajectories or OpenAPI definitions that depend on them may not validate or behave identically across other Open Responses servers.
+
+To mitigate this, extensions to existing schemas SHOULD follow these guidelines:
+
+- Keep all standard fields intact and unchanged in meaning; extensions MUST NOT alter required core behavior.
+- Prefer optional fields so that portable clients can ignore them safely.
+- Document extension fields clearly, including their types, allowed values, and failure modes.
+- Avoid building cross-vendor contracts on top of non-standard fields; instead, propose commonly-used patterns for inclusion in the core spec via the TSC process.
+
+In practice, this means that extending existing schemas is an acceptable way to evolve an implementation, but implementors SHOULD treat those extensions as vendor-specific and avoid assuming that other Open Responses-compatible APIs will recognize or honor them.

@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["shell"],
+      "description": "The type of the shell tool. Always `shell`.",
+      "default": "shell",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Shell tool",
+  "description": "A tool that allows the model to execute shell commands.",
+  "x-openai-class-name": "responses_common.api.resources.tools.FunctionShellTool"
+}

@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["function"],
+      "default": "function",
+      "x-stainless-const": true
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.FunctionToolChoice"
+}

@@ -1,0 +1,7 @@
+{
+  "type": "string",
+  "enum": ["completed", "failed"],
+  "title": "Apply patch call output status",
+  "description": "Outcome values reported for apply_patch tool call outputs.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ApplyPatchCallOutputStatusParam"
+}

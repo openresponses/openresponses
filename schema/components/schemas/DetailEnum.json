@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["low", "high", "auto"],
+  "x-openai-class-name": "oai_api.params.image_url_object_param.DetailEnum"
+}

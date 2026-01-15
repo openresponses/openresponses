@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "model": {
+      "type": "string",
+      "enum": ["dall-e-3"],
+      "default": "dall-e-3",
+      "x-stainless-const": true
+    },
+    "prompt": {
+      "type": "string",
+      "maxLength": 4000,
+      "minLength": 1
+    },
+    "n": {
+      "type": "integer",
+      "maximum": 1,
+      "minimum": 1
+    },
+    "quality": {
+      "$ref": "./ImageQualityDallE.json"
+    },
+    "response_format": {
+      "$ref": "./ResponseFormatDallE.json"
+    },
+    "size": {
+      "$ref": "./ImageSizeDallE3.json"
+    },
+    "style": {
+      "$ref": "./ImageStyleDallE.json"
+    },
+    "user": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["model", "prompt"],
+  "x-openai-class-name": "responsesapi.api.params.image_shared_params.GenerationsBodyDallE3"
+}

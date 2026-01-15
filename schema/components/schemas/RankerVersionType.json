@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["auto", "default-2024-11-15"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.RankerVersionType"
+}

@@ -1,0 +1,61 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image_generation"],
+      "description": "The type of the tool. Always `image_generation`.",
+      "default": "image_generation",
+      "x-stainless-const": true
+    },
+    "model": {
+      "$ref": "./ImageGenToolModel.json",
+      "description": "The image model to use for image generation."
+    },
+    "quality": {
+      "$ref": "./ImageQuality.json",
+      "description": "The quality setting for generated images."
+    },
+    "input_fidelity": {
+      "$ref": "./InputFidelity.json"
+    },
+    "size": {
+      "$ref": "./ImageSize.json",
+      "description": "The size of the generated image."
+    },
+    "output_format": {
+      "$ref": "./ImageOutputFormat.json",
+      "description": "The output image file format."
+    },
+    "output_compression": {
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 0,
+      "description": "Compression level for lossy output formats."
+    },
+    "moderation": {
+      "$ref": "./ImageModeration.json",
+      "description": "The moderation setting to apply to image generation."
+    },
+    "background": {
+      "$ref": "./ImageBackground.json",
+      "description": "The background setting for image generation."
+    },
+    "input_image_mask": {
+      "$ref": "./InputImageMaskContentParam.json",
+      "description": "An optional mask image to apply when editing."
+    },
+    "partial_images": {
+      "type": "integer",
+      "maximum": 3,
+      "minimum": 0,
+      "description": "The number of partial images to generate in streaming mode."
+    },
+    "action": {
+      "$ref": "./ImageGenActionEnum.json",
+      "description": "Whether to generate a new image or edit an existing image."
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.ImageGenToolParam"
+}

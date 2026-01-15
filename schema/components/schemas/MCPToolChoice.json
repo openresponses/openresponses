@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp"],
+      "default": "mcp",
+      "x-stainless-const": true
+    },
+    "server_label": {
+      "type": "string"
+    },
+    "name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "server_label", "name"],
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.MCPToolChoice"
+}

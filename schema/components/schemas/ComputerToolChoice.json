@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["computer_use_preview"],
+      "default": "computer_use_preview",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.ComputerToolChoice"
+}

@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.apply_patch_call_operation_diff.done"],
+      "description": "The type of the event, always `response.apply_patch_call.operation.diff.done`.",
+      "default": "response.apply_patch_call_operation_diff.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "diff": {
+      "type": "string",
+      "description": "The final diff that was emitted."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "item_id", "output_index", "diff"],
+  "title": "Response apply patch diff done event",
+  "description": "A streaming event that indicated a patch diff was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseApplyPatchCallOperationDiffDoneStreamingEvent"
+}

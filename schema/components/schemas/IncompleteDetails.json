@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "reason": {
+      "type": "string",
+      "description": "The reason the response could not be completed."
+    }
+  },
+  "type": "object",
+  "required": ["reason"],
+  "title": "Incomplete details",
+  "description": "Details about why the response was incomplete.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.IncompleteDetails"
+}

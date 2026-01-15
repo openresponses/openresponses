@@ -1,0 +1,55 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["function"],
+      "description": "The type of the function tool. Always `function`.",
+      "default": "function",
+      "x-stainless-const": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the function to call."
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "A description of the function. Used by the model to determine whether or not to call the function."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parameters": {
+      "anyOf": [
+        {
+          "additionalProperties": {},
+          "type": "object",
+          "description": "A JSON schema object describing the parameters of the function.",
+          "x-oaiTypeLabel": "map"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "strict": {
+      "anyOf": [
+        {
+          "type": "boolean",
+          "description": "Whether to enforce strict parameter validation. Default `true`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "name", "description", "parameters", "strict"],
+  "title": "Function",
+  "description": "Defines a function in your own code the model can choose to call. Learn more about [function calling](https://platform.openai.com/docs/guides/function-calling).",
+  "x-openai-class-name": "responses_common.api.resources.tools.FunctionTool"
+}

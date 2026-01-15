@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["apply_patch"],
+      "description": "The selected tool. Always `apply_patch`.",
+      "default": "apply_patch",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Apply patch tool choice",
+  "description": "Require the assistant to call the apply_patch tool.",
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.ApplyPatchToolChoice"
+}

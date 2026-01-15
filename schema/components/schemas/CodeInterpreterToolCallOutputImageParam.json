@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image"],
+      "description": "The output type. Always `image`.",
+      "default": "image",
+      "x-stainless-const": true
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL of the generated image."
+    }
+  },
+  "type": "object",
+  "required": ["type", "url"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.CodeInterpreterToolCallOutputImageParam"
+}

@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["instructions"],
+  "x-openai-class-name": "responsesapi.api.params.exclude_param.ExcludeEnum"
+}

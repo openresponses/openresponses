@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["computer_screenshot"],
+      "description": "Specifies the event type. For a computer screenshot, this property is always set to `computer_screenshot`.",
+      "default": "computer_screenshot",
+      "x-stainless-const": true
+    },
+    "image_url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The URL of the screenshot image."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "file_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The identifier of an uploaded file that contains the screenshot."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "image_url", "file_id"],
+  "title": "Computer screenshot",
+  "description": "A screenshot of a computer.",
+  "x-openai-class-name": "responses_common.api.resources.content_resource.ComputerScreenshotContent"
+}

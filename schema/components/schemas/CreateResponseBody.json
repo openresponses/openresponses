@@ -1,0 +1,316 @@
+{
+  "properties": {
+    "model": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The model to use for this request, e.g. 'gpt-5.2'."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "input": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "string",
+              "maxLength": 10485760
+            },
+            {
+              "items": {
+                "$ref": "./ItemParam.json"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "Context to provide to the model for the scope of this request. May either be a string or an array of input items. If a string is provided, it is interpreted as a user message."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previous_response_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of the response to use as the prior turn for this request.",
+          "example": "resp_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "include": {
+      "items": {
+        "$ref": "./IncludeEnum.json"
+      },
+      "type": "array"
+    },
+    "tools": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./ResponsesToolParam.json"
+          },
+          "type": "array",
+          "description": "A list of tools that the model may call while generating the response."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tool_choice": {
+      "anyOf": [
+        {
+          "$ref": "./ToolChoiceParam.json",
+          "description": "Controls which tool the model should use, if any."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "$ref": "./MetadataParam.json",
+          "description": "Set of 16 key-value pairs that can be attached to an object. This can be         useful for storing additional information about the object in a structured         format, and querying for objects via API or the dashboard.\n        Keys are strings with a maximum length of 64 characters. Values are strings         with a maximum length of 512 characters."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "text": {
+      "anyOf": [
+        {
+          "$ref": "./TextParam.json",
+          "description": "Configuration options for text output."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "temperature": {
+      "anyOf": [
+        {
+          "type": "number",
+          "description": "Sampling temperature to use, between 0 and 2. Higher values make the output more random."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "top_p": {
+      "anyOf": [
+        {
+          "type": "number",
+          "description": "Nucleus sampling parameter, between 0 and 1. The model considers only the tokens with the top cumulative probability."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "presence_penalty": {
+      "anyOf": [
+        {
+          "type": "number",
+          "description": "Penalizes new tokens based on whether they appear in the text so far."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "frequency_penalty": {
+      "anyOf": [
+        {
+          "type": "number",
+          "description": "Penalizes new tokens based on their frequency in the text so far."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parallel_tool_calls": {
+      "anyOf": [
+        {
+          "type": "boolean",
+          "description": "Whether the model may call multiple tools in parallel."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stream": {
+      "type": "boolean",
+      "description": "Whether to stream response events as server-sent events."
+    },
+    "stream_options": {
+      "anyOf": [
+        {
+          "$ref": "./StreamOptionsParam.json",
+          "description": "Options that control streamed response behavior."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "background": {
+      "type": "boolean",
+      "description": "Whether to run the request in the background and return immediately."
+    },
+    "max_output_tokens": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 16,
+          "description": "The maximum number of tokens the model may generate for this response."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "max_tool_calls": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The maximum number of tool calls the model may make while generating the response."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reasoning": {
+      "anyOf": [
+        {
+          "$ref": "./ReasoningParam.json",
+          "description": "Configuration options for reasoning behavior."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "user": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 64,
+          "description": "A unique identifier representing your end user."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "safety_identifier": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 64,
+          "description": "A stable identifier used for safety monitoring and abuse detection."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prompt_cache_key": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 64,
+          "description": "A key to use when reading from or writing to the prompt cache."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prompt_cache_retention": {
+      "anyOf": [
+        {
+          "$ref": "./PromptCacheRetentionEnum.json",
+          "description": "How long to retain a prompt cache entry created by this request."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "truncation": {
+      "$ref": "./TruncationEnum.json",
+      "description": "Controls how the service truncates the input when it exceeds the model context window."
+    },
+    "instructions": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Additional instructions to guide the model for this request."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "store": {
+      "type": "boolean",
+      "description": "Whether to store the response so it can be retrieved later."
+    },
+    "service_tier": {
+      "$ref": "./ServiceTierEnum.json",
+      "description": "The service tier to use for this request."
+    },
+    "top_logprobs": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "maximum": 20,
+          "minimum": 0,
+          "description": "The number of most likely tokens to return at each position, along with their log probabilities."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "conversation": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "string",
+              "example": "conv_123"
+            },
+            {
+              "$ref": "./ConversationParam.json"
+            }
+          ],
+          "description": "The conversation to associate this response with."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "responsesapi.api.params.create_response_body.CreateResponseBody"
+}

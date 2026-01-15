@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["local_file"],
+      "description": "The environment type. Always `local_file`.",
+      "default": "local_file",
+      "x-stainless-const": true
+    },
+    "root": {
+      "type": "string",
+      "description": "Absolute path on the server used as the workspace root."
+    }
+  },
+  "type": "object",
+  "required": ["type", "root"],
+  "description": "Environment configuration for local file access.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.LocalFileEnvironmentParam"
+}

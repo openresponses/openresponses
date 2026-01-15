@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.output_item.added"],
+      "description": "The type of the event, always `response.output_item.added`.",
+      "default": "response.output_item.added",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was added."
+    },
+    "item": {
+      "anyOf": [
+        {
+          "$ref": "./ItemField.json",
+          "description": "An item representing a message, tool call, tool output, reasoning, or other response element."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "output_index", "item"],
+  "title": "Response output item added event",
+  "description": "A streaming event that indicated an output item was added to the response.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseOutputItemAddedStreamingEvent"
+}

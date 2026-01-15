@@ -1,0 +1,412 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@font-face {
+  font-family: "OpenAI Sans";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/openaiSansVariableVF.woff2") format("woff2-variations");
+}
+
+:root {
+  scroll-padding-top: 96px; /* match navbar height */
+}
+
+body {
+  /* Warm "paper" background like the reference screenshots. */
+  @apply bg-slate-50 font-light text-slate-900;
+  font-family: "OpenAI Sans", system-ui, sans-serif;
+}
+
+.site-header {
+  @apply sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur;
+  @apply transition-all duration-300 ease-in-out;
+
+  &.is-scrolled {
+    @apply shadow-sm;
+  }
+}
+
+.article-container {
+  .logos-container {
+    @apply relative left-1/2 lg:w-[min(75vw,1200px)] -translate-x-1/2;
+  }
+}
+
+.logos-container {
+  @apply items-center justify-center gap-6 lg:gap-12 py-12 lg:py-24;
+
+  img {
+    @apply h-10 lg:h-16 w-auto bg-cover;
+  }
+
+  img.openai,
+  img.aisdk {
+    @apply h-8 lg:h-12;
+  }
+
+  img.ollama {
+    @apply -translate-y-2 lg:-translate-y-4 transform;
+  }
+}
+
+.landing-title {
+  font-family: "OpenAI Sans", sans-serif;
+  @apply text-8xl leading-0 leading-20 font-black tracking-tight text-slate-900;
+}
+
+.page-title {
+  font-family: "OpenAI Sans", sans-serif;
+  @apply text-7xl leading-20 tracking-tight;
+}
+
+h1 {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  @apply text-4xl;
+}
+
+h2,
+h3,
+h4 {
+  font-family: "OpenAI Sans", system-ui, sans-serif;
+  font-weight: 500;
+}
+
+h4 {
+  @apply text-slate-500;
+}
+
+code,
+pre {
+  @apply font-mono;
+}
+
+.diagram-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.diagram-scroll img {
+  max-width: none;
+  height: auto;
+  display: block;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+  z-index: 60;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  max-width: min(96vw, 1400px);
+  max-height: 90vh;
+  width: 100%;
+}
+
+.lightbox-content img,
+.lightbox-content svg,
+.lightbox-content pre,
+.lightbox-content code {
+  display: block;
+}
+
+.lightbox-content img,
+.lightbox-content svg {
+  max-width: 100%;
+  max-height: 90vh;
+  height: auto;
+}
+
+.lightbox-content pre {
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.lightbox-content svg {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.lightbox-content img {
+  max-width: min(96vw, 1400px);
+  max-height: 90vh;
+  background: white;
+  border-radius: 12px;
+}
+
+.lightbox-content {
+  pre.mermaid {
+    @apply bg-transparent!;
+  }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: white;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.toc-wrap {
+  position: relative;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.toc-list {
+  display: grid;
+  gap: 8px;
+}
+
+.toc-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+}
+
+.toc-rail-track,
+.toc-rail-fill {
+  position: absolute;
+  left: 6px;
+  width: 1px;
+}
+
+.toc-rail-track {
+  top: var(--toc-rail-start, 0px);
+  bottom: var(--toc-rail-end, 0px);
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.toc-rail-fill {
+  top: var(--toc-rail-start, 0px);
+  height: var(--toc-indicator, 0px);
+  background: rgba(71, 85, 105, 0.7);
+}
+
+.toc-indicator {
+  position: absolute;
+  left: -0.5px;
+  top: -2px;
+  display: inline-flex;
+  transition: transform 120ms ease;
+  font-size: 2em;
+  @apply text-amber-500;
+}
+
+.toc-link {
+  display: block;
+  color: inherit;
+  transition: color 120ms ease;
+  @apply text-slate-500;
+
+  &.depth-2 {
+    @apply ml-2 text-xs text-slate-400;
+  }
+
+  &.is-active {
+    @apply text-slate-700;
+    color: #0f172a;
+    font-weight: 600;
+  }
+}
+
+code,
+.code {
+  &:before,
+  &:after {
+    content: "";
+  }
+
+  @apply rounded border-1 border-slate-300 bg-slate-100 px-1 py-0.5 font-mono font-light;
+}
+
+.prose {
+  h1 {
+    @apply mt-12;
+  }
+}
+
+.reference-table {
+  @apply overflow-hidden rounded-xl border border-slate-200;
+  @apply divide-y divide-slate-200;
+
+  .reference-table__header {
+    @apply bg-slate-100 p-4;
+    @apply text-sm font-bold text-slate-500;
+  }
+
+  .reference-table__row {
+    @apply flex flex-col gap-y-4 pt-2 pb-6;
+  }
+
+  .reference-table__rowl1 {
+    @apply flex flex-row items-center gap-2 px-4 text-sm;
+  }
+
+  .reference-table__rowl2 {
+    @apply px-4 text-sm leading-normal;
+  }
+
+  .reference-table__inline {
+    @apply px-4 pb-4;
+  }
+
+  .reference-table__inline-title {
+    @apply mb-2 text-xs tracking-wide text-slate-400 uppercase;
+  }
+
+  .reference-table__inline-table {
+    @apply divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200;
+  }
+
+  .reference-table__inline-row {
+    @apply flex flex-col gap-2 bg-white p-3;
+  }
+
+  .reference-table__inline-name {
+    @apply flex flex-row items-center gap-2 text-sm;
+  }
+
+  .reference-table__inline-desc {
+    @apply text-sm text-slate-600;
+  }
+
+  .reference-table__enum {
+    @apply px-4 pb-4;
+  }
+
+  .reference-table__enum--inline {
+    @apply px-0 pb-0;
+  }
+
+  .reference-table__enum-title {
+    @apply mb-2 text-xs tracking-wide text-slate-400 uppercase;
+  }
+
+  .reference-table__enum-list {
+    @apply flex flex-col gap-2;
+  }
+
+  .reference-table__enum-item {
+    @apply flex flex-row gap-2;
+  }
+
+  .reference-table__enum-value {
+    @apply font-mono text-slate-700;
+    @apply rounded border border-slate-200 bg-slate-100 px-2 py-0.5 text-xs text-slate-600;
+    @apply inline-flex items-center gap-2;
+  }
+
+  .reference-table__enum-desc {
+    @apply text-[11px] text-slate-500;
+  }
+
+  .reference-table__badge {
+    @apply rounded px-2 py-0.5 text-xs tracking-wide uppercase;
+    @apply border border-slate-200 bg-slate-100 text-slate-600;
+  }
+}
+
+.type-label {
+  @apply rounded border px-2 py-0.5 text-sm font-bold;
+
+  &.string {
+    @apply border-amber-200 bg-amber-100 text-amber-500;
+  }
+
+  &.boolean {
+    @apply border-cyan-200 bg-cyan-100 text-cyan-500;
+  }
+
+  &.number,
+  &.integer {
+    @apply border-blue-200 bg-blue-100 text-blue-500;
+  }
+
+  &:not(.number, .integer, .boolean, .string) {
+    @apply border-emerald-200 bg-emerald-100 text-emerald-500;
+  }
+
+  &.array:after {
+    content: "[]";
+  }
+}
+
+details.union-details {
+  @apply transition hover:cursor-pointer hover:bg-slate-100;
+
+  .union-details__arrow {
+    @apply rotate-0 transition duration-200 ease-in-out;
+  }
+
+  &:open {
+    @apply hover:bg-slate-50;
+
+    .union-details__arrow {
+      @apply rotate-90;
+    }
+  }
+}
+
+article.prose :is(h1, h2, h3) {
+  scroll-margin-top: 120px;
+  position: relative;
+}
+
+article.prose :is(h1, h2, h3) {
+  & .heading-anchor {
+    @apply absolute inline-flex items-center text-lg text-slate-400 no-underline opacity-0;
+
+    left: -1em;
+    top: 50%;
+    transform: translateY(-50%);
+    transition:
+      opacity 140ms ease,
+      color 140ms ease,
+      border-color 140ms ease;
+  }
+
+  &:hover {
+    @apply cursor-pointer;
+  }
+}
+
+article.prose :is(h1, h2, h3):hover .heading-anchor {
+  @apply opacity-100;
+}
+
+article.prose :is(h1, h2, h3) .heading-anchor:focus-visible,
+article.prose :is(h1, h2, h3) .heading-anchor.is-copied {
+  @apply text-emerald-500 opacity-100;
+}
+
+@media (max-width: 640px) {
+  article.prose :is(h1, h2, h3) .heading-anchor {
+    left: -1.4em;
+  }
+}

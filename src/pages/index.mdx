@@ -1,0 +1,47 @@
+---
+layout: ../layouts/DocsLayout.astro
+title: Open Responses
+description: Open Responses documentation overview.
+landingTitle: Open Responses
+---
+
+Open Responses is an open-source specification and ecosystem for building multi-provider, interoperable LLM interfaces based on the OpenAI Responses API. It defines a shared schema, and tooling layer that enable a unified experience for calling language models, streaming results, and composing agentic workflows—independent of provider.
+
+## Why Open Responses
+
+LLM APIs have largely converged on similar building blocks—messages, tool calls, streaming, and multimodal inputs—but each provider encodes them differently. **Open Responses** gives builders a **shared, open specification** (plus reference tooling) so you can describe requests and outputs once, and run them across providers with minimal translation work.
+
+It’s designed to be:
+
+- **Multi-provider by default**: one schema that can map cleanly to many model providers.
+- **Friendly to real-world agentic workflows**: consistent streaming events, tool invocation patterns, and “items” as the atomic unit of model output and tool use.
+- **Extensible without fragmentation**: a stable core with room for provider-specific features when they don’t generalize yet.
+
+## Community
+
+Open Responses is an open project built for a multi-vendor ecosystem. It’s maintained in the open, with contributions from builders across the industry.
+
+<div class="logos-container not-prose flex flex-row flex-wrap items-center justify-center gap-6 px-4">
+    <img class={"openrouter"} src="/svg/logos/openrouter.svg" alt="OpenRouter" />
+    <img class={"aisdk"} src="/svg/logos/ai-sdk.svg" alt="AI SDK" />
+    <img class={"huggingface"} src="/svg/logos/huggingface.svg" alt="Hugging Face" />
+    <img class={"lmstudio"} src="/svg/logos/lmstudio.svg" alt="LM Studio" />
+    <img class={"ollama"} src="/svg/logos/ollama.svg" alt="Ollama" />
+    <img class={"openai"} src="/svg/logos/openai.svg" alt="OpenAI"/>
+    <img class={"vllm"} src="/svg/logos/vllm.svg" alt="vLLM" />
+</div>
+
+**Backed by builders:** a community of developers who want portability, interoperability, and a shared foundation for LLM products.
+
+## Get Started
+
+
+1. **Read the spec** to understand the core concepts: items, streaming events, and tool use.
+2. **Review the OpenAPI reference** to see the full surface area and types.
+3. **Validate your API** using the our [acceptance tests](/compliance).
+
+## Contributing
+
+We’re excited to evolve the spec with a community of builders. If you’re interested in shaping interoperability across LLM providers—schemas, streaming, tooling, tests, or docs—contributions are welcome.
+
+To understand how decisions are made and how the project is run, see the [technical charter](/governance).

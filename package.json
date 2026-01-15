@@ -1,0 +1,57 @@
+{
+  "name": "openresponses",
+  "version": "0.1.0",
+  "description": "OpenResponses",
+  "main": "index.js",
+  "scripts": {
+    "tsp": "tsp compile schema__tsp/schema.tsp",
+    "tsp:watch": "tsp compile schema__tsp/schema.tsp --watch",
+    "spec": "python bin/inline_openapi_refs.py --entrypoint ./schema/openapi.json --endpoint 'POST /responses'  --manifest ./schema/openapi_filter_manifest.yaml --patches schema/openapi_additive_patches.yaml --output ./public/openapi/openapi.json",
+    "generate:zod": "kubb generate",
+    "prettier": "prettier",
+    "prepare": "husky",
+    "dev:astro": "astro dev",
+    "dev": "bun run spec; bun run dev:astro",
+    "preview": "astro preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "tspMain": "./schema/schema.tsp",
+  "devDependencies": {
+    "@kubb/cli": "^4.15.0",
+    "@kubb/core": "^4.15.0",
+    "@kubb/plugin-oas": "^4.15.0",
+    "@kubb/plugin-zod": "^4.15.0",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "4.3.13",
+    "@astrojs/react": "4.4.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/bun": "^1.3.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "astro": "5.16.6",
+    "astro-expressive-code": "^0.41.3",
+    "astro-mermaid": "^1.2.0",
+    "mermaid": "^11.12.2",
+    "oas": "^28.8.2",
+    "railroad-diagrams": "^1.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^3.25.76"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
+  }
+}

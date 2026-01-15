@@ -1,0 +1,37 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["json_schema"],
+      "default": "json_schema",
+      "x-stainless-const": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "schema": {
+      "anyOf": [
+        {},
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "strict": {
+      "type": "boolean"
+    }
+  },
+  "type": "object",
+  "required": ["type", "name", "description", "schema", "strict"],
+  "x-openai-class-name": "responses_common.api.resources.response_format_field.JsonSchemaResponseFormat"
+}

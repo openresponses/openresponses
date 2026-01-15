@@ -1,0 +1,57 @@
+{
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of this reasoning item.",
+          "example": "rs_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["reasoning"],
+      "description": "The item type. Always `reasoning`.",
+      "default": "reasoning",
+      "x-stainless-const": true
+    },
+    "summary": {
+      "items": {
+        "$ref": "./ReasoningSummaryContentParam.json"
+      },
+      "type": "array",
+      "description": "Reasoning summary content associated with this item."
+    },
+    "content": {
+      "anyOf": [
+        {
+          "items": {},
+          "type": "array",
+          "maxItems": 0,
+          "description": "Reasoning content for this item."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "encrypted_content": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "An encrypted representation of the reasoning content."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "summary"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ReasoningItemParam"
+}

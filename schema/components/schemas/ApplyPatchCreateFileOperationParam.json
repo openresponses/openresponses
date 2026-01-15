@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["create_file"],
+      "description": "The operation type. Always `create_file`.",
+      "default": "create_file",
+      "x-stainless-const": true
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path of the file to create relative to the workspace root."
+    },
+    "diff": {
+      "type": "string",
+      "maxLength": 10485760,
+      "description": "Unified diff content to apply when creating the file."
+    }
+  },
+  "type": "object",
+  "required": ["type", "path", "diff"],
+  "title": "Apply patch create file operation",
+  "description": "Instruction for creating a new file via the apply_patch tool.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ApplyPatchCreateFileOperationParam"
+}

@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["screenshot"],
+      "description": "The type of the action. Always `screenshot`.",
+      "default": "screenshot",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Screenshot action",
+  "description": "A screenshot action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.ScreenshotAction"
+}

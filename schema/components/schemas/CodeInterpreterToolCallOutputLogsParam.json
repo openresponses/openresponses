@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["logs"],
+      "description": "The output type. Always `logs`.",
+      "default": "logs",
+      "x-stainless-const": true
+    },
+    "logs": {
+      "type": "string",
+      "description": "Captured logs from code execution."
+    }
+  },
+  "type": "object",
+  "required": ["type", "logs"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.CodeInterpreterToolCallOutputLogsParam"
+}

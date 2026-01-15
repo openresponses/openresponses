@@ -1,0 +1,89 @@
+{
+  "post": {
+    "tags": ["Videos"],
+    "summary": "Create a video",
+    "description": "Create a new video generation job from a prompt and optional reference assets.",
+    "operationId": "createVideo",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "$ref": "../components/schemas/CreateVideoBody.json"
+          }
+        },
+        "application/json": {
+          "schema": {
+            "$ref": "../components/schemas/CreateVideoBody.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/VideoResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.videos.create_video_method.CreateVideoMethod",
+    "x-openai-secret-internal": "openapi-flag-devday2025"
+  },
+  "get": {
+    "tags": ["Videos"],
+    "summary": "List videos",
+    "description": "List recently generated videos for the current project.",
+    "operationId": "ListVideos",
+    "parameters": [
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of items to retrieve",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      {
+        "name": "order",
+        "in": "query",
+        "description": "Sort order of results by timestamp. Use `asc` for ascending order or `desc` for descending order.",
+        "required": false,
+        "schema": {
+          "$ref": "../components/schemas/OrderEnum.json"
+        }
+      },
+      {
+        "name": "after",
+        "in": "query",
+        "description": "Identifier for the last item from the previous pagination request",
+        "required": false,
+        "schema": {
+          "description": "Identifier for the last item from the previous pagination request",
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/VideoListResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.videos.list_videos_method.ListVideosMethod",
+    "x-openai-secret-internal": "openapi-flag-devday2025"
+  }
+}

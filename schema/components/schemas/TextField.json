@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "format": {
+      "oneOf": [
+        {
+          "$ref": "./TextResponseFormat.json"
+        },
+        {
+          "$ref": "./JsonObjectResponseFormat.json"
+        },
+        {
+          "$ref": "./JsonSchemaResponseFormat.json"
+        }
+      ]
+    },
+    "verbosity": {
+      "$ref": "./VerbosityEnum.json"
+    }
+  },
+  "type": "object",
+  "required": ["format"],
+  "x-openai-class-name": "responses_common.api.resources.response_format_field.TextField"
+}

@@ -1,0 +1,59 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["code_interpreter_call"],
+      "default": "code_interpreter_call",
+      "x-stainless-const": true
+    },
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "./CodeInterpreterCallStatus.json"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "container_id": {
+      "type": "string"
+    },
+    "code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "outputs": {
+      "anyOf": [
+        {
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "./CodeInterpreterOutputLogs.json"
+              },
+              {
+                "$ref": "./CodeInterpreterOutputImage.json"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "type"
+            }
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "id", "status", "container_id", "code", "outputs"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.CodeInterpreterCall",
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/CodeInterpreterToolCall.yaml"
+}

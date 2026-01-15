@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["auto", "disabled"],
+  "x-openai-class-name": "responsesapi.api.params.create_response_body.TruncationEnum"
+}

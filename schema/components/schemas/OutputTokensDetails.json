@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "reasoning_tokens": {
+      "type": "integer",
+      "description": "The number of output tokens that were attributed to reasoning."
+    }
+  },
+  "type": "object",
+  "required": ["reasoning_tokens"],
+  "title": "Output tokens details",
+  "description": "A breakdown of output token usage that was recorded.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.OutputTokensDetails"
+}

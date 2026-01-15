@@ -1,0 +1,42 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["file_search_call"],
+      "default": "file_search_call",
+      "x-stainless-const": true
+    },
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "./FileSearchToolCallStatusEnum.json"
+    },
+    "queries": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "results": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./FileSearchResult.json"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_by": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["type", "id", "status", "queries", "results"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.FileSearchCall",
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/FileSearchToolCall.yaml"
+}

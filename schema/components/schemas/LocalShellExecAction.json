@@ -1,0 +1,64 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["exec"],
+      "description": "The type of the local shell action. Always `exec`.",
+      "default": "exec",
+      "x-stainless-const": true
+    },
+    "command": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "The command to run."
+    },
+    "timeout_ms": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Optional timeout in milliseconds for the command."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "working_directory": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Optional working directory to run the command in."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "env": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object",
+      "description": "Environment variables to set for the command.",
+      "x-oaiTypeLabel": "map"
+    },
+    "user": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Optional user to run the command as."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "command", "env"],
+  "title": "Local shell exec action",
+  "description": "Execute a shell command on the server.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.LocalShellExecAction"
+}

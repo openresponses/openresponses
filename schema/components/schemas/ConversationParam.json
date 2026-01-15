@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the conversation.",
+      "example": "conv_123"
+    }
+  },
+  "type": "object",
+  "required": ["id"],
+  "title": "Conversation object",
+  "description": "The conversation that this response belongs to.",
+  "x-openai-class-name": "responsesapi.api.params.create_response_body.ConversationParam"
+}

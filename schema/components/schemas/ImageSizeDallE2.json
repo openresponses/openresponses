@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["256x256", "512x512", "1024x1024"],
+  "x-openai-class-name": "responsesapi.api.params.image_shared_params.ImageSizeDallE2"
+}

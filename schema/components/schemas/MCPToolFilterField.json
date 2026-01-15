@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "tool_names": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "read_only": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["tool_names", "read_only"],
+  "x-openai-class-name": "responses_common.api.resources.tools.MCPToolFilterField"
+}

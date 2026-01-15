@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["auto"],
+      "description": "Always `auto`.",
+      "default": "auto",
+      "x-stainless-const": true
+    },
+    "file_ids": {
+      "items": {
+        "type": "string",
+        "example": "file-123"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "description": "An optional list of uploaded files to make available to your code."
+    },
+    "memory_limit": {
+      "anyOf": [
+        {
+          "$ref": "./ContainerMemoryLimit.json",
+          "description": "The memory limit for the code interpreter container."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "CodeInterpreterToolAuto",
+  "description": "Configuration for a code interpreter container. Optionally specify the IDs of the files to run the code on.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.AutoCodeInterpreterToolParam"
+}

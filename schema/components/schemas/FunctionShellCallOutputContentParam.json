@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "stdout": {
+      "type": "string",
+      "maxLength": 10485760,
+      "description": "Captured stdout output for the shell call."
+    },
+    "stderr": {
+      "type": "string",
+      "maxLength": 10485760,
+      "description": "Captured stderr output for the shell call."
+    },
+    "outcome": {
+      "$ref": "./FunctionShellCallOutputOutcomeParam.json",
+      "description": "The exit or timeout outcome associated with this shell call."
+    }
+  },
+  "type": "object",
+  "required": ["stdout", "stderr", "outcome"],
+  "title": "Shell output content",
+  "description": "Captured stdout and stderr for a portion of a shell tool call output.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.FunctionShellCallOutputContentParam"
+}

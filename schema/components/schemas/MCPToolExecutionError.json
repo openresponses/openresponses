@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp_tool_execution_error"],
+      "default": "mcp_tool_execution_error",
+      "x-stainless-const": true
+    },
+    "content": {}
+  },
+  "type": "object",
+  "required": ["type", "content"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.MCPToolExecutionError"
+}

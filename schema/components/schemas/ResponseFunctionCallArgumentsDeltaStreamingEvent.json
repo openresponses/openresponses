@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.function_call_arguments.delta"],
+      "description": "The type of the event, always `response.function_call_arguments.delta`.",
+      "default": "response.function_call_arguments.delta",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "delta": {
+      "type": "string",
+      "description": "The arguments delta that was appended."
+    },
+    "obfuscation": {
+      "type": "string",
+      "description": "An obfuscation string that was added to pad the event payload."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "item_id", "output_index", "delta"],
+  "title": "Response function call arguments delta event",
+  "description": "A streaming event that indicated function call arguments were incrementally added.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseFunctionCallArgumentsDeltaStreamingEvent"
+}

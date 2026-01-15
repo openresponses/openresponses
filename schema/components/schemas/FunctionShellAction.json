@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "commands": {
+      "items": {
+        "type": "string",
+        "description": "A list of commands to run."
+      },
+      "type": "array"
+    },
+    "timeout_ms": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Optional timeout in milliseconds for the commands."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "max_output_length": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Optional maximum number of characters to return from each command."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["commands", "timeout_ms", "max_output_length"],
+  "title": "Shell exec action",
+  "description": "Execute a shell command.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.FunctionShellAction"
+}

@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["summary_text"],
+      "description": "The type of the object. Always `summary_text`.",
+      "default": "summary_text",
+      "x-stainless-const": true
+    },
+    "text": {
+      "type": "string",
+      "description": "A summary of the reasoning output from the model so far."
+    }
+  },
+  "type": "object",
+  "required": ["type", "text"],
+  "title": "Summary text",
+  "description": "A summary text from the model.",
+  "x-openai-class-name": "responses_common.api.resources.content_resource.SummaryTextContent"
+}

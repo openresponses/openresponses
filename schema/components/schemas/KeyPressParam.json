@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["keypress"],
+      "description": "Specifies the event type. Always `keypress`.",
+      "default": "keypress",
+      "x-stainless-const": true
+    },
+    "keys": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "The keys to press."
+    }
+  },
+  "type": "object",
+  "required": ["type", "keys"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.KeyPress"
+}

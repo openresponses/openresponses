@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "user_location": {
+      "$ref": "./ApproximateLocationParam.json",
+      "description": "An approximate user location to bias web search results."
+    },
+    "search_context_size": {
+      "$ref": "./SearchContextSize.json",
+      "description": "How much context to retrieve and include from web search results."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["web_search_preview_2025_03_11"],
+      "description": "The type of the tool. Always `web_search_preview_2025_03_11`.",
+      "default": "web_search_preview_2025_03_11",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.WebSearchPreviewToolParam_2025_03_11"
+}

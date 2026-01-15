@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["always", "never"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.MCPRequireApprovalApiEnum"
+}

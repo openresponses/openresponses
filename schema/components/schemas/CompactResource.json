@@ -1,0 +1,71 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the compacted response."
+    },
+    "object": {
+      "type": "string",
+      "enum": ["response.compaction"],
+      "description": "The object type. Always `response.compaction`.",
+      "default": "response.compaction",
+      "x-stainless-const": true
+    },
+    "output": {
+      "items": {
+        "$ref": "./ItemField.json"
+      },
+      "type": "array",
+      "description": "The compacted list of output items."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "Unix timestamp (in seconds) when the compacted conversation was created."
+    },
+    "usage": {
+      "$ref": "./Usage.json",
+      "description": "Token accounting for the compaction pass, including cached, reasoning, and total tokens."
+    }
+  },
+  "type": "object",
+  "required": ["id", "object", "output", "created_at", "usage"],
+  "title": "The compacted response object",
+  "example": {
+    "id": "resp_001",
+    "object": "response.compaction",
+    "output": [
+      {
+        "type": "message",
+        "role": "user",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "Summarize our launch checklist from last week."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "role": "user",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "You are performing a CONTEXT CHECKPOINT COMPACTION..."
+          }
+        ]
+      },
+      {
+        "type": "compaction",
+        "id": "cmp_001",
+        "encrypted_content": "encrypted-summary"
+      }
+    ],
+    "created_at": 1731459200,
+    "usage": {
+      "input_tokens": 42897,
+      "output_tokens": 12000,
+      "total_tokens": 54912
+    }
+  },
+  "x-openai-class-name": "responsesapi.api.resources.compact_resource.CompactionResourceBody"
+}

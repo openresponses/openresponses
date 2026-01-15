@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["none", "minimal", "low", "medium", "high", "xhigh"],
+  "x-openai-class-name": "oai_api.params.reasoning_effort_param.ReasoningEffortEnum"
+}

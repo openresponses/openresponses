@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "embedding_weight": {
+      "type": "number",
+      "description": "Weight to apply to embedding similarity scores when using hybrid search."
+    },
+    "text_weight": {
+      "type": "number",
+      "description": "Weight to apply to text similarity scores when using hybrid search."
+    }
+  },
+  "type": "object",
+  "required": [],
+  "description": "Optional hybrid search weighting configuration.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.HybridSearchOptions"
+}

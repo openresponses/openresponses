@@ -1,0 +1,67 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["message"],
+      "description": "The type of the message. Always set to `message`.",
+      "default": "message",
+      "x-stainless-const": true
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the message."
+    },
+    "status": {
+      "$ref": "./MessageStatus.json",
+      "description": "The status of item. One of `in_progress`, `completed`, or `incomplete`. Populated when items are returned via API."
+    },
+    "role": {
+      "$ref": "./MessageRole.json",
+      "description": "The role of the message. One of `unknown`, `user`, `assistant`, `system`, `critic`, `discriminator`, `developer`, or `tool`."
+    },
+    "content": {
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "./InputTextContent.json"
+          },
+          {
+            "$ref": "./OutputTextContent.json"
+          },
+          {
+            "$ref": "./TextContent.json"
+          },
+          {
+            "$ref": "./SummaryTextContent.json"
+          },
+          {
+            "$ref": "./ReasoningTextContent.json"
+          },
+          {
+            "$ref": "./RefusalContent.json"
+          },
+          {
+            "$ref": "./InputImageContent.json"
+          },
+          {
+            "$ref": "./ComputerScreenshotContent.json"
+          },
+          {
+            "$ref": "./InputFileContent.json"
+          }
+        ],
+        "description": "A content part that makes up an input or output item.",
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "type": "array",
+      "description": "The content of the message"
+    }
+  },
+  "type": "object",
+  "required": ["type", "id", "status", "role", "content"],
+  "title": "Message",
+  "description": "A message to or from the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.Message"
+}

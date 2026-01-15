@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "cached_tokens": {
+      "type": "integer",
+      "description": "The number of input tokens that were served from cache."
+    }
+  },
+  "type": "object",
+  "required": ["cached_tokens"],
+  "title": "Input tokens details",
+  "description": "A breakdown of input token usage that was recorded.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.InputTokensDetails"
+}

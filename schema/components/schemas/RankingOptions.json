@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "ranker": {
+      "$ref": "./RankerVersionType.json",
+      "description": "The ranker to use for the file search."
+    },
+    "score_threshold": {
+      "type": "number",
+      "description": "The score threshold for the file search, a number between 0 and 1. Numbers closer to 1 will attempt to return only the most relevant results, but may return fewer results."
+    },
+    "hybrid_search": {
+      "$ref": "./HybridSearchOptions.json",
+      "description": "Weights that control how reciprocal rank fusion balances semantic embedding matches versus sparse keyword matches when hybrid search is enabled."
+    }
+  },
+  "type": "object",
+  "required": ["ranker", "score_threshold"],
+  "x-openai-class-name": "responses_common.api.resources.tools.RankingOptions"
+}

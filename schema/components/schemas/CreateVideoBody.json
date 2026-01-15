@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "model": {
+      "$ref": "./VideoModel.json",
+      "description": "The video generation model to use (allowed values: sora-2, sora-2-pro). Defaults to `sora-2`."
+    },
+    "prompt": {
+      "type": "string",
+      "maxLength": 32000,
+      "minLength": 1,
+      "description": "Text prompt that describes the video to generate."
+    },
+    "input_reference": {
+      "type": "string",
+      "format": "binary",
+      "description": "Optional image reference that guides generation."
+    },
+    "seconds": {
+      "$ref": "./VideoSeconds.json",
+      "description": "Clip duration in seconds (allowed values: 4, 8, 12). Defaults to 4 seconds."
+    },
+    "size": {
+      "$ref": "./VideoSize.json",
+      "description": "Output resolution formatted as width x height (allowed values: 720x1280, 1280x720, 1024x1792, 1792x1024). Defaults to 720x1280."
+    }
+  },
+  "type": "object",
+  "required": ["prompt"],
+  "title": "Create video request",
+  "description": "Parameters for creating a new video generation job.",
+  "x-openai-class-name": "responsesapi.api.params.video_param.CreateVideoBody"
+}

@@ -1,0 +1,113 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the video job."
+    },
+    "object": {
+      "type": "string",
+      "enum": ["video"],
+      "description": "The object type, which is always `video`.",
+      "default": "video",
+      "x-stainless-const": true
+    },
+    "model": {
+      "$ref": "./VideoModel.json",
+      "description": "The video generation model that produced the job."
+    },
+    "status": {
+      "$ref": "./VideoStatus.json",
+      "description": "Current lifecycle status of the video job."
+    },
+    "progress": {
+      "type": "integer",
+      "description": "Approximate completion percentage for the generation task."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "Unix timestamp (seconds) for when the job was created."
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Unix timestamp (seconds) for when the job completed, if finished."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "description": "Unix timestamp (seconds) for when the downloadable assets expire, if set."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prompt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The prompt that was used to generate the video."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "size": {
+      "$ref": "./VideoSize.json",
+      "description": "The resolution of the generated video."
+    },
+    "seconds": {
+      "$ref": "./VideoSeconds.json",
+      "description": "Duration of the generated clip in seconds."
+    },
+    "remixed_from_video_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Identifier of the source video if this video is a remix."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "./Error.json",
+          "description": "Error payload that explains why generation failed, if applicable."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "object",
+    "model",
+    "status",
+    "progress",
+    "created_at",
+    "completed_at",
+    "expires_at",
+    "prompt",
+    "size",
+    "seconds",
+    "remixed_from_video_id",
+    "error"
+  ],
+  "title": "Video job",
+  "description": "Structured information describing a generated video job.",
+  "x-openai-class-name": "responsesapi.api.resources.video_resource.VideoBody"
+}

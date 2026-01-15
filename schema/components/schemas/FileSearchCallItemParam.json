@@ -1,0 +1,51 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique ID of this file search tool call.",
+      "example": "fs_123"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["file_search_call"],
+      "description": "The item type. Always `file_search_call`.",
+      "default": "file_search_call",
+      "x-stainless-const": true
+    },
+    "status": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The status of the file search tool call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "queries": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "The search queries issued to the file search tool."
+    },
+    "results": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./FileSearchRetrievedChunksParam.json"
+          },
+          "type": "array",
+          "description": "Retrieved chunks returned by the file search tool."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["id", "type", "queries"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.FileSearchCallItemParam"
+}

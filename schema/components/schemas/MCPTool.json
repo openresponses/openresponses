@@ -1,0 +1,82 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp"],
+      "default": "mcp",
+      "x-stainless-const": true
+    },
+    "server_label": {
+      "type": "string"
+    },
+    "server_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "server_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "headers": {
+      "anyOf": [
+        {},
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "allowed_tools": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "./MCPToolFilterField.json"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "require_approval": {
+      "oneOf": [
+        {
+          "$ref": "./MCPRequireApprovalFilterField.json"
+        },
+        {
+          "$ref": "./MCPRequireApprovalFieldEnum.json"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "server_label",
+    "server_description",
+    "server_url",
+    "headers",
+    "allowed_tools",
+    "require_approval"
+  ],
+  "x-openai-class-name": "responses_common.api.resources.tools.MCPTool"
+}

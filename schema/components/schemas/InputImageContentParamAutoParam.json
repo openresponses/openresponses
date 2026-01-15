@@ -1,0 +1,51 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["input_image"],
+      "description": "The type of the input item. Always `input_image`.",
+      "default": "input_image",
+      "x-stainless-const": true
+    },
+    "image_url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 20971520,
+          "description": "The URL of the image to be sent to the model. A fully qualified URL or base64 encoded image in a data URL."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "file_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of the file to be sent to the model.",
+          "example": "file-123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "detail": {
+      "anyOf": [
+        {
+          "$ref": "./DetailEnum.json",
+          "description": "The detail level of the image to be sent to the model. One of `high`, `low`, or `auto`. Defaults to `auto`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Input image",
+  "description": "An image input to the model. Learn about [image inputs](/docs/guides/vision)",
+  "x-openai-class-name": "responses_common.api.params.input_content_param.InputImageContentParamAuto"
+}

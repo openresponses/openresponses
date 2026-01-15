@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+echo "Running lint-staged..."
+bunx lint-staged

@@ -1,0 +1,218 @@
+{
+  "post": {
+    "summary": "Create response",
+    "description": "Creates a response.",
+    "operationId": "Createresponse",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../components/schemas/CreateResponseBody.json"
+          }
+        },
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "$ref": "../components/schemas/CreateResponseBody.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ResponseResource.json"
+            }
+          },
+          "text/event-stream": {
+            "schema": {
+              "oneOf": [
+                {
+                  "$ref": "../components/schemas/ResponseCreatedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseQueuedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseFailedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseIncompleteStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseOutputItemAddedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseOutputItemDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseReasoningSummaryPartAddedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseReasoningSummaryPartDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseContentPartAddedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseContentPartDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseOutputTextDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseOutputTextDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseRefusalDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseRefusalDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseReasoningDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseReasoningDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseReasoningSummaryDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseReasoningSummaryDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseOutputTextAnnotationAddedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseFunctionCallArgumentsDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseFunctionCallArgumentsDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCustomToolCallInputDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCustomToolCallInputDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseShellCallCommandAddedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseShellCallCommandDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseShellCallCommandDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseFileSearchCallInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseFileSearchCallSearchingStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseFileSearchCallCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseWebSearchCallInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseWebSearchCallSearchingStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseWebSearchCallCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCodeInterpreterCallInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCodeInterpreterCallInterpretingStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCodeInterpreterCallCodeDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCodeInterpreterCallCodeDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseCodeInterpreterCallCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseApplyPatchCallOperationDiffDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseApplyPatchCallOperationDiffDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseImageGenCallInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseImageGenCallGeneratingStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseImageGenCallPartialImageStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseImageGenCallCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPListToolsInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPListToolsFailedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPListToolsCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPCallInProgressStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPCallFailedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPCallCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPCallArgumentsDeltaStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ResponseMCPCallArgumentsDoneStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ImageGenerationPartialImageStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ImageGenerationCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ImageEditPartialImageStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ImageEditCompletedStreamingEvent.json"
+                },
+                {
+                  "$ref": "../components/schemas/ErrorStreamingEvent.json"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type"
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.responses.create_response_method.CreateResponseMethod"
+  }
+}

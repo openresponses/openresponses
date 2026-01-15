@@ -1,0 +1,42 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["custom"],
+      "description": "The type of the custom tool. Always `custom`.",
+      "default": "custom",
+      "x-stainless-const": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the custom tool, used to identify it in tool calls."
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Optional description of the custom tool, used to provide more context."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "format": {
+      "anyOf": [
+        {
+          "$ref": "./CustomToolFormat.json",
+          "description": "The input format for the custom tool. Default is unconstrained text."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "name", "description", "format"],
+  "title": "Custom tool",
+  "description": "A custom tool that processes input using a specified format. Learn more about [custom tools](/docs/guides/function-calling#custom-tools).",
+  "x-openai-class-name": "responses_common.api.resources.tools.CustomTool"
+}

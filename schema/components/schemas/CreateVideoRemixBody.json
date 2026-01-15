@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "maxLength": 32000,
+      "minLength": 1,
+      "description": "Updated text prompt that directs the remix generation."
+    }
+  },
+  "type": "object",
+  "required": ["prompt"],
+  "title": "Create video remix request",
+  "description": "Parameters for remixing an existing generated video.",
+  "x-openai-class-name": "responsesapi.api.params.video_param.CreateVideoRemixBody"
+}

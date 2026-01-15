@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.code_interpreter_call_code.delta"],
+      "description": "The type of the event, always `response.code_interpreter_call.code.delta`.",
+      "default": "response.code_interpreter_call_code.delta",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "delta": {
+      "type": "string",
+      "description": "The code delta that was appended."
+    },
+    "obfuscation": {
+      "type": "string",
+      "description": "An obfuscation string that was added to pad the event payload."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "output_index", "item_id", "delta"],
+  "title": "Response code interpreter call code delta event",
+  "description": "A streaming event that indicated code interpreter input code was incrementally added.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseCodeInterpreterCallCodeDeltaStreamingEvent"
+}

@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["move"],
+      "description": "The type of the action. Always `move`.",
+      "default": "move",
+      "x-stainless-const": true
+    },
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate where the pointer was moved."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate where the pointer was moved."
+    }
+  },
+  "type": "object",
+  "required": ["type", "x", "y"],
+  "title": "Move action",
+  "description": "A pointer move action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.MoveAction"
+}

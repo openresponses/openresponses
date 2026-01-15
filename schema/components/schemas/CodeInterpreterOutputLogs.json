@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["logs"],
+      "description": "The type of the output. Always `logs`.",
+      "default": "logs",
+      "x-stainless-const": true
+    },
+    "logs": {
+      "type": "string",
+      "description": "The logs output from the code interpreter."
+    }
+  },
+  "type": "object",
+  "required": ["type", "logs"],
+  "title": "Code interpreter output logs",
+  "description": "The logs output from the code interpreter.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.CodeInterpreterOutputLogs"
+}

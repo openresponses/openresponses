@@ -1,0 +1,53 @@
+---
+type EnumValue = string | number | boolean | null;
+type EnumDescriptions = Record<string, string>;
+
+interface Props {
+  values?: EnumValue[];
+  descriptions?: EnumDescriptions;
+  inline?: boolean;
+}
+
+const { values = [], descriptions = {}, inline = false } = Astro.props as Props;
+---
+
+{
+  values.length > 0 && (
+    <div class:list={[{ "px-4 pb-4": !inline }, { "px-0 pb-0": inline }]}>
+      <div class="mb-2 text-xs tracking-[0.08em] text-slate-400 uppercase">
+        Values
+      </div>
+      <table class="w-full border-collapse overflow-hidden rounded-lg bg-white outline outline-slate-200">
+        <tbody class="divide-y divide-slate-200">
+          {values.map((value, index) => {
+            const description = descriptions?.[value];
+            return (
+              <tr>
+                <td
+                  class:list={[
+                    "w-[30%] border-slate-200 bg-slate-50 px-3 py-2 align-top font-mono text-xs text-slate-700 last:border-b-0",
+                    {
+                      "border-b": index < values.length - 1,
+                    },
+                  ]}
+                >
+                  {String(value)}
+                </td>
+                <td
+                  class:list={[
+                    "border-slate-200 px-3 py-2 align-top text-xs text-slate-500",
+                    {
+                      "border-b": index < values.length - 1,
+                    },
+                  ]}
+                >
+                  {description || "—"}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}

@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the safety check."
+    },
+    "code": {
+      "type": "string",
+      "description": "The safety check code that was recorded."
+    },
+    "message": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The safety check message that was recorded."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["id", "code", "message"],
+  "title": "Safety check",
+  "description": "A safety check that was recorded for a computer tool call.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.SafetyCheck"
+}

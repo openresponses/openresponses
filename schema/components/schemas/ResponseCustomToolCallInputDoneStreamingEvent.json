@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.custom_tool_call_input.done"],
+      "description": "The type of the event, always `response.custom_tool_call.input.done`.",
+      "default": "response.custom_tool_call_input.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "input": {
+      "type": "string",
+      "description": "The final input string that was emitted."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "output_index", "item_id", "input"],
+  "title": "Response custom tool call input done event",
+  "description": "A streaming event that indicated custom tool call input was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseCustomToolCallInputDoneStreamingEvent"
+}

@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["in_memory", "24h"],
+  "x-openai-class-name": "prompt_caching.prompt_cache_retention.PromptCacheRetentionEnum"
+}

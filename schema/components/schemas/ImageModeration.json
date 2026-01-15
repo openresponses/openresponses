@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["auto", "low"],
+  "x-openai-class-name": "responses_common.api.params.image_shared_params.ImageModeration"
+}

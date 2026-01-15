@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The ID of the pending safety check."
+    },
+    "code": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The type of the pending safety check."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "message": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Details about the pending safety check."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["id"],
+  "description": "A pending safety check for the computer call.",
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.ComputerCallSafetyCheckParam"
+}

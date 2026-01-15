@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["text"],
+      "description": "Unconstrained text format. Always `text`.",
+      "default": "text",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Text format",
+  "description": "Unconstrained free-form text.",
+  "x-openai-class-name": "responses_common.api.resources.tools.CustomTextFormatField"
+}

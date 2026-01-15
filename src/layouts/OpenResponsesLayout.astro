@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <main class="container mx-auto px-4 sm:px-6">
+      <div class="prose mx-auto max-w-3xl py-12">
+        <article class="mx-auto max-w-3xl">
+          <slot />
+        </article>
+      </div>
+    </main>
+    <script is:inline>
+      // Lightweight union tabs: no framework, just class toggles + ARIA.
+      (() => {
+        const roots = document.querySelectorAll("[data-union-tabs]");
+        for (const root of roots) {
+          const tabs = Array.from(
+            root.querySelectorAll('[role="tab"][data-tab]'),
+          );
+          const panels = Array.from(
+            root.querySelectorAll('[role="tabpanel"][data-panel]'),
+          );
+
+          const setActive = (idx) => {
+            for (const tab of tabs) {
+              const active = tab.getAttribute("data-tab") === String(idx);
+              tab.setAttribute("aria-selected", active ? "true" : "false");
+              tab.classList.toggle("border-orange-500", active);
+              tab.classList.toggle("text-orange-700", active);
+              tab.classList.toggle("border-transparent", !active);
+              tab.classList.toggle("text-slate-500", !active);
+            }
+            for (const panel of panels) {
+              const active = panel.getAttribute("data-panel") === String(idx);
+              panel.classList.toggle("hidden", !active);
+              panel.classList.toggle("block", active);
+            }
+          };
+
+          for (const tab of tabs) {
+            tab.addEventListener("click", () =>
+              setActive(tab.getAttribute("data-tab")),
+            );
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

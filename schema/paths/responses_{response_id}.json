@@ -1,0 +1,116 @@
+{
+  "get": {
+    "summary": "Retrieve Response",
+    "description": "Retrieves a response.",
+    "operationId": "RetrieveResponse",
+    "parameters": [
+      {
+        "name": "response_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "example": "resp_123",
+          "type": "string"
+        }
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "../components/schemas/IncludeEnum.json"
+          }
+        }
+      },
+      {
+        "name": "exclude",
+        "in": "query",
+        "description": "A list of fields to omit from the response returned by the API.",
+        "required": false,
+        "schema": {
+          "description": "A list of fields to omit from the response returned by the API.",
+          "type": "array",
+          "items": {
+            "$ref": "../components/schemas/ExcludeEnum.json"
+          }
+        }
+      },
+      {
+        "name": "stream",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "starting_after",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "name": "include_obfuscation",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ResponseResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.responses.get_response_method.GetResponseMethod"
+  },
+  "delete": {
+    "summary": "Delete Response",
+    "description": "Deletes a response.",
+    "operationId": "DeleteResponse",
+    "parameters": [
+      {
+        "name": "response_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "example": "resp_123",
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/DeletedResponseResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.responses.delete_response_method.DeleteResponseMethod"
+  }
+}

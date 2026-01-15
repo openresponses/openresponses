@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["exit"],
+      "description": "The outcome type. Always `exit`.",
+      "default": "exit",
+      "x-stainless-const": true
+    },
+    "exit_code": {
+      "type": "integer",
+      "description": "The exit code returned by the shell process."
+    }
+  },
+  "type": "object",
+  "required": ["type", "exit_code"],
+  "title": "Shell call exit outcome",
+  "description": "Indicates that the shell commands finished and returned an exit code.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.FunctionShellCallOutputExitOutcomeParam"
+}

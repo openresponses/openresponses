@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate of this point in the drag path."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate of this point in the drag path."
+    }
+  },
+  "type": "object",
+  "required": ["x", "y"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.Drag.Coord"
+}

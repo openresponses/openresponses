@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["drag"],
+      "description": "Specifies the event type. Always `drag`.",
+      "default": "drag",
+      "x-stainless-const": true
+    },
+    "path": {
+      "items": {
+        "$ref": "./CoordParam.json"
+      },
+      "type": "array",
+      "description": "The path of the drag as a sequence of coordinates."
+    }
+  },
+  "type": "object",
+  "required": ["type", "path"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.Drag"
+}

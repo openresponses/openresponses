@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "input_schema": {},
+    "annotations": {
+      "anyOf": [
+        {},
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["name", "description", "input_schema", "annotations"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.MCPListToolsTool"
+}

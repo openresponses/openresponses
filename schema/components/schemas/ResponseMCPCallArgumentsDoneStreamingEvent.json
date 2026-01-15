@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.mcp_call_arguments.done"],
+      "description": "The type of the event, always `response.mcp_call.arguments.done`.",
+      "default": "response.mcp_call_arguments.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "arguments": {
+      "type": "string",
+      "description": "The final arguments string that was emitted."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "output_index",
+    "item_id",
+    "arguments"
+  ],
+  "title": "Response MCP call arguments done event",
+  "description": "A streaming event that indicated MCP call arguments were completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseMCPCallArgumentsDoneStreamingEvent"
+}

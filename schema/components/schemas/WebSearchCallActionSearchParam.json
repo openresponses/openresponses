@@ -1,0 +1,64 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["search"],
+      "description": "The action type. Always `search`.",
+      "default": "search",
+      "x-stainless-const": true
+    },
+    "query": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The query string used for web search."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "queries": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "The list of queries issued as part of this web search call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sources": {
+      "anyOf": [
+        {
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "./UrlSourceParam.json"
+              },
+              {
+                "$ref": "./ApiSourceParam.json"
+              }
+            ],
+            "description": "A source referenced by a web search tool call.",
+            "discriminator": {
+              "propertyName": "type"
+            }
+          },
+          "type": "array",
+          "description": "Sources used for the search."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.WebSearchCallActionSearch"
+}

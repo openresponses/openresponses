@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["find_in_page"],
+      "default": "find_in_page",
+      "x-stainless-const": true
+    },
+    "url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pattern": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.WebSearchCallActionFindInPage"
+}

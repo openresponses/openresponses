@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.failed"],
+      "description": "The type of the event, always `response.failed`.",
+      "default": "response.failed",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "response": {
+      "$ref": "./ResponseResource.json",
+      "description": "The response snapshot that was emitted with the event."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "response"],
+  "title": "Response failed event",
+  "description": "A streaming event that indicated the response had failed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseFailedStreamingEvent"
+}

@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.function_call_arguments.done"],
+      "description": "The type of the event, always `response.function_call_arguments.done`.",
+      "default": "response.function_call_arguments.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "arguments": {
+      "type": "string",
+      "description": "The final arguments string that was emitted."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "item_id",
+    "output_index",
+    "arguments"
+  ],
+  "title": "Response function call arguments done event",
+  "description": "A streaming event that indicated function call arguments were completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseFunctionCallArgumentsDoneStreamingEvent"
+}

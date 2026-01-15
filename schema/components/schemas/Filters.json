@@ -1,0 +1,50 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./ComparisonFilterFieldEQ.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldNE.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldGT.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldGTE.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldLT.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldLTE.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldIN.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldNIN.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldCONTAINS.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldNCONTAINS.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldCONTAINSANY.json"
+    },
+    {
+      "$ref": "./ComparisonFilterFieldNCONTAINSANY.json"
+    },
+    {
+      "$ref": "./CompoundFilterFieldAND.json"
+    },
+    {
+      "$ref": "./CompoundFilterFieldOR.json"
+    }
+  ],
+  "description": "A filter to apply.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

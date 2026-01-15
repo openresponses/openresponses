@@ -1,0 +1,77 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./Message.json"
+    },
+    {
+      "$ref": "./FunctionCall.json"
+    },
+    {
+      "$ref": "./FunctionCallOutput.json"
+    },
+    {
+      "$ref": "./FileSearchCall.json"
+    },
+    {
+      "$ref": "./WebSearchCall.json"
+    },
+    {
+      "$ref": "./ImageGenCall.json"
+    },
+    {
+      "$ref": "./ComputerCall.json"
+    },
+    {
+      "$ref": "./ComputerCallOutput.json"
+    },
+    {
+      "$ref": "./ReasoningBody.json"
+    },
+    {
+      "$ref": "./CompactionBody.json"
+    },
+    {
+      "$ref": "./CodeInterpreterCall.json"
+    },
+    {
+      "$ref": "./LocalShellCall.json"
+    },
+    {
+      "$ref": "./LocalShellCallOutput.json"
+    },
+    {
+      "$ref": "./FunctionShellCall.json"
+    },
+    {
+      "$ref": "./FunctionShellCallOutput.json"
+    },
+    {
+      "$ref": "./ApplyPatchToolCall.json"
+    },
+    {
+      "$ref": "./ApplyPatchToolCallOutput.json"
+    },
+    {
+      "$ref": "./MCPListTools.json"
+    },
+    {
+      "$ref": "./MCPApprovalRequest.json"
+    },
+    {
+      "$ref": "./MCPApprovalResponse.json"
+    },
+    {
+      "$ref": "./MCPToolCall.json"
+    },
+    {
+      "$ref": "./CustomToolCall.json"
+    },
+    {
+      "$ref": "./CustomToolCallOutput.json"
+    }
+  ],
+  "description": "An item representing a message, tool call, tool output, reasoning, or other response element.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

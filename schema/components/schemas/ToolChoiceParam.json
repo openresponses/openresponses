@@ -1,0 +1,15 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./SpecificToolChoiceParam.json"
+    },
+    {
+      "$ref": "./ToolChoiceValueEnum.json"
+    },
+    {
+      "$ref": "./AllowedToolsParam.json"
+    }
+  ],
+  "description": "Controls which tool the model should use, if any.",
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/ToolChoiceParam.yaml"
+}

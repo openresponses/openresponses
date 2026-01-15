@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["timeout"],
+      "description": "The outcome type. Always `timeout`.",
+      "default": "timeout",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Shell call timeout outcome",
+  "description": "Indicates that the shell call exceeded its configured time limit.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.FunctionShellCallOutputTimeoutOutcome"
+}

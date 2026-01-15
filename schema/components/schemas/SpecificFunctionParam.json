@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["function"],
+      "description": "The tool to call. Always `function`.",
+      "default": "function",
+      "x-stainless-const": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the function tool to call."
+    }
+  },
+  "type": "object",
+  "required": ["type", "name"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificFunctionParam"
+}

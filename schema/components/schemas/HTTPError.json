@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["http_error"],
+      "default": "http_error",
+      "x-stainless-const": true
+    },
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["type", "code", "message"],
+  "x-openai-class-name": "responses_common.api.resources.item_resource.HTTPError"
+}

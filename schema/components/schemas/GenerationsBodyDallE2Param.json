@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "model": {
+      "type": "string",
+      "enum": ["dall-e-2"],
+      "default": "dall-e-2",
+      "x-stainless-const": true
+    },
+    "prompt": {
+      "type": "string",
+      "maxLength": 1000,
+      "minLength": 1
+    },
+    "n": {
+      "type": "integer",
+      "maximum": 10,
+      "minimum": 1
+    },
+    "response_format": {
+      "$ref": "./ResponseFormatDallE.json"
+    },
+    "size": {
+      "$ref": "./ImageSizeDallE2.json"
+    },
+    "user": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["model", "prompt"],
+  "x-openai-class-name": "responsesapi.api.params.image_shared_params.GenerationsBodyDallE2"
+}

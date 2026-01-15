@@ -1,0 +1,100 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image_generation"],
+      "description": "The type of the image generation tool. Always `image_generation`.",
+      "default": "image_generation",
+      "x-stainless-const": true
+    },
+    "model": {
+      "anyOf": [
+        {
+          "$ref": "./ImageGenToolModel.json",
+          "description": "The image generation model to use. Defaults to `gpt-image-1` when not specified."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "n": {
+      "type": "integer",
+      "description": "The number of images to generate. Must be between 1 and 10."
+    },
+    "quality": {
+      "anyOf": [
+        {
+          "$ref": "./ImageQuality.json",
+          "description": "The quality of the image that will be generated. Must be one of `auto` (default value, will automatically select the quality based on the prompt), `high`, `medium`, or `low`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "size": {
+      "anyOf": [
+        {
+          "$ref": "./ImageSize.json",
+          "description": "The size of the generated images. Must be one of `1024x1024`, `1536x1024` (landscape), `1024x1536` (portrait), or `auto` (default value)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "output_format": {
+      "anyOf": [
+        {
+          "$ref": "./ImageOutputFormat.json",
+          "description": "The format of the generated images. Must be one of `png`, `jpeg`, or `webp`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "output_compression": {
+      "type": "integer",
+      "description": "The compression level of the generated images. Must be between 0 and 100, and defaults to 100."
+    },
+    "moderation": {
+      "anyOf": [
+        {
+          "$ref": "./ImageModeration.json",
+          "description": "Control the content-moderation level for images generated. Must be either `low` for less restrictive filtering or `auto` (default value)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "background": {
+      "anyOf": [
+        {
+          "$ref": "./ImageBackground.json",
+          "description": "Allows to set transparency for the background of the generated image(s). This parameter is only supported for `gpt-image-1`. Must be one of `transparent`, `opaque` or `auto` (default value). When `auto` is used, the model will automatically determine the best background for the image.\nIf `transparent`, the output format needs to support transparency, so it should be set to either `png` (default value) or `webp`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "model",
+    "n",
+    "quality",
+    "size",
+    "output_format",
+    "output_compression",
+    "moderation",
+    "background"
+  ],
+  "title": "Image generation",
+  "description": "A tool that generates images. Learn more about the [image generation tool](https://platform.openai.com/docs/guides/image-generation).",
+  "x-openai-class-name": "responses_common.api.resources.tools.ImageGenTool"
+}

@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "stdout": {
+      "type": "string",
+      "description": "The standard output that was captured."
+    },
+    "stderr": {
+      "type": "string",
+      "description": "The standard error output that was captured."
+    },
+    "outcome": {
+      "oneOf": [
+        {
+          "$ref": "./FunctionShellCallOutputTimeoutOutcome.json"
+        },
+        {
+          "$ref": "./FunctionShellCallOutputExitOutcome.json"
+        }
+      ],
+      "title": "Shell call outcome",
+      "description": "Represents either an exit outcome (with an exit code) or a timeout outcome for a shell call output chunk.",
+      "discriminator": {
+        "propertyName": "type"
+      }
+    },
+    "created_by": {
+      "type": "string",
+      "description": "The identifier of the actor that created the item."
+    }
+  },
+  "type": "object",
+  "required": ["stdout", "stderr", "outcome"],
+  "title": "Shell call output content",
+  "description": "The content of a shell tool call output that was emitted.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.FunctionShellCallOutputContent"
+}

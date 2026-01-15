@@ -1,0 +1,125 @@
+---
+import apispec from "../../../public/openapi/openapi.json" with { type: "json" };
+import EnumValues from "./EnumValues.astro";
+import PropertyTable from "./PropertyTable.astro";
+import UnionVariantBadges from "./UnionVariantBadges.astro";
+import { buildReferenceSections } from "../../lib/openapi/referenceIndex";
+import type { OpenApiDocument, OpenApiSchema } from "../../lib/openapi/types";
+
+type Props = {
+  schemaNames: string[];
+};
+
+const { schemaNames } = Astro.props as Props;
+const schemas = schemaNames
+  .map((name) => apispec.components?.schemas?.[name] as OpenApiSchema | null)
+  .filter(Boolean);
+
+const sections = buildReferenceSections(apispec as OpenApiDocument, schemas);
+---
+
+{
+  sections.enums.length > 0 && (
+    <>
+      <h2 id="enums">Enums</h2>
+      <div class="mt-10 space-y-6">
+        {sections.enums.map((section) => (
+          <div>
+            <h3
+              id={`${section.id}-title`}
+              class="code w-fit text-lg font-semibold text-slate-900"
+            >
+              {section.name}
+            </h3>
+            <section
+              id={section.id}
+              aria-labelledby={`${section.id}-title`}
+              class="not-prose"
+            >
+              <div class="pb-4">
+                {section.description && (
+                  <div class="pt-4 text-sm text-slate-600">
+                    {section.description}
+                  </div>
+                )}
+                <div class="pt-4">
+                  <EnumValues
+                    inline
+                    values={section.values}
+                    descriptions={section.descriptions}
+                  />
+                </div>
+              </div>
+            </section>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
+{
+  sections.unions.length > 0 && (
+    <>
+      <h2 id="unions">Unions</h2>
+      <div class="not-prose">
+        <div class="mt-10 space-y-6">
+          {sections.unions.map((section) => (
+            <div>
+              <h3
+                id={`${section.id}-title`}
+                class="code w-fit text-lg font-semibold text-slate-900"
+              >
+                {section.name}
+              </h3>
+              <div class="pb-4">
+                {section.description && (
+                  <div class="pt-4 text-sm text-slate-600">
+                    {section.description}
+                  </div>
+                )}
+                <div class="flex flex-wrap gap-2 pt-4">
+                  <UnionVariantBadges variants={section.variants} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
+{
+  sections.objects.length > 0 && (
+    <>
+      <h2 id="objects">Objects</h2>
+      <div class="mt-10 space-y-6">
+        {sections.objects.map((section) => (
+          <div>
+            <h3
+              id={`${section.id}-title`}
+              class="code w-fit text-lg font-semibold text-slate-900"
+            >
+              {section.name}
+            </h3>
+            <section
+              id={section.id}
+              aria-labelledby={`${section.id}-title`}
+              class="not-prose"
+            >
+              <div class="pb-4">
+                {section.description && (
+                  <div class="pt-4 text-sm text-slate-600">
+                    {section.description}
+                  </div>
+                )}
+                <div class="pt-4">
+                  <PropertyTable inline rows={section.rows} />
+                </div>
+              </div>
+            </section>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}

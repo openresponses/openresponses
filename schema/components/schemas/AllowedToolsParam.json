@@ -1,0 +1,27 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["allowed_tools"],
+      "description": "The tool choice type. Always `allowed_tools`.",
+      "default": "allowed_tools",
+      "x-stainless-const": true
+    },
+    "tools": {
+      "items": {
+        "$ref": "./SpecificToolChoiceParam.json"
+      },
+      "type": "array",
+      "maxItems": 128,
+      "minItems": 1,
+      "description": "The list of tools that are permitted for this request."
+    },
+    "mode": {
+      "$ref": "./ToolChoiceValueEnum.json",
+      "description": "How to select a tool from the allowed set."
+    }
+  },
+  "type": "object",
+  "required": ["type", "tools"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.AllowedToolsParam"
+}

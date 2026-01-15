@@ -1,0 +1,116 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the image generation call.",
+      "example": "ig_123"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["image_generation_call"],
+      "description": "The type of the image generation call. Always `image_gen_call`.",
+      "default": "image_generation_call",
+      "x-stainless-const": true
+    },
+    "status": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "./ImageGenCallStatus.json"
+            },
+            {
+              "type": "string",
+              "description": "The status of the image generation call."
+            }
+          ],
+          "description": "The status of the image generation call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_by": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Identifier of the actor that created the image generation call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "revised_prompt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The prompt that was used after any model prompt rewriting."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "result": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 33554432,
+          "description": "The generated image encoded in base64."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "size": {
+      "anyOf": [
+        {
+          "$ref": "./ImageSize.json",
+          "description": "The image size used for generation."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "background": {
+      "anyOf": [
+        {
+          "$ref": "./ImageBackground.json",
+          "description": "The background setting used for generation."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "quality": {
+      "anyOf": [
+        {
+          "$ref": "./ImageQuality.json",
+          "description": "The quality setting used for generation."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "output_format": {
+      "anyOf": [
+        {
+          "$ref": "./ImageOutputFormat.json",
+          "description": "The output format used for generation."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["id", "type"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ImageGenCallItemParam"
+}

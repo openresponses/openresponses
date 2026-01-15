@@ -1,0 +1,6 @@
+{
+  "properties": {},
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "xapi.api_param_model.EmptyModel"
+}

@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["delete_file"],
+      "description": "The operation type. Always `delete_file`.",
+      "default": "delete_file",
+      "x-stainless-const": true
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path of the file to delete relative to the workspace root."
+    }
+  },
+  "type": "object",
+  "required": ["type", "path"],
+  "title": "Apply patch delete file operation",
+  "description": "Instruction for deleting an existing file via the apply_patch tool.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ApplyPatchDeleteFileOperationParam"
+}

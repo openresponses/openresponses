@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "always": {
+      "$ref": "./MCPToolFilterParam.json",
+      "description": "A filter that forces approval for matching tools."
+    },
+    "never": {
+      "$ref": "./MCPToolFilterParam.json",
+      "description": "A filter that skips approval for matching tools."
+    }
+  },
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "responses_common.api.params.tool_param.MCPRequireApprovalFilterParam"
+}

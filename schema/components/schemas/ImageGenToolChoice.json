@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image_generation"],
+      "default": "image_generation",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.ImageGenToolChoice"
+}

@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "ranker": {
+      "$ref": "./RankerVersionType.json",
+      "description": "The ranker version to use for reranking file search results."
+    },
+    "score_threshold": {
+      "type": "number",
+      "description": "Minimum score a result must have to be included."
+    },
+    "hybrid_search": {
+      "$ref": "./HybridSearchOptionsParam.json",
+      "description": "Optional hybrid search weighting configuration."
+    }
+  },
+  "type": "object",
+  "required": [],
+  "description": "Options that control ranking and filtering of file search results.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.FileSearchRankingOptions"
+}

@@ -1,0 +1,35 @@
+{
+  "post": {
+    "summary": "Compact conversation",
+    "description": "Runs a compaction pass over a conversation. Compaction returns encrypted, opaque items and the underlying logic may evolve over time.",
+    "operationId": "Compactconversation",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../components/schemas/CompactResponseMethodPublicBody.json"
+          }
+        },
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "$ref": "../components/schemas/CompactResponseMethodPublicBody.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/CompactResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.responses.compact_response_method.CompactResponseMethodPublic"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image_generation.completed"],
+      "description": "The type of the event, always `image_gen.completed`.",
+      "default": "image_generation.completed",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "b64_json": {
+      "type": "string",
+      "description": "The base64-encoded image that was emitted."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "The timestamp when the image was created."
+    },
+    "usage": {
+      "$ref": "./ImageUsage.json",
+      "description": "Token usage statistics that were recorded for the image request."
+    },
+    "size": {
+      "type": "string",
+      "description": "The image size that was used."
+    },
+    "quality": {
+      "type": "string",
+      "description": "The image quality that was used."
+    },
+    "background": {
+      "type": "string",
+      "description": "The background setting that was used."
+    },
+    "output_format": {
+      "type": "string",
+      "description": "The output format that was used."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "b64_json", "created_at", "usage"],
+  "title": "Image generation completed event",
+  "description": "A streaming event that indicated image generation was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ImageGenerationCompletedStreamingEvent"
+}

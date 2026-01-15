@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["computer_use_preview"],
+      "description": "The tool to call. Always `computer_use_preview`.",
+      "default": "computer_use_preview",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificComputerPreviewParam"
+}

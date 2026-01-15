@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["low", "medium", "high"],
+  "x-openai-class-name": "oai_api.params.verbosity_param.VerbosityEnum"
+}

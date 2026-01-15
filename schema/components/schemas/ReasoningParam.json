@@ -1,0 +1,46 @@
+{
+  "properties": {
+    "effort": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "./ReasoningEffortEnum.json"
+            }
+          ],
+          "description": "Controls the level of reasoning effort the model should apply. Higher effort may increase latency and cost."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "generate_summary": {
+      "anyOf": [
+        {
+          "$ref": "./ReasoningSummaryEnum.json",
+          "description": "Deprecated alias for `summary`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "summary": {
+      "anyOf": [
+        {
+          "$ref": "./ReasoningSummaryEnum.json",
+          "description": "Controls whether the response includes a reasoning summary."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [],
+  "description": "**gpt-5 and o-series models only** Configuration options for [reasoning models](https://platform.openai.com/docs/guides/reasoning).",
+  "x-openai-class-name": "oai_api.params.reasoning_param.ReasoningParam",
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/Reasoning.yaml"
+}

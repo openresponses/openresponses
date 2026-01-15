@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["video", "thumbnail", "spritesheet"],
+  "x-openai-class-name": "responsesapi.api.methods.videos.get_video_content_method.VideoContentVariant"
+}

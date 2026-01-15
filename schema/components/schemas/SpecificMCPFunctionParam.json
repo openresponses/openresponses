@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp"],
+      "description": "The tool to call. Always `mcp`.",
+      "default": "mcp",
+      "x-stainless-const": true
+    },
+    "server_label": {
+      "type": "string",
+      "description": "The label of the MCP server to call."
+    },
+    "name": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The name of the MCP tool to call. If omitted, the server may choose a default."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "server_label"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificMCPFunctionParam"
+}

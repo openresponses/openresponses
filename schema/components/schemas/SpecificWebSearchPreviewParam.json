@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["web_search_preview"],
+      "description": "The tool to call. Always `web_search_preview`.",
+      "default": "web_search_preview",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificWebSearchPreviewParam"
+}

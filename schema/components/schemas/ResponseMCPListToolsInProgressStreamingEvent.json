@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.mcp_list_tools.in_progress"],
+      "description": "The type of the event, always `response.mcp_list_tools.in_progress`.",
+      "default": "response.mcp_list_tools.in_progress",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the tool call item that was updated."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "output_index", "item_id"],
+  "title": "Response MCP list tools in progress event",
+  "description": "A streaming event that indicated an MCP list tools call was in progress.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseMCPListToolsInProgressStreamingEvent"
+}

@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["code_interpreter"],
+      "default": "code_interpreter",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.resources.tool_choices.CodeInterpreterToolChoice"
+}

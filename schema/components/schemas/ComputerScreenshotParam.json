@@ -1,0 +1,44 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["computer_screenshot"],
+      "description": "The content type. Always `computer_screenshot`.",
+      "default": "computer_screenshot",
+      "x-stainless-const": true
+    },
+    "image_url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 20971520,
+          "description": "The URL of the screenshot image."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "file_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of an uploaded screenshot image file.",
+          "example": "file-123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "detail": {
+      "$ref": "./DetailEnum.json",
+      "description": "The detail level of the image to be sent to the model. One of `high`, `low`, or `auto`. Defaults to `high`."
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Input image",
+  "description": "An image input to the model. Learn about [image inputs](/docs/guides/vision)",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ComputerScreenshotParam"
+}

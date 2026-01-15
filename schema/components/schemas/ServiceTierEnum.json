@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["auto", "default", "flex", "priority"],
+  "x-openai-class-name": "oai_api.params.service_tier_param.ServiceTierEnum"
+}

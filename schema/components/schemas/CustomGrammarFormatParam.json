@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["grammar"],
+      "description": "Grammar format. Always `grammar`.",
+      "default": "grammar",
+      "x-stainless-const": true
+    },
+    "syntax": {
+      "$ref": "./GrammarSyntax.json",
+      "description": "The syntax of the grammar definition. One of `lark` or `regex`."
+    },
+    "definition": {
+      "type": "string",
+      "description": "The grammar definition."
+    }
+  },
+  "type": "object",
+  "required": ["type", "syntax", "definition"],
+  "title": "Grammar format",
+  "description": "A grammar defined by the user.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.CustomGrammarFormatParam"
+}

@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["left", "right", "wheel", "back", "forward"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.ClickButtonType"
+}

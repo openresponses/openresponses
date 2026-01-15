@@ -1,0 +1,61 @@
+{
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of this web search tool call.",
+          "example": "ws_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["web_search_call"],
+      "description": "The item type. Always `web_search_call`.",
+      "default": "web_search_call",
+      "x-stainless-const": true
+    },
+    "status": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The status of the web search tool call."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "action": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "./WebSearchCallActionSearchParam.json"
+            },
+            {
+              "$ref": "./WebSearchCallActionOpenPageParam.json"
+            },
+            {
+              "$ref": "./WebSearchCallActionFindInPageParam.json"
+            }
+          ],
+          "description": "The web search action performed by the tool.",
+          "discriminator": {
+            "propertyName": "type"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.WebSearchCallItemParam"
+}

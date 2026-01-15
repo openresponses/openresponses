@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["click"],
+      "description": "The type of the action. Always `click`.",
+      "default": "click",
+      "x-stainless-const": true
+    },
+    "button": {
+      "type": "string",
+      "description": "The mouse button that was clicked."
+    },
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate that was clicked."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate that was clicked."
+    }
+  },
+  "type": "object",
+  "required": ["type", "button", "x", "y"],
+  "title": "Click action",
+  "description": "A click action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.ClickAction"
+}

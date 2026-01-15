@@ -1,0 +1,16 @@
+emit:
+  - "@typespec/openapi3"
+  - "@typespec/json-schema"
+options:
+  "@typespec/openapi3":
+    emitter-output-dir: "{project-root}/public/openapi"
+    file-type: yaml
+  "@typespec/json-schema":
+    emitter-output-dir: "{project-root}/public/json_schema"
+    file-type: json
+    emitAllModels: true
+    int64-strategy: "number"
+
+linter:
+  extends:
+    - "@typespec/http/all"

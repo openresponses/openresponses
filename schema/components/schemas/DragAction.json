@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["drag"],
+      "description": "The type of the action. Always `drag`.",
+      "default": "drag",
+      "x-stainless-const": true
+    },
+    "path": {
+      "items": {
+        "$ref": "./DragPoint.json"
+      },
+      "type": "array",
+      "description": "The path of coordinates that was dragged."
+    }
+  },
+  "type": "object",
+  "required": ["type", "path"],
+  "title": "Drag action",
+  "description": "A drag action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.DragAction"
+}

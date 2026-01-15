@@ -1,0 +1,56 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./CodeInterpreterToolParam.json"
+    },
+    {
+      "$ref": "./FunctionToolParam.json"
+    },
+    {
+      "$ref": "./CustomToolParam.json"
+    },
+    {
+      "$ref": "./WebSearchToolParam.json"
+    },
+    {
+      "$ref": "./WebSearchToolParam_2025_08_14Param.json"
+    },
+    {
+      "$ref": "./WebSearchGADeprecatedToolParam.json"
+    },
+    {
+      "$ref": "./WebSearchPreviewToolParam.json"
+    },
+    {
+      "$ref": "./WebSearchPreviewToolParam_2025_03_11Param.json"
+    },
+    {
+      "$ref": "./ImageGenToolParam.json"
+    },
+    {
+      "$ref": "./MCPToolParam.json"
+    },
+    {
+      "$ref": "./FileSearchToolParam.json"
+    },
+    {
+      "$ref": "./ComputerToolParam.json"
+    },
+    {
+      "$ref": "./ComputerUsePreviewToolParam.json"
+    },
+    {
+      "$ref": "./LocalShellToolParam.json"
+    },
+    {
+      "$ref": "./FunctionShellToolParam.json"
+    },
+    {
+      "$ref": "./ApplyPatchToolParam.json"
+    }
+  ],
+  "discriminator": {
+    "propertyName": "type"
+  },
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/Tool.yaml"
+}

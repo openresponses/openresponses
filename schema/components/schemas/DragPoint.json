@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate."
+    }
+  },
+  "type": "object",
+  "required": ["x", "y"],
+  "title": "Coordinate",
+  "description": "An x/y coordinate pair, e.g. `{ x: 100, y: 200 }`.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.DragPoint"
+}

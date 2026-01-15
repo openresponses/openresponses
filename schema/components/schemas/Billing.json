@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "payer": {
+      "$ref": "./Payer.json",
+      "description": "The party that was billed for this response."
+    }
+  },
+  "type": "object",
+  "required": ["payer"],
+  "title": "Billing",
+  "description": "Billing information that was recorded for the response.",
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.Billing"
+}

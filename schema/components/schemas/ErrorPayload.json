@@ -1,0 +1,48 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "The error type that was emitted."
+    },
+    "code": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The error code that was emitted, if any."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "message": {
+      "type": "string",
+      "description": "The human-readable error message that was emitted."
+    },
+    "param": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The parameter name that was associated with the error, if any."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "headers": {
+      "additionalProperties": {
+        "type": "string",
+        "description": "The header value that was emitted."
+      },
+      "type": "object",
+      "description": "The response headers that were emitted with the error, if any.",
+      "x-oaiTypeLabel": "map"
+    }
+  },
+  "type": "object",
+  "required": ["type", "code", "message", "param"],
+  "title": "Error payload",
+  "description": "An error payload that was emitted for a streaming error event.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ErrorPayload"
+}

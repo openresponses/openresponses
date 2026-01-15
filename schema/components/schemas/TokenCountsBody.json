@@ -1,0 +1,137 @@
+{
+  "properties": {
+    "model": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Model ID used to generate the response, like `gpt-4o` or `o3`. OpenAI offers a wide range of models with different capabilities, performance characteristics, and price points. Refer to the [model guide](/docs/models) to browse and compare available models."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "input": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "string",
+              "maxLength": 10485760,
+              "description": "A text input to the model, equivalent to a text input with the `user` role."
+            },
+            {
+              "items": {
+                "$ref": "./ItemParam.json"
+              },
+              "type": "array",
+              "description": "A list of one or many input items to the model, containing different content types."
+            }
+          ],
+          "description": "Text, image, or file inputs to the model, used to generate a response",
+          "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/InputParam.yaml"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previous_response_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The unique ID of the previous response to the model. Use this to create multi-turn conversations. Learn more about [conversation state](/docs/guides/conversation-state). Cannot be used in conjunction with `conversation`.",
+          "example": "resp_123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tools": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./ResponsesToolParam.json"
+          },
+          "type": "array",
+          "description": "An array of tools the model may call while generating a response. You can specify which tool to use by setting the `tool_choice` parameter."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "text": {
+      "anyOf": [
+        {
+          "$ref": "./TextParam.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reasoning": {
+      "anyOf": [
+        {
+          "$ref": "./ReasoningParam.json",
+          "description": "**gpt-5 and o-series models only** Configuration options for [reasoning models](https://platform.openai.com/docs/guides/reasoning)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "truncation": {
+      "$ref": "./TruncationEnum.json",
+      "description": "The truncation strategy to use for the model response. - `auto`: If the input to this Response exceeds the model's context window size, the model will truncate the response to fit the context window by dropping items from the beginning of the conversation. - `disabled` (default): If the input size will exceed the context window size for a model, the request will fail with a 400 error."
+    },
+    "instructions": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "A system (or developer) message inserted into the model's context.\nWhen used along with `previous_response_id`, the instructions from a previous response will not be carried over to the next response. This makes it simple to swap out system (or developer) messages in new responses."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "conversation": {
+      "anyOf": [
+        {
+          "$ref": "./ResponsesConversationParam.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tool_choice": {
+      "anyOf": [
+        {
+          "$ref": "./ToolChoiceParam.json",
+          "description": "Controls which tool the model should use, if any."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parallel_tool_calls": {
+      "anyOf": [
+        {
+          "type": "boolean",
+          "description": "Whether to allow the model to run tool calls in parallel."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "responsesapi.api.params.token_count_body.TokenCountBody"
+}

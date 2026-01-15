@@ -1,0 +1,47 @@
+{
+  "properties": {
+    "object": {
+      "type": "string",
+      "enum": ["list"],
+      "description": "The type of object returned, must be `list`.",
+      "default": "list",
+      "x-stainless-const": true
+    },
+    "data": {
+      "items": {
+        "$ref": "./VideoResource.json"
+      },
+      "type": "array",
+      "description": "A list of items"
+    },
+    "first_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of the first item in the list."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "last_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The ID of the last item in the list."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "has_more": {
+      "type": "boolean",
+      "description": "Whether there are more items available."
+    }
+  },
+  "type": "object",
+  "required": ["object", "data", "first_id", "last_id", "has_more"],
+  "x-openai-class-name": "oai_api.resources.list_resource.ListResource._create_list_model.<locals>.List"
+}

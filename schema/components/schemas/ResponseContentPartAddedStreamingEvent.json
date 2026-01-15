@@ -1,0 +1,74 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.content_part.added"],
+      "description": "The type of the event, always `response.content_part.added`.",
+      "default": "response.content_part.added",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "content_index": {
+      "type": "integer",
+      "description": "The index of the content part that was added."
+    },
+    "part": {
+      "oneOf": [
+        {
+          "$ref": "./InputTextContent.json"
+        },
+        {
+          "$ref": "./OutputTextContent.json"
+        },
+        {
+          "$ref": "./TextContent.json"
+        },
+        {
+          "$ref": "./SummaryTextContent.json"
+        },
+        {
+          "$ref": "./ReasoningTextContent.json"
+        },
+        {
+          "$ref": "./RefusalContent.json"
+        },
+        {
+          "$ref": "./InputImageContent.json"
+        },
+        {
+          "$ref": "./ComputerScreenshotContent.json"
+        },
+        {
+          "$ref": "./InputFileContent.json"
+        }
+      ],
+      "description": "A content part that makes up an input or output item.",
+      "discriminator": {
+        "propertyName": "type"
+      }
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "item_id",
+    "output_index",
+    "content_index",
+    "part"
+  ],
+  "title": "Response content part added event",
+  "description": "A streaming event that indicated a content part was added.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseContentPartAddedStreamingEvent"
+}

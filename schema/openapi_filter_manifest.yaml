@@ -1,0 +1,140 @@
+version: 1
+
+allow:
+  # Optional allowlists (if provided, only the allowed items remain).
+  fields:
+    InputImageContent:
+      - type
+      - image_url
+      - detail
+    InputFileContent:
+      - type
+      - filename
+      - file_url
+    InputImageContentParamAutoParam:
+      - type
+      - image_url
+      - detail
+    InputFileContentParam:
+      - type
+      - filename
+      - file_data
+      - file_url
+  oneOf:
+    "paths.POST /responses.responses.200.content.text/event-stream.schema":
+      - ResponseCreatedStreamingEvent
+      - ResponseQueuedStreamingEvent
+      - ResponseInProgressStreamingEvent
+      - ResponseCompletedStreamingEvent
+      - ResponseFailedStreamingEvent
+      - ResponseIncompleteStreamingEvent
+      - ResponseOutputItemAddedStreamingEvent
+      - ResponseOutputItemDoneStreamingEvent
+      - ResponseReasoningSummaryPartAddedStreamingEvent
+      - ResponseReasoningSummaryPartDoneStreamingEvent
+      - ResponseContentPartAddedStreamingEvent
+      - ResponseContentPartDoneStreamingEvent
+      - ResponseOutputTextDeltaStreamingEvent
+      - ResponseOutputTextDoneStreamingEvent
+      - ResponseRefusalDeltaStreamingEvent
+      - ResponseRefusalDoneStreamingEvent
+      - ResponseReasoningDeltaStreamingEvent
+      - ResponseReasoningDoneStreamingEvent
+      - ResponseReasoningSummaryDeltaStreamingEvent
+      - ResponseReasoningSummaryDoneStreamingEvent
+      - ResponseOutputTextAnnotationAddedStreamingEvent
+      - ResponseFunctionCallArgumentsDeltaStreamingEvent
+      - ResponseFunctionCallArgumentsDoneStreamingEvent
+      - ErrorStreamingEvent
+    AllowedToolChoice:
+      - FunctionToolChoice
+    ResponsesToolParam:
+      - FunctionToolParam
+    ItemField:
+      - Message
+      - FunctionCall
+      - FunctionCallOutput
+      - ReasoningBody
+    ItemParam:
+      - ItemReferenceParam
+      - ReasoningItemParam
+      - UserMessageItemParam
+      - SystemMessageItemParam
+      - DeveloperMessageItemParam
+      - AssistantMessageItemParam
+      - FunctionCallItemParam
+      - FunctionCallOutputItemParam
+    Tool:
+      - FunctionTool
+    SpecificToolChoiceParam:
+      - SpecificFunctionParam
+    ResponseResource.tool_choice:
+      - FunctionToolChoice
+      - ToolChoiceValueEnum
+      - AllowedToolChoice
+    OutputTextContentParam.annotations:
+      - UrlCitationParam
+    Annotation:
+      - UrlCitationBody
+  enums:
+    IncludeEnum:
+      - reasoning.encrypted_content
+      - message.output_text.logprobs
+    MessageRole:
+      - user
+      - assistant
+      - system
+      - developer
+    ReasoningEffortEnum:
+      - none
+      - low
+      - medium
+      - high
+      - xhigh
+
+deny:
+  types:
+    - ComputerScreenshotContent
+    - PromptInstructionMessage
+  fields:
+    ReasoningBody:
+      - created_by
+    FunctionCall:
+      - created_by
+    FunctionCallOutput:
+      - created_by
+
+    CreateResponseBody:
+      - user
+      - prompt
+      - conversation
+      - prompt_cache_retention
+    ResponseResource:
+      - next_response_ids
+      - input
+      - cost_token
+      - billing
+      - context_edits
+      - user
+      - prompt
+      - conversation
+      - prompt_cache_retention
+    AutoCodeInterpreterToolParam:
+      - memory_limit
+    ReasoningParam:
+      - generate_summary
+    Reasoning:
+      - generate_summary
+  enums: {}
+
+  # Remove specific oneOf entries by schema name within a given owning schema.
+  # Each list entry removes any oneOf item that references that schema.
+  # You can scope to a specific property with "SchemaName.property".
+  # You can also target operation schemas via:
+  oneOf:
+    Tool:
+      - FileSearchTool
+    ItemField:
+      - FileSearchCall
+      - WebSearchCall
+      - ImageGenCall

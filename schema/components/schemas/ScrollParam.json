@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["scroll"],
+      "description": "Specifies the event type. Always `scroll`.",
+      "default": "scroll",
+      "x-stainless-const": true
+    },
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate where the scroll occurred."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate where the scroll occurred."
+    },
+    "scroll_x": {
+      "type": "integer",
+      "description": "The horizontal scroll distance."
+    },
+    "scroll_y": {
+      "type": "integer",
+      "description": "The vertical scroll distance."
+    }
+  },
+  "type": "object",
+  "required": ["type", "x", "y", "scroll_x", "scroll_y"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.Scroll"
+}

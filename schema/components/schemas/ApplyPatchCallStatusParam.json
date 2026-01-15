@@ -1,0 +1,7 @@
+{
+  "type": "string",
+  "enum": ["in_progress", "completed"],
+  "title": "Apply patch call status",
+  "description": "Status values reported for apply_patch tool calls.",
+  "x-openai-class-name": "responses_common.api.params.input_item_param.ApplyPatchCallStatusParam"
+}

@@ -1,0 +1,190 @@
+---
+import Oas from "oas";
+import apispec from "../../../public/openapi/openapi.json" with { type: "json" };
+import EnumValues from "./EnumValues.astro";
+import PropertyTable from "./PropertyTable.astro";
+import TypeBadgeGroup from "./TypeBadgeGroup.astro";
+import UnionVariantBadges from "./UnionVariantBadges.astro";
+import { buildReferenceIndex } from "../../lib/openapi/referenceIndex";
+import type { OpenApiDocument, OpenApiSchema } from "../../lib/openapi/types";
+
+type Props = {
+  schemaName?: string;
+  header?: string;
+  includeSections?: boolean;
+};
+
+const {
+  schemaName: schemaNameProp,
+  header = "Body Parameters",
+  includeSections = true,
+} = Astro.props as Props;
+
+// @ts-ignore
+const ApiReference = new Oas(apispec);
+const operation = ApiReference.operation("/responses", "post");
+const schema = operation.getRequestBody("application/json");
+
+const schemaRef = schema?.schema?.$ref;
+const schemaName = schemaRef ? schemaRef.split("/").pop() : null;
+const resolvedSchemaName = schemaNameProp ?? schemaName;
+const requestSchema = resolvedSchemaName
+  ? (apispec.components?.schemas?.[resolvedSchemaName] as OpenApiSchema | null)
+  : null;
+
+const { parameterRows, sections } = buildReferenceIndex(
+  apispec as OpenApiDocument,
+  requestSchema,
+);
+---
+
+<div class="reference-table not-prose">
+  <div class="reference-table__header">{header}</div>
+  {
+    parameterRows.map((row) => (
+      <div class="reference-table__row">
+        <div class="reference-table__rowl1">
+          <span class="code">{row.name}</span>
+          <TypeBadgeGroup row={row} />
+          {row.required && (
+            <span class:list={["font-mono text-xs font-bold text-red-400"]}>
+              required
+            </span>
+          )}
+        </div>
+        {row.description && (
+          <div class="reference-table__rowl2">{row.description}</div>
+        )}
+        {!row.literalValue && !row.isUnion && (
+          <EnumValues
+            values={row.enumValues}
+            descriptions={row.enumDescriptions}
+          />
+        )}
+        {row.inlineable && row.inlineRows.length > 0 && (
+          <div class="reference-table__inline">
+            <div class="reference-table__inline-title">Fields</div>
+            <PropertyTable inline rows={row.inlineRows} />
+          </div>
+        )}
+      </div>
+    ))
+  }
+</div>
+{
+  includeSections && sections.enums.length > 0 && (
+    <>
+      <h2 id="enums">Enums</h2>
+      <div class="mt-10 space-y-6">
+        {sections.enums.map((section) => (
+          <div>
+            <h3
+              id={`${section.id}-title`}
+              class="code w-fit text-2xl font-semibold text-slate-900"
+            >
+              {section.name}
+            </h3>
+            <section
+              id={section.id}
+              aria-labelledby={`${section.id}-title`}
+              class="not-prose rounded-xl border border-slate-200"
+            >
+              <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
+                {section.title}
+              </div>
+              <div class="px-4 pb-4">
+                {section.description && (
+                  <div class="pt-4 text-sm text-slate-600">
+                    {section.description}
+                  </div>
+                )}
+                <div class="pt-4">
+                  <EnumValues
+                    values={section.values}
+                    descriptions={section.descriptions}
+                  />
+                </div>
+              </div>
+            </section>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
+{
+  includeSections && sections.unions.length > 0 && (
+    <>
+      <h2 id="unions">Unions</h2>
+      <div class="mt-10 space-y-6">
+        {sections.unions.map((section) => (
+          <div>
+            <h3
+              id={`${section.id}-title`}
+              class="code w-fit text-2xl font-semibold text-slate-900"
+            >
+              {section.name}
+            </h3>
+            <section
+              id={section.id}
+              aria-labelledby={`${section.id}-title`}
+              class="not-prose rounded-xl border border-slate-200"
+            >
+              <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
+                {section.title}
+              </div>
+              <div class="px-4 pb-4">
+                {section.description && (
+                  <div class="pt-4 text-sm text-slate-600">
+                    {section.description}
+                  </div>
+                )}
+                <div class="flex flex-wrap gap-2 pt-4">
+                  <UnionVariantBadges variants={section.variants} />
+                </div>
+              </div>
+            </section>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
+{
+  includeSections && sections.objects.length > 0 && (
+    <>
+      <h2 id="objects">Objects</h2>
+      <div class="mt-10 space-y-6">
+        {sections.objects.map((section) => (
+          <div>
+            <h3
+              id={`${section.id}-title`}
+              class="code w-fit text-2xl font-semibold text-slate-900"
+            >
+              {section.name}
+            </h3>
+            <section
+              id={section.id}
+              aria-labelledby={`${section.id}-title`}
+              class="not-prose rounded-xl border border-slate-200"
+            >
+              <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
+                {section.title}
+              </div>
+              <div class="px-4 pb-4">
+                {section.description && (
+                  <div class="pt-4 text-sm text-slate-600">
+                    {section.description}
+                  </div>
+                )}
+                <div class="pt-4">
+                  <PropertyTable rows={section.rows} />
+                </div>
+              </div>
+            </section>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}

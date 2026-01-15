@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["move"],
+      "description": "Specifies the event type. Always `move`.",
+      "default": "move",
+      "x-stainless-const": true
+    },
+    "x": {
+      "type": "integer",
+      "description": "The target x-coordinate for the cursor."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The target y-coordinate for the cursor."
+    }
+  },
+  "type": "object",
+  "required": ["type", "x", "y"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.Move"
+}

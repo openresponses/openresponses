@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image"],
+      "description": "The type of the output. Always `image`.",
+      "default": "image",
+      "x-stainless-const": true
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL of the image output from the code interpreter."
+    }
+  },
+  "type": "object",
+  "required": ["type", "url"],
+  "title": "Code interpreter output image",
+  "description": "The image output from the code interpreter.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.CodeInterpreterOutputImage"
+}

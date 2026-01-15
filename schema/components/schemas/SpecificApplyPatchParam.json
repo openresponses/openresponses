@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["apply_patch"],
+      "description": "The tool to call. Always `apply_patch`.",
+      "default": "apply_patch",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Specific apply patch tool choice",
+  "description": "Forces the model to call the apply_patch tool when executing a tool call.",
+  "x-openai-class-name": "responses_common.api.params.tool_choice_param.SpecificApplyPatchParam"
+}

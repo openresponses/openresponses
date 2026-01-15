@@ -1,0 +1,55 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.output_text.annotation.added"],
+      "description": "The type of the event, always `response.output_text.annotation.added`.",
+      "default": "response.output_text.annotation.added",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "content_index": {
+      "type": "integer",
+      "description": "The index of the output text content that was updated."
+    },
+    "annotation_index": {
+      "type": "integer",
+      "description": "The index of the annotation that was added."
+    },
+    "annotation": {
+      "anyOf": [
+        {
+          "$ref": "./Annotation.json",
+          "description": "An annotation that applies to a span of output text."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "item_id",
+    "output_index",
+    "content_index",
+    "annotation_index",
+    "annotation"
+  ],
+  "title": "Response output text annotation added event",
+  "description": "A streaming event that indicated an output text annotation was added.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseOutputTextAnnotationAddedStreamingEvent"
+}

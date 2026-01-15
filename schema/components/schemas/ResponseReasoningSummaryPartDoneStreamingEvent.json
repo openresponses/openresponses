@@ -1,0 +1,74 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.reasoning_summary_part.done"],
+      "description": "The type of the event, always `response.reasoning_summary_part.done`.",
+      "default": "response.reasoning_summary_part.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "The ID of the item that was updated."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was updated."
+    },
+    "summary_index": {
+      "type": "integer",
+      "description": "The index of the summary part that was completed."
+    },
+    "part": {
+      "oneOf": [
+        {
+          "$ref": "./InputTextContent.json"
+        },
+        {
+          "$ref": "./OutputTextContent.json"
+        },
+        {
+          "$ref": "./TextContent.json"
+        },
+        {
+          "$ref": "./SummaryTextContent.json"
+        },
+        {
+          "$ref": "./ReasoningTextContent.json"
+        },
+        {
+          "$ref": "./RefusalContent.json"
+        },
+        {
+          "$ref": "./InputImageContent.json"
+        },
+        {
+          "$ref": "./ComputerScreenshotContent.json"
+        },
+        {
+          "$ref": "./InputFileContent.json"
+        }
+      ],
+      "description": "A content part that makes up an input or output item.",
+      "discriminator": {
+        "propertyName": "type"
+      }
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "item_id",
+    "output_index",
+    "summary_index",
+    "part"
+  ],
+  "title": "Response reasoning summary part done event",
+  "description": "A streaming event that indicated a reasoning summary part was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseReasoningSummaryPartDoneStreamingEvent"
+}

@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["transparent", "opaque", "auto"],
+  "x-openai-class-name": "responses_common.api.params.image_shared_params.ImageBackground"
+}

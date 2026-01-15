@@ -1,0 +1,58 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp"],
+      "description": "The type of the tool. Always `mcp`.",
+      "default": "mcp",
+      "x-stainless-const": true
+    },
+    "server_label": {
+      "type": "string",
+      "description": "A label used to identify the MCP server."
+    },
+    "server_url": {
+      "type": "string",
+      "description": "The URL of the MCP server to connect to."
+    },
+    "server_description": {
+      "type": "string",
+      "description": "An optional human-readable description of the MCP server."
+    },
+    "headers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object",
+      "description": "Optional HTTP headers to send when connecting to the MCP server."
+    },
+    "allowed_tools": {
+      "oneOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "$ref": "./MCPToolFilterParam.json"
+        }
+      ],
+      "description": "A list of MCP tool names that are allowed for this server."
+    },
+    "require_approval": {
+      "oneOf": [
+        {
+          "$ref": "./MCPRequireApprovalFilterParam.json"
+        },
+        {
+          "$ref": "./MCPRequireApprovalApiEnum.json"
+        }
+      ],
+      "description": "Controls which MCP tools require explicit user approval before execution."
+    }
+  },
+  "type": "object",
+  "required": ["type", "server_label"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.MCPToolParam"
+}

@@ -1,0 +1,42 @@
+# Contributing
+
+Thanks for helping with Open Responses. This file focuses on how to make proposals.
+
+## Proposals
+
+We keep changes open, neutral, and interoperable, as described in `src/pages/governance.mdx`.
+
+## Maintainers
+
+- Lead Core Maintainer: Steve Coffey
+- Core Maintainers: To be nominated
+
+### Lead Core Maintainer selection and removal
+
+- The Lead Core Maintainer may be removed by a 75% vote of all Core Maintainers,
+  excluding the incumbent.
+- If the role becomes vacant, Core Maintainers select a replacement using a
+  consensus-seeking or ranked-choice method.
+
+### When to propose
+
+Create a proposal for any change that affects the specification, compatibility, or conformance.
+
+### How to propose
+
+1. Open an issue titled "Proposal: <short name>" with:
+   - Problem statement and motivation
+   - Proposed change (spec text or API shape)
+   - Compatibility impact (breaking, additive, or clarifying)
+   - Reference implementation or migration plan (if applicable)
+   - Test or conformance plan
+2. After initial feedback, submit a PR that includes the spec change and related docs/tests.
+
+### How proposals are decided
+
+We seek consensus. If consensus cannot be reached, the TSC resolves the decision per the
+governance charter. The Lead Core Maintainer is the final decision-maker when needed.
+
+### DCO
+
+All code contributions must include a Developer Certificate of Origin (DCO) sign-off.

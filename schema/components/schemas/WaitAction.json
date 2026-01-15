@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["wait"],
+      "description": "The type of the action. Always `wait`.",
+      "default": "wait",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Wait action",
+  "description": "A wait action that was requested by the model.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.WaitAction"
+}

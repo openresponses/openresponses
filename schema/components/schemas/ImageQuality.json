@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["low", "medium", "high", "auto"],
+  "x-openai-class-name": "responses_common.api.params.image_shared_params.ImageQuality"
+}

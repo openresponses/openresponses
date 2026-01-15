@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["click"],
+      "description": "Specifies the event type. For a click action, this property is always `click`.",
+      "default": "click",
+      "x-stainless-const": true
+    },
+    "button": {
+      "$ref": "./ClickButtonType.json",
+      "description": "Indicates which mouse button was pressed during the click. One of `left`, `right`, `wheel`, `back`, or `forward`."
+    },
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate where the click occurred."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate where the click occurred."
+    }
+  },
+  "type": "object",
+  "required": ["type", "button", "x", "y"],
+  "title": "Click",
+  "description": "A click action.",
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.Click"
+}

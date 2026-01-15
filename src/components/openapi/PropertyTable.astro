@@ -1,0 +1,75 @@
+---
+import EnumValues from "./EnumValues.astro";
+import UnionVariantBadges from "./UnionVariantBadges.astro";
+import type { InlineRow } from "../../lib/openapi/referenceIndex";
+
+interface Props {
+  rows?: InlineRow[];
+  inline?: boolean;
+}
+
+const { rows = [], inline = false } = Astro.props as Props;
+
+const typeClass = (type: string) => {
+  if (type === "string") return "text-amber-500 bg-amber-100 border-amber-200";
+  if (type === "boolean")
+    return "text-emerald-500 bg-emerald-100 border-emerald-200";
+  if (type === "number" || type === "integer")
+    return "text-blue-500 bg-blue-100 border-blue-200";
+  return "text-purple-500 bg-purple-100 border-purple-200";
+};
+---
+
+{
+  rows.length > 0 && (
+    <div
+      class:list={[
+        "overflow-hidden rounded-lg border border-slate-200",
+        "divide-y divide-slate-200",
+        { "bg-white": !inline },
+      ]}
+    >
+      {rows.map((row) => (
+        <div class="flex flex-col gap-2 p-3">
+          <div class="flex items-center gap-2 text-sm">
+            <span class="code">{row.name}</span>
+            {row.literalValue ? (
+              <span class="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">
+                "{row.literalValue}"
+              </span>
+            ) : row.unionVariants.length > 0 ? (
+              <div class="flex flex-wrap gap-2">
+                <UnionVariantBadges variants={row.unionVariants} />
+              </div>
+            ) : (
+              <span
+                class:list={[
+                  "rounded border px-2 py-0.5 text-xs font-bold",
+                  typeClass(row.type),
+                ]}
+              >
+                {row.type}
+                {row.array && "[]"}
+              </span>
+            )}
+            {row.required && (
+              <span class="font-mono text-[10px] font-bold text-red-400">
+                required
+              </span>
+            )}
+          </div>
+          {row.description && (
+            <div class="text-sm text-slate-600">{row.description}</div>
+          )}
+          {!row.literalValue && (
+            <EnumValues
+              inline
+              values={row.enumValues}
+              descriptions={row.enumDescriptions}
+            />
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}

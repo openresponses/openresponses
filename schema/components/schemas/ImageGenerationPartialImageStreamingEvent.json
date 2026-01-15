@@ -1,0 +1,54 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["image_generation.partial_image"],
+      "description": "The type of the event, always `image_gen.partial_image`.",
+      "default": "image_generation.partial_image",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "partial_image_index": {
+      "type": "integer",
+      "description": "The index of the partial image that was emitted."
+    },
+    "b64_json": {
+      "type": "string",
+      "description": "The base64-encoded partial image that was emitted."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "The timestamp when the partial image was created."
+    },
+    "size": {
+      "type": "string",
+      "description": "The image size that was used."
+    },
+    "quality": {
+      "type": "string",
+      "description": "The image quality that was used."
+    },
+    "background": {
+      "type": "string",
+      "description": "The background setting that was used."
+    },
+    "output_format": {
+      "type": "string",
+      "description": "The output format that was used."
+    }
+  },
+  "type": "object",
+  "required": [
+    "type",
+    "sequence_number",
+    "partial_image_index",
+    "b64_json",
+    "created_at"
+  ],
+  "title": "Image generation partial image event",
+  "description": "A streaming event that indicated a partial image was emitted during image generation.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ImageGenerationPartialImageStreamingEvent"
+}

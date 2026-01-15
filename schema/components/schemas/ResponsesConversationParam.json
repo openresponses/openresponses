@@ -1,0 +1,12 @@
+{
+  "oneOf": [
+    {
+      "type": "string",
+      "example": "conv_123"
+    },
+    {
+      "$ref": "./ConversationParam.json"
+    }
+  ],
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/ConversationParam.yaml"
+}

@@ -1,0 +1,48 @@
+{
+  "post": {
+    "tags": ["Videos"],
+    "summary": "Create a video remix",
+    "description": "Create a remix of a completed video using a refreshed prompt.",
+    "operationId": "CreateVideoRemix",
+    "parameters": [
+      {
+        "name": "video_id",
+        "in": "path",
+        "description": "The identifier of the completed video to remix.",
+        "required": true,
+        "schema": {
+          "example": "video_123",
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "$ref": "../components/schemas/CreateVideoRemixBody.json"
+          }
+        },
+        "application/json": {
+          "schema": {
+            "$ref": "../components/schemas/CreateVideoRemixBody.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/VideoResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.videos.create_video_remix_method.CreateVideoRemixMethod",
+    "x-openai-secret-internal": "openapi-flag-devday2025"
+  }
+}

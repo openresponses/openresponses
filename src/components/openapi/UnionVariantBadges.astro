@@ -1,0 +1,56 @@
+---
+import type {
+  ParameterUnionVariant,
+  UnionVariantLink,
+} from "../../lib/openapi/referenceIndex";
+
+type Variant = ParameterUnionVariant | UnionVariantLink;
+
+type Props = {
+  variants: Variant[];
+};
+
+const { variants } = Astro.props as Props;
+const formatVariantLabel = (label: string, array: boolean) =>
+  array ? `${label}[]` : label;
+---
+
+{
+  variants.map((variant) =>
+    variant.groupVariants?.length ? (
+      <div class="flex flex-wrap gap-2">
+        <span class:list={["type-label", variant.typeClass]}>
+          {formatVariantLabel(variant.label, variant.array)}
+        </span>
+        {variant.groupVariants.map((group) =>
+          group.sectionId ? (
+            <a
+              class:list={[
+                "type-label transition hover:shadow",
+                group.typeClass,
+              ]}
+              href={`#${group.sectionId}`}
+            >
+              {formatVariantLabel(group.label, group.array)}
+            </a>
+          ) : (
+            <span class:list={["type-label", group.typeClass]}>
+              {formatVariantLabel(group.label, group.array)}
+            </span>
+          ),
+        )}
+      </div>
+    ) : variant.sectionId ? (
+      <a
+        class:list={["type-label transition hover:shadow", variant.typeClass]}
+        href={`#${variant.sectionId}`}
+      >
+        {formatVariantLabel(variant.label, variant.array)}
+      </a>
+    ) : (
+      <span class:list={["type-label", variant.typeClass]}>
+        {formatVariantLabel(variant.label, variant.array)}
+      </span>
+    ),
+  )
+}

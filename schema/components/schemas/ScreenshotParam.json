@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["screenshot"],
+      "description": "Specifies the event type. Always `screenshot`.",
+      "default": "screenshot",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.Screenshot"
+}

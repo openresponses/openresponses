@@ -1,0 +1,76 @@
+{
+  "properties": {
+    "model": {
+      "type": "string",
+      "enum": ["gpt-image-1.5"],
+      "default": "gpt-image-1.5",
+      "x-stainless-const": true
+    },
+    "image": {
+      "oneOf": [
+        {
+          "items": {
+            "type": "string",
+            "format": "binary"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string",
+          "format": "binary"
+        }
+      ]
+    },
+    "mask": {
+      "type": "string",
+      "format": "binary"
+    },
+    "prompt": {
+      "type": "string",
+      "maxLength": 32000,
+      "minLength": 1
+    },
+    "n": {
+      "type": "integer",
+      "maximum": 10,
+      "minimum": 1
+    },
+    "quality": {
+      "$ref": "./ImageQuality.json"
+    },
+    "input_fidelity": {
+      "$ref": "./InputFidelity.json"
+    },
+    "size": {
+      "$ref": "./ImageSize.json"
+    },
+    "user": {
+      "type": "string"
+    },
+    "output_format": {
+      "$ref": "./ImageOutputFormat.json"
+    },
+    "output_compression": {
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 0
+    },
+    "moderation": {
+      "$ref": "./ImageModeration.json"
+    },
+    "background": {
+      "$ref": "./ImageBackground.json"
+    },
+    "stream": {
+      "type": "boolean"
+    },
+    "partial_images": {
+      "type": "integer",
+      "maximum": 3,
+      "minimum": 0
+    }
+  },
+  "type": "object",
+  "required": ["model", "image", "prompt"],
+  "x-openai-class-name": "responsesapi.api.params.image_shared_params.EditImageBody15"
+}

@@ -1,0 +1,58 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["approximate"],
+      "description": "The type of location approximation. Always `approximate`.",
+      "default": "approximate",
+      "x-stainless-const": true
+    },
+    "country": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The two-letter [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1) of the user, e.g. `US`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Free text input for the region of the user, e.g. `California`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "city": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "Free text input for the city of the user, e.g. `San Francisco`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "timezone": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "The [IANA timezone](https://timeapi.io/documentation/iana-timezones) of the user, e.g. `America/Los_Angeles`."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "country", "region", "city", "timezone"],
+  "x-openai-class-name": "responses_common.api.resources.tools.ApproximateLocation"
+}

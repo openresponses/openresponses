@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "image_url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 20971520,
+          "description": "An image mask to apply when editing, specified as an image URL."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "file_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "An uploaded file ID for an image mask to apply when editing.",
+          "example": "file-123"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [],
+  "description": "An optional mask image to apply when editing.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.InputImageMaskContentParam"
+}

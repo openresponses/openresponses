@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "input_tokens": {
+      "type": "integer",
+      "description": "The number of input tokens that was recorded."
+    },
+    "output_tokens": {
+      "type": "integer",
+      "description": "The number of output tokens that was recorded."
+    },
+    "total_tokens": {
+      "type": "integer",
+      "description": "The total number of tokens that was recorded."
+    },
+    "input_tokens_details": {
+      "$ref": "./ImageUsageInputTokensDetails.json",
+      "description": "A breakdown of input token usage that was recorded."
+    },
+    "output_tokens_details": {
+      "$ref": "./ImageUsageOutputTokensDetails.json",
+      "description": "A breakdown of output token usage that was recorded."
+    }
+  },
+  "type": "object",
+  "required": [
+    "input_tokens",
+    "output_tokens",
+    "total_tokens",
+    "input_tokens_details"
+  ],
+  "title": "Image usage",
+  "description": "Token usage statistics that were recorded for an image request.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ImageUsage"
+}

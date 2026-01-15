@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["url", "b64_json"],
+  "x-openai-class-name": "responsesapi.api.params.image_shared_params.ResponseFormatDallE"
+}

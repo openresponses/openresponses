@@ -1,0 +1,49 @@
+{
+  "post": {
+    "summary": "Edit Image",
+    "description": "Edit images.",
+    "operationId": "EditImage",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "oneOf": [
+              {
+                "$ref": "../components/schemas/EditsBodyDallE2Param.json"
+              },
+              {
+                "$ref": "../components/schemas/EditImageBody1Param.json"
+              },
+              {
+                "$ref": "../components/schemas/EditImageBody1MiniParam.json"
+              },
+              {
+                "$ref": "../components/schemas/EditImageBody15Param.json"
+              },
+              {
+                "$ref": "../components/schemas/EditImageBodyChatGPTImageLatestParam.json"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "model"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ImageResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.images.edit_image_method.EditImageMethod"
+  }
+}

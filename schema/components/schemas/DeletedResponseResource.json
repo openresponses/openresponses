@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "object": {
+      "type": "string",
+      "enum": ["response.deleted"],
+      "default": "response.deleted",
+      "x-stainless-const": true
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["object", "deleted", "id"],
+  "x-openai-class-name": "responsesapi.api.resources.deleted_response_resource.DeletedResponseBody"
+}

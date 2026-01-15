@@ -1,0 +1,27 @@
+{
+  "properties": {
+    "always": {
+      "anyOf": [
+        {
+          "$ref": "./MCPToolFilterField.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "never": {
+      "anyOf": [
+        {
+          "$ref": "./MCPToolFilterField.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["always", "never"],
+  "x-openai-class-name": "responses_common.api.resources.tools.MCPRequireApprovalFilterField"
+}

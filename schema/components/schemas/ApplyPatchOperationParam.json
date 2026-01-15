@@ -1,0 +1,18 @@
+{
+  "oneOf": [
+    {
+      "$ref": "./ApplyPatchCreateFileOperationParam.json"
+    },
+    {
+      "$ref": "./ApplyPatchDeleteFileOperationParam.json"
+    },
+    {
+      "$ref": "./ApplyPatchUpdateFileOperationParam.json"
+    }
+  ],
+  "title": "Apply patch operation",
+  "description": "One of the create_file, delete_file, or update_file operations supplied to the apply_patch tool.",
+  "discriminator": {
+    "propertyName": "type"
+  }
+}

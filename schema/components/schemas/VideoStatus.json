@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["queued", "in_progress", "completed", "failed"],
+  "x-openai-class-name": "responsesapi.api.resources.video_resource.VideoStatus"
+}

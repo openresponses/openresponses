@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["apply_patch"],
+      "description": "The type of the tool. Always `apply_patch`.",
+      "default": "apply_patch",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Apply patch tool",
+  "description": "A tool that lets the assistant create, delete, or update files by applying textual diffs.",
+  "x-openai-class-name": "responses_common.api.resources.tools.ApplyPatchTool"
+}

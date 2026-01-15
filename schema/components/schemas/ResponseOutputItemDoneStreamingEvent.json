@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["response.output_item.done"],
+      "description": "The type of the event, always `response.output_item.done`.",
+      "default": "response.output_item.done",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "output_index": {
+      "type": "integer",
+      "description": "The index of the output item that was completed."
+    },
+    "item": {
+      "anyOf": [
+        {
+          "$ref": "./ItemField.json",
+          "description": "An item representing a message, tool call, tool output, reasoning, or other response element."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "output_index", "item"],
+  "title": "Response output item done event",
+  "description": "A streaming event that indicated an output item was completed.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ResponseOutputItemDoneStreamingEvent"
+}

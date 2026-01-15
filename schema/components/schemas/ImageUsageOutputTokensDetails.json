@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "image_tokens": {
+      "type": "integer",
+      "description": "The number of image output tokens that was recorded."
+    },
+    "text_tokens": {
+      "type": "integer",
+      "description": "The number of text output tokens that was recorded."
+    }
+  },
+  "type": "object",
+  "required": ["image_tokens", "text_tokens"],
+  "title": "Image usage output tokens details",
+  "description": "A breakdown of output tokens that was recorded for an image request.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ImageUsageOutputTokensDetails"
+}

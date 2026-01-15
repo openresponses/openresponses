@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["update_file"],
+      "description": "Update an existing file with the provided diff.",
+      "default": "update_file",
+      "x-stainless-const": true
+    },
+    "path": {
+      "type": "string",
+      "description": "Path of the file to update."
+    },
+    "diff": {
+      "type": "string",
+      "description": "Diff to apply."
+    }
+  },
+  "type": "object",
+  "required": ["type", "path", "diff"],
+  "title": "Apply patch update file operation",
+  "description": "Instruction describing how to update a file via the apply_patch tool.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.ApplyPatchUpdateFileOperation"
+}

@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["computer-preview"],
+      "description": "The type of the tool. Always `computer-preview`.",
+      "default": "computer-preview",
+      "x-stainless-const": true
+    },
+    "display_width": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The display width in pixels."
+    },
+    "display_height": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The display height in pixels."
+    },
+    "environment": {
+      "$ref": "./ComputerEnvironment.json",
+      "description": "The target environment for the computer tool."
+    }
+  },
+  "type": "object",
+  "required": ["type", "display_width", "display_height", "environment"],
+  "x-openai-class-name": "responses_common.api.params.tool_param.ComputerToolParam"
+}

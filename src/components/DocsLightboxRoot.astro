@@ -1,0 +1,64 @@
+---
+
+---
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-content" role="document"></div>
+  <button class="lightbox-close" type="button">Close</button>
+</div>
+
+<script is:inline>
+  (() => {
+    const lightbox = document.getElementById("lightbox");
+    if (!lightbox) return;
+    const lightboxContent = lightbox.querySelector(".lightbox-content");
+    const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+    const openLightbox = (node) => {
+      lightboxContent.replaceChildren(node);
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.remove("is-open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxContent.replaceChildren();
+    };
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+
+    lightboxClose?.addEventListener("click", closeLightbox);
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeLightbox();
+    });
+
+    const article = document.querySelector("article.prose");
+    if (!article) return;
+    const lightboxTargets = Array.from(
+      article.querySelectorAll("[data-lightbox]"),
+    );
+
+    for (const target of lightboxTargets) {
+      if (target.hasAttribute("data-scrollable")) {
+        if (!target.closest(".diagram-scroll")) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "diagram-scroll";
+          target.parentNode?.insertBefore(wrapper, target);
+          wrapper.appendChild(target);
+        }
+      }
+
+      target.style.cursor = "zoom-in";
+      target.addEventListener("click", () => {
+        const clone = target.cloneNode(true);
+        clone.removeAttribute("data-lightbox");
+        clone.style.cursor = "default";
+        openLightbox(clone);
+      });
+    }
+  })();
+</script>

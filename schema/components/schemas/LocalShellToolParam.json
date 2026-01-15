@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["local_shell"],
+      "description": "The type of the local shell tool. Always `local_shell`.",
+      "default": "local_shell",
+      "x-stainless-const": true
+    }
+  },
+  "type": "object",
+  "required": ["type"],
+  "title": "Local shell tool",
+  "description": "A tool that allows the model to execute shell commands in a local environment.",
+  "x-openai-class-name": "responses_common.api.params.tool_param.LocalShellToolParam"
+}

@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["mcp_approval_request"],
+      "description": "The type of the item. Always `mcp_approval_request`.",
+      "default": "mcp_approval_request",
+      "x-stainless-const": true
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the approval request."
+    },
+    "server_label": {
+      "type": "string",
+      "description": "The label of the MCP server making the request."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the tool to run."
+    },
+    "arguments": {
+      "type": "string",
+      "description": "A JSON string of arguments for the tool."
+    }
+  },
+  "type": "object",
+  "required": ["type", "id", "server_label", "name", "arguments"],
+  "title": "MCP approval request",
+  "description": "A request for human approval of a tool invocation.",
+  "x-openai-class-name": "responses_common.api.resources.item_resource.MCPApprovalRequest",
+  "x-openai-schema-override-path": "lib/js/oai_js_apidocs_data/src/openapi/components/schemas/MCPApprovalRequest.yaml"
+}

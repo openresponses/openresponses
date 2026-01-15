@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["double_click"],
+      "description": "Specifies the event type. Always `double_click`.",
+      "default": "double_click",
+      "x-stainless-const": true
+    },
+    "x": {
+      "type": "integer",
+      "description": "The x-coordinate where the double click occurred."
+    },
+    "y": {
+      "type": "integer",
+      "description": "The y-coordinate where the double click occurred."
+    }
+  },
+  "type": "object",
+  "required": ["type", "x", "y"],
+  "x-openai-class-name": "responses_common.api.params.computer_call_item_param.DoubleClick"
+}

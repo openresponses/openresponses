@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["error"],
+      "description": "The type of the event, always `error`.",
+      "default": "error",
+      "x-stainless-const": true
+    },
+    "sequence_number": {
+      "type": "integer",
+      "description": "The sequence number of the event that was emitted."
+    },
+    "error": {
+      "$ref": "./ErrorPayload.json",
+      "description": "The error payload that was emitted."
+    }
+  },
+  "type": "object",
+  "required": ["type", "sequence_number", "error"],
+  "title": "Error event",
+  "description": "A streaming event that indicated an error was emitted.",
+  "x-openai-class-name": "responsesapi.api.resources.streaming_event_resource.ErrorStreamingEvent"
+}

@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["text"],
+      "default": "text",
+      "x-stainless-const": true
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "type": "object",
+  "required": ["type", "text"],
+  "title": "Text Content",
+  "description": "A text content.",
+  "x-openai-class-name": "responses_common.api.resources.content_resource.TextContent"
+}

@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["url"],
+      "description": "The source type. Always `url`.",
+      "default": "url",
+      "x-stainless-const": true
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL source."
+    }
+  },
+  "type": "object",
+  "required": ["type", "url"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.UrlSourceParam"
+}

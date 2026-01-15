@@ -1,0 +1,31 @@
+{
+  "post": {
+    "summary": "Cancel Response",
+    "description": "Cancels a response.",
+    "operationId": "CancelResponse",
+    "parameters": [
+      {
+        "name": "response_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "example": "resp_123",
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ResponseResource.json"
+            }
+          }
+        }
+      }
+    },
+    "x-openai-class-name": "responsesapi.api.methods.responses.cancel_response_method.CancelResponseMethod"
+  }
+}

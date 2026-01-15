@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "tool_names": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "A list of tool names to match against."
+    },
+    "read_only": {
+      "type": "boolean",
+      "description": "Whether to allow only read-only tools for matching entries."
+    }
+  },
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "responses_common.api.params.tool_param.MCPToolFilterParam"
+}

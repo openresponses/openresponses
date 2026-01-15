@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "usage": {
+      "$ref": "./ImageGenUsage.json"
+    },
+    "created": {
+      "type": "integer"
+    },
+    "data": {
+      "items": {
+        "$ref": "./Image.json"
+      },
+      "type": "array"
+    },
+    "size": {
+      "$ref": "./ImageSize.json"
+    },
+    "background": {
+      "$ref": "./ImageBackground.json"
+    },
+    "quality": {
+      "$ref": "./ImageQuality.json"
+    },
+    "output_format": {
+      "$ref": "./ImageOutputFormat.json"
+    }
+  },
+  "type": "object",
+  "required": [],
+  "x-openai-class-name": "responsesapi.api.resources.image_resource.ImageBody"
+}

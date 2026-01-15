@@ -1,0 +1,42 @@
+---
+import type { ParameterRow } from "../../lib/openapi/referenceIndex";
+import UnionVariantBadges from "./UnionVariantBadges.astro";
+
+type Props = {
+  row: ParameterRow;
+};
+
+const { row } = Astro.props as Props;
+const showUnionBadges = row.isUnion && row.unionVariants.length > 0;
+const showLinkedType =
+  !showUnionBadges && Boolean(row.typeLinkId) && !row.literalValue;
+---
+
+<div class="flex flex-row gap-0">
+  {
+    showUnionBadges ? (
+      <div class="flex flex-wrap gap-2">
+        <UnionVariantBadges variants={row.unionVariants} />
+      </div>
+    ) : row.literalValue ? (
+      <span class="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">
+        "{row.literalValue}"
+      </span>
+    ) : showLinkedType ? (
+      <a
+        class:list={[
+          "type-label transition hover:shadow",
+          row.typeClass,
+          { array: row.array },
+        ]}
+        href={`#${row.typeLinkId}`}
+      >
+        {row.typeLabel.trim()}
+      </a>
+    ) : (
+      <span class:list={["type-label", row.typeClass, { array: row.array }]}>
+        {row.typeLabel.trim()}
+      </span>
+    )
+  }
+</div>

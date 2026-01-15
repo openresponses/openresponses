@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "enum": ["developer", "openai"],
+  "x-openai-class-name": "responsesapi.api.resources.response_resource.Payer"
+}

@@ -1,0 +1,59 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAI API",
+    "version": "2.3.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.openai.com/v1"
+    }
+  ],
+  "paths": {
+    "/responses/compact": {
+      "$ref": "paths/responses_compact.json"
+    },
+    "/responses/input_tokens": {
+      "$ref": "paths/responses_input_tokens.json"
+    },
+    "/responses": {
+      "$ref": "paths/responses.json"
+    },
+    "/responses/{response_id}": {
+      "$ref": "paths/responses_{response_id}.json"
+    },
+    "/responses/{response_id}/cancel": {
+      "$ref": "paths/responses_{response_id}_cancel.json"
+    },
+    "/responses/{response_id}/input_items": {
+      "$ref": "paths/responses_{response_id}_input_items.json"
+    },
+    "/images/generations": {
+      "$ref": "paths/images_generations.json"
+    },
+    "/images/edits": {
+      "$ref": "paths/images_edits.json"
+    },
+    "/videos": {
+      "$ref": "paths/videos.json"
+    },
+    "/videos/{video_id}/remix": {
+      "$ref": "paths/videos_{video_id}_remix.json"
+    },
+    "/videos/{video_id}": {
+      "$ref": "paths/videos_{video_id}.json"
+    },
+    "/videos/{video_id}/content": {
+      "$ref": "paths/videos_{video_id}_content.json"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "in": "header"
+      }
+    }
+  }
+}

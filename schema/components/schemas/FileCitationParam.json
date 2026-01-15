@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["file_citation"],
+      "description": "The citation type. Always `file_citation`.",
+      "default": "file_citation",
+      "x-stainless-const": true
+    },
+    "index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The index of the file in the list of files."
+    },
+    "file_id": {
+      "type": "string",
+      "description": "The ID of the file.",
+      "example": "file-123"
+    },
+    "filename": {
+      "type": "string",
+      "description": "The filename of the file cited."
+    }
+  },
+  "type": "object",
+  "required": ["type", "index", "file_id", "filename"],
+  "x-openai-class-name": "responses_common.api.params.input_item_param.FileCitationParam"
+}
