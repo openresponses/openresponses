@@ -50,6 +50,7 @@ export { outputTextContentParamSchema } from "./outputTextContentParamSchema.ts"
 export { outputTextContentSchema } from "./outputTextContentSchema.ts";
 export { outputTokensDetailsSchema } from "./outputTokensDetailsSchema.ts";
 export { reasoningBodySchema } from "./reasoningBodySchema.ts";
+export { reasoningContentParamSchema } from "./reasoningContentParamSchema.ts";
 export { reasoningEffortEnumSchema } from "./reasoningEffortEnumSchema.ts";
 export { reasoningItemParamSchema } from "./reasoningItemParamSchema.ts";
 export { reasoningParamSchema } from "./reasoningParamSchema.ts";

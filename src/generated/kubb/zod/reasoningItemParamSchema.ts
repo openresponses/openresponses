@@ -3,6 +3,7 @@
  * Do not edit manually.
  */
 
+import { reasoningContentParamSchema } from "./reasoningContentParamSchema.ts";
 import { reasoningSummaryContentParamSchema } from "./reasoningSummaryContentParamSchema.ts";
 import { z } from "zod";
 
@@ -15,5 +16,8 @@ export const reasoningItemParamSchema = z.object({
   summary: z
     .array(z.lazy(() => reasoningSummaryContentParamSchema))
     .describe("Reasoning summary content associated with this item."),
+  content: z.optional(
+    z.union([z.array(z.lazy(() => reasoningContentParamSchema)), z.null()]),
+  ),
   encrypted_content: z.optional(z.union([z.string(), z.null()])),
 });

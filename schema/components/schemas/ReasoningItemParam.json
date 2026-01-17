@@ -29,9 +29,10 @@
     "content": {
       "anyOf": [
         {
-          "items": {},
+          "items": {
+            "$ref": "./ReasoningContentParam.json"
+          },
           "type": "array",
-          "maxItems": 0,
           "description": "Reasoning content for this item."
         },
         {

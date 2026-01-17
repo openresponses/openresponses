@@ -43,8 +43,5 @@ export const functionCallOutputSchema = z
       z.string(),
     ]),
     status: z.lazy(() => functionCallOutputStatusEnumSchema).and(z.any()),
-    created_by: z.optional(
-      z.string().describe("The identifier of the actor that created the item."),
-    ),
   })
   .describe("A function tool call output that was returned by the tool.");

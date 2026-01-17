@@ -21,7 +21,9 @@
     },
     "schema": {
       "anyOf": [
-        {},
+        {
+          "type": "object"
+        },
         {
           "type": "null"
         }
