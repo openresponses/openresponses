@@ -152,12 +152,13 @@ ${colors.bold}EXAMPLES:${colors.reset}
 `);
 }
 
-function printTestHeader(name: string, description: string) {
-  // Don't print headers immediately - we'll print them with results
-}
-
 /**
  * Enhance error messages with detailed information about received values and expected types
+ *
+ * Note: This re-parses the response with Zod, which is also done in src/lib/compliance-tests.ts.
+ * This duplication is necessary because src only generates simple error messages (field: message),
+ * but we need detailed messages that include the actual received values for better debugging.
+ * We cannot modify src/lib/compliance-tests.ts to avoid this duplication.
  */
 function enhanceErrorMessages(result: TestResult): TestResult {
   if (!result.errors || result.errors.length === 0 || !result.response) {
@@ -227,7 +228,6 @@ function printTestResult(result: TestResult, verbose: boolean) {
       ? `${colors.green}✓${colors.reset}`
       : `${colors.red}✗${colors.reset}`;
 
-  const statusColor = result.status === "passed" ? colors.green : colors.red;
   const duration = result.duration ? `${result.duration}ms` : "?";
   const streamInfo =
     result.streamEvents !== undefined ? ` · ${result.streamEvents} events` : "";
@@ -273,11 +273,13 @@ function printTestResult(result: TestResult, verbose: boolean) {
     if (result.request) {
       console.log(`\n  ${colors.bold}Request:${colors.reset}`);
       const requestStr = JSON.stringify(result.request, null, 2);
-      const requestLines = requestStr.split("\n").slice(0, verbose ? 50 : 10);
+      const allRequestLines = requestStr.split("\n");
+      const lineLimit = verbose ? 50 : 10;
+      const requestLines = allRequestLines.slice(0, lineLimit);
       requestLines.forEach((line) =>
         console.log(`  ${colors.gray}${line}${colors.reset}`),
       );
-      if (requestStr.split("\n").length > (verbose ? 50 : 10)) {
+      if (allRequestLines.length > lineLimit) {
         console.log(
           `  ${colors.gray}... (truncated, use --verbose for full output)${colors.reset}`,
         );
@@ -290,13 +292,13 @@ function printTestResult(result: TestResult, verbose: boolean) {
         typeof result.response === "string"
           ? result.response
           : JSON.stringify(result.response, null, 2);
-      const responseLines = responseStr
-        .split("\n")
-        .slice(0, verbose ? 100 : 15);
+      const allResponseLines = responseStr.split("\n");
+      const lineLimit = verbose ? 100 : 15;
+      const responseLines = allResponseLines.slice(0, lineLimit);
       responseLines.forEach((line) =>
         console.log(`  ${colors.gray}${line}${colors.reset}`),
       );
-      if (responseStr.split("\n").length > (verbose ? 100 : 15)) {
+      if (allResponseLines.length > lineLimit) {
         console.log(
           `  ${colors.gray}... (truncated, use --verbose for full output)${colors.reset}`,
         );
@@ -424,49 +426,19 @@ async function main() {
 
   const results: TestResult[] = [];
   const runningTests = new Set<string>();
-
-  // Create a custom version of runAllTests for filtered tests
-  const runFilteredTests = async (
-    testConfig: TestConfig,
-    onProgress: (result: TestResult) => void,
-  ): Promise<TestResult[]> => {
-    const promises = testsToRun.map(async (template) => {
-      onProgress({
-        id: template.id,
-        name: template.name,
-        description: template.description,
-        status: "running",
-      });
-
-      // Import runTest from compliance-tests
-      const { default: ComplianceTester } =
-        await import("../src/lib/compliance-tests");
-      const runTest = ((await import("../src/lib/compliance-tests")) as any)
-        .runTest;
-
-      // Since runTest is not exported, we need to call runAllTests with filtered list
-      // Let's use a workaround
-      return null as any;
-    });
-
-    return Promise.all(promises);
-  };
-
-  // Use the regular runAllTests but filter in the callback
   await runAllTests(config, (result) => {
-    // Skip tests not in our filter
+    // Skip tests not matching the filter
     if (config.filterTests && !config.filterTests.includes(result.id)) {
       return;
     }
 
     if (result.status === "running") {
       runningTests.add(result.id);
-      printTestHeader(result.name, result.description);
     } else if (runningTests.has(result.id)) {
-      // Enhance error messages with detailed information
-      let enhancedResult = enhanceErrorMessages(result);
+      // Enhance error messages with actual received values for better debugging
+      const enhancedResult = enhanceErrorMessages(result);
 
-      // Filter errors by field if requested
+      // If field filtering is requested, only show errors for those specific fields
       if (config.filterFields && enhancedResult.errors) {
         enhancedResult.errors = enhancedResult.errors.filter((error) => {
           const fieldName = error.split(":")[0].trim();
@@ -476,7 +448,6 @@ async function main() {
           );
         });
 
-        // Update error count in result
         if (enhancedResult.errors.length === 0) {
           console.log(
             `\n  ${colors.yellow}ℹ${colors.reset} No errors found for fields: ${config.filterFields.join(", ")}`,
