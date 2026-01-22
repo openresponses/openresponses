@@ -30,7 +30,7 @@ Modern LLM systems have converged on similar primitives—messages, function ca
 
 All models, to some extent, exhibit agency — the ability to perceive input, reason, act through tools, and reflect on outcomes.
 
-Open Responses at is core is designed to expose the power of this agentic loop to developers, making requests that allow the model to do multiple things and yield back a result, whether this is developer-hosted tool calls where control is yielded back to the user, or provider-hosted tools where control is held by the model provider until the model signals an exit criteria.
+Open Responses at its core is designed to expose the power of this agentic loop to developers, making requests that allow the model to do multiple things and yield back a result, whether this is developer-hosted tool calls where control is yielded back to the user, or provider-hosted tools where control is held by the model provider until the model signals an exit criteria.
 
 Open Responses defines a common pattern for defining control flow in the agent loop, a set of item definitions for developer-controlled tools, and pattern for defining provider and router-hosted tools.
 
@@ -38,7 +38,7 @@ Open Responses defines a common pattern for defining control flow in the agent l
 
 **Items** are the fundamental unit of context in Open Responses: they represent an atomic unit of model output, tool invocation, or reasoning state. Items are bidirectional, they can be provided as inputs to the model, or as outputs from the model.
 
-Each item type has a defined schema that binds it and contains properties specific to it’s unique purpose.
+Each item type has a defined schema that binds it and contains properties specific to its unique purpose.
 
 Open Responses defines a common set of items supported by a quorum of model providers, and defines how provider-specific item types can be defined.
 
@@ -141,7 +141,7 @@ In Open Responses, all items have a lifecycle. They can be `in_progress` if the 
 
 It's important to note that while items follow a state machine model—transitioning through these defined states—this does not necessarily mean they are stateful in the sense of being persisted to disk or stored long-term. The state machine describes the item's status within the response flow, but persistence is a separate concern and is not implied by the item's state transitions.
 
-All item types should have these three basic status:
+All item types should have these three basic states:
 
 - `in_progress` - the model is currently emitting tokens belonging to this item
 - `incomplete` - the model has exhausted its token budget while emitting tokens belonging to this item. This is a terminal state. If an item ends in a terminal state, it MUST be the last item emitted, and the containing response also MUST be in an `incomplete` state.
@@ -348,7 +348,7 @@ Errors are also emitted as events in the streaming protocol, allowing clients to
 
 It is recommended to check for error responses and handle them gracefully in your client implementation. Display user-friendly messages or trigger appropriate fallbacks where possible.
 
-Error types can indicate whether an error is recoverable or not, allowing your application to determine if it should retry, prompt the user, or halt the operation. The error’s `code` provide additional details, often including guidance or steps for recovery, which helps developers create more robust and responsive clients.
+Error types can indicate whether an error is recoverable or not, allowing your application to determine if it should retry, prompt the user, or halt the operation. The error’s `code` provides additional details, often including guidance or steps for recovery, which helps developers create more robust and responsive clients.
 
 ```json
 {
@@ -657,7 +657,7 @@ These required fields ensure that all items—standard and extension types—are
 {
   "type": "acme:telemetry_chunk",
   "id": "tc_123",
-  "status": "completed"
+  "status": "completed",
   "request_id": "req_123",
   "sequence": 4,
   "latency_ms": 72,
