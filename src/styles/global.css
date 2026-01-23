@@ -48,6 +48,10 @@ body {
     img.openrouter {
       @apply h-12;
     }
+
+    img.nvidia {
+      @apply h-8 lg:h-12;
+    }
   }
 }
 

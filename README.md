@@ -1,6 +1,6 @@
 # Open Responses
 
-Open Responses is an open-source specification for multi-provider, interoperable LLM interfaces insired by the OpenAI Responses API. It defines a shared request/response model, streaming semantics, and tool invocation patterns so clients and providers can exchange structured inputs and outputs in a consistent shape.
+Open Responses is an open-source specification for multi-provider, interoperable LLM interfaces inspired by the OpenAI Responses API. It defines a shared request/response model, streaming semantics, and tool invocation patterns so clients and providers can exchange structured inputs and outputs in a consistent shape.
 
 At a high level, the spec centers on:
 
