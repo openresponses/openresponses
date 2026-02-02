@@ -274,6 +274,7 @@
       "description": "The context management edits that were applied while generating this response, if any."
     },
     "metadata": {
+      "$ref": "./MetadataParam.json",
       "description": "Developer-defined metadata that was associated with the response."
     },
     "safety_identifier": {
