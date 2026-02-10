@@ -48,13 +48,34 @@ allow:
       - ErrorStreamingEvent
     AllowedToolChoice:
       - FunctionToolChoice
+      - FileSearchToolChoice
+      - WebSearchToolChoice
+      - CodeInterpreterToolChoice
+      - MCPToolChoice
+      - ComputerUseToolChoice
     ResponsesToolParam:
       - FunctionToolParam
+      - FileSearchToolParam
+      - WebSearchToolParam
+      - CodeInterpreterToolParam
+      - MCPToolParam
+      - ComputerToolParam
+      - ImageGenToolParam
     ItemField:
       - Message
       - FunctionCall
       - FunctionCallOutput
       - ReasoningBody
+      - FileSearchCall
+      - WebSearchCall
+      - ImageGenCall
+      - ComputerCall
+      - ComputerCallOutput
+      - CodeInterpreterCall
+      - MCPListTools
+      - MCPApprovalRequest
+      - MCPApprovalResponse
+      - MCPToolCall
     ItemParam:
       - ItemReferenceParam
       - ReasoningItemParam
@@ -66,6 +87,11 @@ allow:
       - FunctionCallOutputItemParam
     Tool:
       - FunctionTool
+      - FileSearchTool
+      - WebSearchPreviewTool
+      - MCPTool
+      - ComputerUsePreviewTool
+      - ImageGenTool
     SpecificToolChoiceParam:
       - SpecificFunctionParam
     ResponseResource.tool_choice:
@@ -131,10 +157,4 @@ deny:
   # Each list entry removes any oneOf item that references that schema.
   # You can scope to a specific property with "SchemaName.property".
   # You can also target operation schemas via:
-  oneOf:
-    Tool:
-      - FileSearchTool
-    ItemField:
-      - FileSearchCall
-      - WebSearchCall
-      - ImageGenCall
+  oneOf: {}
