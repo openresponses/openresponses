@@ -165,6 +165,89 @@ export const testTemplates: TestTemplate[] = [
   },
 
   {
+    id: "tool-calling-streaming",
+    name: "Tool Calling (Streaming)",
+    description:
+      "Streaming tool call: validates function_call SSE events including arguments delta/done",
+    streaming: true,
+    getRequest: (config) => ({
+      model: config.model,
+      input: [
+        {
+          type: "message",
+          role: "user",
+          content: "What's the weather like in San Francisco?",
+        },
+      ],
+      tools: [
+        {
+          type: "function",
+          name: "get_weather",
+          description: "Get the current weather for a location",
+          parameters: {
+            type: "object",
+            properties: {
+              location: {
+                type: "string",
+                description: "The city and state, e.g. San Francisco, CA",
+              },
+            },
+            required: ["location"],
+          },
+        },
+      ],
+    }),
+    validators: [
+      streamingEvents,
+      streamingSchema,
+      // Validate function_call streaming events are present
+      (_, context) => {
+        if (!context.streaming || !context.sseResult) return [];
+        const errors: string[] = [];
+        const eventTypes = context.sseResult.events.map(
+          (e) => (e.data as any)?.type,
+        );
+
+        // Must have output_item.added with function_call type
+        const hasAddedFunctionCall = context.sseResult.events.some(
+          (e) =>
+            (e.data as any)?.type === "response.output_item.added" &&
+            (e.data as any)?.item?.type === "function_call",
+        );
+        if (!hasAddedFunctionCall) {
+          errors.push(
+            "Missing response.output_item.added event with function_call item",
+          );
+        }
+
+        // Must have function_call_arguments.delta
+        if (!eventTypes.includes("response.function_call_arguments.delta")) {
+          errors.push("Missing response.function_call_arguments.delta event");
+        }
+
+        // Must have function_call_arguments.done
+        if (!eventTypes.includes("response.function_call_arguments.done")) {
+          errors.push("Missing response.function_call_arguments.done event");
+        }
+
+        // Must have output_item.done with function_call type
+        const hasDoneFunctionCall = context.sseResult.events.some(
+          (e) =>
+            (e.data as any)?.type === "response.output_item.done" &&
+            (e.data as any)?.item?.type === "function_call",
+        );
+        if (!hasDoneFunctionCall) {
+          errors.push(
+            "Missing response.output_item.done event with function_call item",
+          );
+        }
+
+        return errors;
+      },
+    ],
+  },
+
+  {
     id: "image-input",
     name: "Image Input",
     description: "Send image URL in user content",

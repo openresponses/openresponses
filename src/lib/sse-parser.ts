@@ -120,7 +120,8 @@ export async function parseSSEStream(
 
               if (
                 parsed.type === "response.completed" ||
-                parsed.type === "response.failed"
+                parsed.type === "response.failed" ||
+                parsed.type === "response.incomplete"
               ) {
                 finalResponse = parsed.response;
               }
