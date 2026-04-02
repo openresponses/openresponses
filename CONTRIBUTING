@@ -8,8 +8,15 @@ We keep changes open, neutral, and interoperable, as described in `src/pages/gov
 
 ## Maintainers
 
-- Lead Core Maintainer: Steve Coffey
-- Core Maintainers: To be nominated
+- Lead Core Maintainer: Steve Coffey, OpenAI
+- Core Maintainers:
+  - Ankit Mathur, Databricks
+  - Anthony Liguori, Amazon
+  - Ben Burtenshaw, HuggingFace
+  - Devon Rifkin, Ollama
+  - Ji Huang, OpenAI
+  - Matt Apperson, OpenRouter
+  - Shaun Smith, HuggingFace
 
 ### Lead Core Maintainer selection and removal
 

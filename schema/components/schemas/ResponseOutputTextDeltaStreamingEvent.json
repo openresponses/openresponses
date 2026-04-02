@@ -46,8 +46,7 @@
     "item_id",
     "output_index",
     "content_index",
-    "delta",
-    "logprobs"
+    "delta"
   ],
   "title": "Response output text delta event",
   "description": "A streaming event that indicated output text was incrementally added.",

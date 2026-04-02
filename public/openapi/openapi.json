@@ -24,9 +24,7 @@
             "anyOf": [
               {
                 "type": "string",
-                "enum": [
-                  "item_reference"
-                ],
+                "enum": ["item_reference"],
                 "description": "The type of item to reference. Always `item_reference`.",
                 "default": "item_reference"
               },
@@ -41,9 +39,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "title": "Item reference",
         "description": "An internal identifier for an item to reference."
       },
@@ -51,9 +47,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "summary_text"
-            ],
+            "enum": ["summary_text"],
             "description": "The content type. Always `summary_text`.",
             "default": "summary_text"
           },
@@ -64,10 +58,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ]
+        "required": ["type", "text"]
       },
       "ReasoningItemParam": {
         "properties": {
@@ -85,9 +76,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "reasoning"
-            ],
+            "enum": ["reasoning"],
             "description": "The item type. Always `reasoning`.",
             "default": "reasoning"
           },
@@ -118,18 +107,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "summary"
-        ]
+        "required": ["type", "summary"]
       },
       "InputTextContentParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_text"
-            ],
+            "enum": ["input_text"],
             "description": "The type of the input item. Always `input_text`.",
             "default": "input_text"
           },
@@ -140,10 +124,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ],
+        "required": ["type", "text"],
         "title": "Input text",
         "description": "A text input to the model.",
         "x-unionDisplay": "section",
@@ -151,11 +132,7 @@
       },
       "DetailEnum": {
         "type": "string",
-        "enum": [
-          "low",
-          "high",
-          "auto"
-        ],
+        "enum": ["low", "high", "auto"],
         "x-enumDescriptions": {
           "auto": "Choose the detail level automatically.",
           "high": "Allows the model to \"see\" a higher-resolution version of the image, usually increasing input token costs.",
@@ -166,9 +143,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_image"
-            ],
+            "enum": ["input_image"],
             "description": "The type of the input item. Always `input_image`.",
             "default": "input_image"
           },
@@ -203,9 +178,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "title": "Input image",
         "description": "An image input to the model. Learn about [image inputs](/docs/guides/vision)"
       },
@@ -213,9 +186,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_file"
-            ],
+            "enum": ["input_file"],
             "description": "The type of the input item. Always `input_file`.",
             "default": "input_file"
           },
@@ -255,9 +226,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "title": "Input file",
         "description": "A file input to the model."
       },
@@ -277,17 +246,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "message"
-            ],
+            "enum": ["message"],
             "description": "The item type. Always `message`.",
             "default": "message"
           },
           "role": {
             "type": "string",
-            "enum": [
-              "user"
-            ],
+            "enum": ["user"],
             "description": "The message role. Always `user`.",
             "default": "user"
           },
@@ -334,11 +299,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "role",
-          "content"
-        ]
+        "required": ["type", "role", "content"]
       },
       "SystemMessageItemParam": {
         "properties": {
@@ -356,17 +317,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "message"
-            ],
+            "enum": ["message"],
             "description": "The item type. Always `message`.",
             "default": "message"
           },
           "role": {
             "type": "string",
-            "enum": [
-              "system"
-            ],
+            "enum": ["system"],
             "description": "The message role. Always `system`.",
             "default": "system"
           },
@@ -406,11 +363,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "role",
-          "content"
-        ]
+        "required": ["type", "role", "content"]
       },
       "DeveloperMessageItemParam": {
         "properties": {
@@ -428,17 +381,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "message"
-            ],
+            "enum": ["message"],
             "description": "The item type. Always `message`.",
             "default": "message"
           },
           "role": {
             "type": "string",
-            "enum": [
-              "developer"
-            ],
+            "enum": ["developer"],
             "description": "The message role. Always `developer`.",
             "default": "developer"
           },
@@ -478,19 +427,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "role",
-          "content"
-        ]
+        "required": ["type", "role", "content"]
       },
       "UrlCitationParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "url_citation"
-            ],
+            "enum": ["url_citation"],
             "description": "The citation type. Always `url_citation`.",
             "default": "url_citation"
           },
@@ -514,21 +457,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "start_index",
-          "end_index",
-          "url",
-          "title"
-        ]
+        "required": ["type", "start_index", "end_index", "url", "title"]
       },
       "OutputTextContentParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "output_text"
-            ],
+            "enum": ["output_text"],
             "description": "The content type. Always `output_text`.",
             "default": "output_text"
           },
@@ -550,18 +485,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ]
+        "required": ["type", "text"]
       },
       "RefusalContentParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "refusal"
-            ],
+            "enum": ["refusal"],
             "description": "The content type. Always `refusal`.",
             "default": "refusal"
           },
@@ -572,10 +502,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "refusal"
-        ]
+        "required": ["type", "refusal"]
       },
       "AssistantMessageItemParam": {
         "properties": {
@@ -593,17 +520,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "message"
-            ],
+            "enum": ["message"],
             "description": "The item type. Always `message`.",
             "default": "message"
           },
           "role": {
             "type": "string",
-            "enum": [
-              "assistant"
-            ],
+            "enum": ["assistant"],
             "description": "The role of the message author. Always `assistant`.",
             "default": "assistant"
           },
@@ -647,19 +570,11 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "role",
-          "content"
-        ]
+        "required": ["type", "role", "content"]
       },
       "FunctionCallItemStatus": {
         "type": "string",
-        "enum": [
-          "in_progress",
-          "completed",
-          "incomplete"
-        ]
+        "enum": ["in_progress", "completed", "incomplete"]
       },
       "FunctionCallItemParam": {
         "properties": {
@@ -683,9 +598,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "function_call"
-            ],
+            "enum": ["function_call"],
             "description": "The item type. Always `function_call`.",
             "default": "function_call"
           },
@@ -719,12 +632,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "call_id",
-          "type",
-          "name",
-          "arguments"
-        ]
+        "required": ["call_id", "type", "name", "arguments"]
       },
       "FunctionCallOutputItemParam": {
         "properties": {
@@ -748,9 +656,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "function_call_output"
-            ],
+            "enum": ["function_call_output"],
             "description": "The type of the function tool call output. Always `function_call_output`.",
             "default": "function_call_output"
           },
@@ -807,11 +713,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "call_id",
-          "type",
-          "output"
-        ],
+        "required": ["call_id", "type", "output"],
         "title": "Function tool call output",
         "description": "The output of a function tool call."
       },
@@ -827,37 +729,19 @@
       },
       "ImageSize": {
         "type": "string",
-        "enum": [
-          "1024x1024",
-          "1024x1536",
-          "1536x1024",
-          "auto"
-        ]
+        "enum": ["1024x1024", "1024x1536", "1536x1024", "auto"]
       },
       "ImageBackground": {
         "type": "string",
-        "enum": [
-          "transparent",
-          "opaque",
-          "auto"
-        ]
+        "enum": ["transparent", "opaque", "auto"]
       },
       "ImageQuality": {
         "type": "string",
-        "enum": [
-          "low",
-          "medium",
-          "high",
-          "auto"
-        ]
+        "enum": ["low", "medium", "high", "auto"]
       },
       "ImageOutputFormat": {
         "type": "string",
-        "enum": [
-          "png",
-          "webp",
-          "jpeg"
-        ]
+        "enum": ["png", "webp", "jpeg"]
       },
       "ItemParam": {
         "oneOf": [
@@ -894,10 +778,7 @@
       },
       "IncludeEnum": {
         "type": "string",
-        "enum": [
-          "reasoning.encrypted_content",
-          "message.output_text.logprobs"
-        ],
+        "enum": ["reasoning.encrypted_content", "message.output_text.logprobs"],
         "description": "",
         "x-enumDescriptions": {
           "message.output_text.logprobs": "includes sampled logprobs in assistant messages.",
@@ -908,9 +789,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "auto"
-            ],
+            "enum": ["auto"],
             "description": "Always `auto`.",
             "default": "auto"
           },
@@ -925,9 +804,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "title": "CodeInterpreterToolAuto",
         "description": "Configuration for a code interpreter container. Optionally specify the IDs of the files to run the code on."
       },
@@ -935,9 +812,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "code_interpreter"
-            ],
+            "enum": ["code_interpreter"],
             "description": "The type of the tool. Always `code_interpreter`.",
             "default": "code_interpreter"
           },
@@ -955,10 +830,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "container"
-        ]
+        "required": ["type", "container"]
       },
       "EmptyModelParam": {
         "properties": {},
@@ -998,25 +870,18 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "function"
-            ],
+            "enum": ["function"],
             "default": "function"
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "type"
-        ]
+        "required": ["name", "type"]
       },
       "ApproximateLocationParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "approximate"
-            ],
+            "enum": ["approximate"],
             "description": "The location type. Always `approximate`.",
             "default": "approximate"
           },
@@ -1066,18 +931,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "description": "An approximate user location to bias web search results."
       },
       "SearchContextSize": {
         "type": "string",
-        "enum": [
-          "low",
-          "medium",
-          "high"
-        ]
+        "enum": ["low", "medium", "high"]
       },
       "WebSearchToolParam": {
         "properties": {
@@ -1103,9 +962,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "web_search"
-            ],
+            "enum": ["web_search"],
             "description": "The type of the tool. Always `web_search`.",
             "default": "web_search"
           },
@@ -1115,9 +972,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "ImageGenToolModel": {
         "anyOf": [
@@ -1126,27 +981,18 @@
           },
           {
             "type": "string",
-            "enum": [
-              "gpt-image-1",
-              "gpt-image-1-mini"
-            ]
+            "enum": ["gpt-image-1", "gpt-image-1-mini"]
           }
         ]
       },
       "InputFidelity": {
         "type": "string",
-        "enum": [
-          "high",
-          "low"
-        ],
+        "enum": ["high", "low"],
         "description": "Control how much effort the model will exert to match the style and features, especially facial features, of input images. This parameter is only supported for `gpt-image-1`. Unsupported for `gpt-image-1-mini`. Supports `high` and `low`. Defaults to `low`."
       },
       "ImageModeration": {
         "type": "string",
-        "enum": [
-          "auto",
-          "low"
-        ]
+        "enum": ["auto", "low"]
       },
       "InputImageMaskContentParam": {
         "properties": {
@@ -1181,19 +1027,13 @@
       },
       "ImageGenActionEnum": {
         "type": "string",
-        "enum": [
-          "generate",
-          "edit",
-          "auto"
-        ]
+        "enum": ["generate", "edit", "auto"]
       },
       "ImageGenToolParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "image_generation"
-            ],
+            "enum": ["image_generation"],
             "description": "The type of the tool. Always `image_generation`.",
             "default": "image_generation"
           },
@@ -1294,9 +1134,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "MCPToolFilterParam": {
         "properties": {
@@ -1343,18 +1181,13 @@
       },
       "MCPRequireApprovalApiEnum": {
         "type": "string",
-        "enum": [
-          "always",
-          "never"
-        ]
+        "enum": ["always", "never"]
       },
       "MCPToolParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp"
-            ],
+            "enum": ["mcp"],
             "description": "The type of the tool. Always `mcp`.",
             "default": "mcp"
           },
@@ -1404,17 +1237,11 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "server_label"
-        ]
+        "required": ["type", "server_label"]
       },
       "RankerVersionType": {
         "type": "string",
-        "enum": [
-          "auto",
-          "default-2024-11-15"
-        ]
+        "enum": ["auto", "default-2024-11-15"]
       },
       "HybridSearchOptionsParam": {
         "properties": {
@@ -1509,18 +1336,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "eq"
-            ],
+            "enum": ["eq"],
             "description": "The filter type. Always `eq`.",
             "default": "eq"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamNEParam": {
         "properties": {
@@ -1569,18 +1391,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ne"
-            ],
+            "enum": ["ne"],
             "description": "The filter type. Always `ne`.",
             "default": "ne"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamGTParam": {
         "properties": {
@@ -1629,18 +1446,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "gt"
-            ],
+            "enum": ["gt"],
             "description": "The filter type. Always `gt`.",
             "default": "gt"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamGTEParam": {
         "properties": {
@@ -1689,18 +1501,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "gte"
-            ],
+            "enum": ["gte"],
             "description": "The filter type. Always `gte`.",
             "default": "gte"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamLTParam": {
         "properties": {
@@ -1749,18 +1556,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "lt"
-            ],
+            "enum": ["lt"],
             "description": "The filter type. Always `lt`.",
             "default": "lt"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamLTEParam": {
         "properties": {
@@ -1809,18 +1611,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "lte"
-            ],
+            "enum": ["lte"],
             "description": "The filter type. Always `lte`.",
             "default": "lte"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamINParam": {
         "properties": {
@@ -1869,18 +1666,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "in"
-            ],
+            "enum": ["in"],
             "description": "The filter type. Always `in`.",
             "default": "in"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamNINParam": {
         "properties": {
@@ -1929,18 +1721,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "nin"
-            ],
+            "enum": ["nin"],
             "description": "The filter type. Always `nin`.",
             "default": "nin"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamContainsParam": {
         "properties": {
@@ -1989,18 +1776,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "contains"
-            ],
+            "enum": ["contains"],
             "description": "The filter type. Always `contains`.",
             "default": "contains"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamNContainsParam": {
         "properties": {
@@ -2049,18 +1831,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ncontains"
-            ],
+            "enum": ["ncontains"],
             "description": "The filter type. Always `ncontains`.",
             "default": "ncontains"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamContainsAnyParam": {
         "properties": {
@@ -2109,18 +1886,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "containsany"
-            ],
+            "enum": ["containsany"],
             "description": "The filter type. Always `containsany`.",
             "default": "containsany"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "ComparisonFilterParamNContainsAnyParam": {
         "properties": {
@@ -2169,18 +1941,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ncontainsany"
-            ],
+            "enum": ["ncontainsany"],
             "description": "The filter type. Always `ncontainsany`.",
             "default": "ncontainsany"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "type"
-        ]
+        "required": ["key", "type"]
       },
       "CompoundFilterParamOrParam": {
         "properties": {
@@ -2240,18 +2007,13 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "or"
-            ],
+            "enum": ["or"],
             "description": "The filter type. Always `or`.",
             "default": "or"
           }
         },
         "type": "object",
-        "required": [
-          "filters",
-          "type"
-        ]
+        "required": ["filters", "type"]
       },
       "CompoundFilterParamAndParam": {
         "properties": {
@@ -2311,26 +2073,19 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "and"
-            ],
+            "enum": ["and"],
             "description": "The filter type. Always `and`.",
             "default": "and"
           }
         },
         "type": "object",
-        "required": [
-          "filters",
-          "type"
-        ]
+        "required": ["filters", "type"]
       },
       "FileSearchToolParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "file_search"
-            ],
+            "enum": ["file_search"],
             "description": "The type of the tool. Always `file_search`.",
             "default": "file_search"
           },
@@ -2412,27 +2167,17 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "vector_store_ids"
-        ]
+        "required": ["type", "vector_store_ids"]
       },
       "ComputerEnvironment": {
         "type": "string",
-        "enum": [
-          "windows",
-          "mac",
-          "linux",
-          "browser"
-        ]
+        "enum": ["windows", "mac", "linux", "browser"]
       },
       "ComputerToolParam": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "computer-preview"
-            ],
+            "enum": ["computer-preview"],
             "description": "The type of the tool. Always `computer-preview`.",
             "default": "computer-preview"
           },
@@ -2458,12 +2203,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "display_width",
-          "display_height",
-          "environment"
-        ]
+        "required": ["type", "display_width", "display_height", "environment"]
       },
       "ResponsesToolParam": {
         "oneOf": [
@@ -2499,9 +2239,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "function"
-            ],
+            "enum": ["function"],
             "description": "The tool to call. Always `function`.",
             "default": "function"
           },
@@ -2511,10 +2249,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "name"
-        ]
+        "required": ["type", "name"]
       },
       "SpecificToolChoiceParam": {
         "oneOf": [
@@ -2525,11 +2260,7 @@
       },
       "ToolChoiceValueEnum": {
         "type": "string",
-        "enum": [
-          "none",
-          "auto",
-          "required"
-        ],
+        "enum": ["none", "auto", "required"],
         "x-enumDescriptions": {
           "auto": "Let the model choose the tools from among the provided set.",
           "none": "Restrict the model from calling any tools.",
@@ -2540,9 +2271,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "allowed_tools"
-            ],
+            "enum": ["allowed_tools"],
             "description": "The tool choice type. Always `allowed_tools`.",
             "default": "allowed_tools"
           },
@@ -2567,10 +2296,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "tools"
-        ]
+        "required": ["type", "tools"]
       },
       "ToolChoiceParam": {
         "oneOf": [
@@ -2597,11 +2323,7 @@
       },
       "VerbosityEnum": {
         "type": "string",
-        "enum": [
-          "low",
-          "medium",
-          "high"
-        ],
+        "enum": ["low", "medium", "high"],
         "x-enumDescriptions": {
           "high": "Instruct the model to emit more verbose final responses.",
           "low": "Instruct the model to emit less verbose final responses.",
@@ -2648,13 +2370,7 @@
       },
       "ReasoningEffortEnum": {
         "type": "string",
-        "enum": [
-          "none",
-          "low",
-          "medium",
-          "high",
-          "xhigh"
-        ],
+        "enum": ["none", "low", "medium", "high", "xhigh"],
         "x-enumDescriptions": {
           "high": "Use a higher reasoning effort to improve answer quality.",
           "medium": "Use a balanced reasoning effort.",
@@ -2666,11 +2382,7 @@
       },
       "ReasoningSummaryEnum": {
         "type": "string",
-        "enum": [
-          "concise",
-          "detailed",
-          "auto"
-        ],
+        "enum": ["concise", "detailed", "auto"],
         "x-enumDescriptions": {
           "auto": "Allow the model to decide when to summarize.",
           "concise": "Emit concise summaries of reasoning content.",
@@ -2718,10 +2430,7 @@
       },
       "TruncationEnum": {
         "type": "string",
-        "enum": [
-          "auto",
-          "disabled"
-        ],
+        "enum": ["auto", "disabled"],
         "x-enumDescriptions": {
           "auto": "Let the service decide how to truncate.",
           "disabled": "Disable service truncation. Context over the model's context limit will result in a 400 error."
@@ -2729,12 +2438,7 @@
       },
       "ServiceTierEnum": {
         "type": "string",
-        "enum": [
-          "auto",
-          "default",
-          "flex",
-          "priority"
-        ],
+        "enum": ["auto", "default", "flex", "priority"],
         "x-enumDescriptions": {
           "auto": "Choose a service tier automatically based on current account state.",
           "default": "Choose the default service tier.",
@@ -3066,20 +2770,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "reason"
-        ],
+        "required": ["reason"],
         "title": "Incomplete details",
         "description": "Details about why the response was incomplete."
       },
       "MessageRole": {
         "type": "string",
-        "enum": [
-          "user",
-          "assistant",
-          "system",
-          "developer"
-        ],
+        "enum": ["user", "assistant", "system", "developer"],
         "x-enumDescriptions": {
           "assistant": "Model-generated content in the conversation.",
           "developer": "Developer-supplied guidance that shapes the assistant\u2019s behavior.",
@@ -3091,9 +2788,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_text"
-            ],
+            "enum": ["input_text"],
             "description": "The type of the input item. Always `input_text`.",
             "default": "input_text"
           },
@@ -3103,10 +2798,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ],
+        "required": ["type", "text"],
         "title": "Input text",
         "description": "A text input to the model."
       },
@@ -3114,9 +2806,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "url_citation"
-            ],
+            "enum": ["url_citation"],
             "description": "The type of the URL citation. Always `url_citation`.",
             "default": "url_citation"
           },
@@ -3138,13 +2828,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "url",
-          "start_index",
-          "end_index",
-          "title"
-        ],
+        "required": ["type", "url", "start_index", "end_index", "title"],
         "title": "URL citation",
         "description": "A citation for a web resource used to generate a model response."
       },
@@ -3175,11 +2859,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "token",
-          "logprob",
-          "bytes"
-        ],
+        "required": ["token", "logprob", "bytes"],
         "title": "Top log probability",
         "description": "The top log probability of a token."
       },
@@ -3205,12 +2885,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "token",
-          "logprob",
-          "bytes",
-          "top_logprobs"
-        ],
+        "required": ["token", "logprob", "bytes", "top_logprobs"],
         "title": "Log probability",
         "description": "The log probability of a token."
       },
@@ -3218,9 +2893,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "output_text"
-            ],
+            "enum": ["output_text"],
             "description": "The type of the output text. Always `output_text`.",
             "default": "output_text"
           },
@@ -3243,12 +2916,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text",
-          "annotations",
-          "logprobs"
-        ],
+        "required": ["type", "text", "annotations"],
         "title": "Output text",
         "description": "A text output from the model."
       },
@@ -3256,9 +2924,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "text"
-            ],
+            "enum": ["text"],
             "default": "text"
           },
           "text": {
@@ -3266,10 +2932,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ],
+        "required": ["type", "text"],
         "title": "Text Content",
         "description": "A text content."
       },
@@ -3277,9 +2940,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "summary_text"
-            ],
+            "enum": ["summary_text"],
             "description": "The type of the object. Always `summary_text`.",
             "default": "summary_text"
           },
@@ -3289,10 +2950,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ],
+        "required": ["type", "text"],
         "title": "Summary text",
         "description": "A summary text from the model."
       },
@@ -3300,9 +2958,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "reasoning_text"
-            ],
+            "enum": ["reasoning_text"],
             "description": "The type of the reasoning text. Always `reasoning_text`.",
             "default": "reasoning_text"
           },
@@ -3312,10 +2968,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ],
+        "required": ["type", "text"],
         "title": "Reasoning text",
         "description": "Reasoning text from the model."
       },
@@ -3323,9 +2976,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "refusal"
-            ],
+            "enum": ["refusal"],
             "description": "The type of the refusal. Always `refusal`.",
             "default": "refusal"
           },
@@ -3335,20 +2986,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "refusal"
-        ],
+        "required": ["type", "refusal"],
         "title": "Refusal",
         "description": "A refusal from the model."
       },
       "ImageDetail": {
         "type": "string",
-        "enum": [
-          "low",
-          "high",
-          "auto"
-        ],
+        "enum": ["low", "high", "auto"],
         "x-enumDescriptions": {
           "auto": "Choose the detail level automatically.",
           "high": "Allows the model to \"see\" a higher-resolution version of the image, usually increasing input token costs.",
@@ -3359,9 +3003,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_image"
-            ],
+            "enum": ["input_image"],
             "description": "The type of the input item. Always `input_image`.",
             "default": "input_image"
           },
@@ -3388,11 +3030,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "image_url",
-          "detail"
-        ],
+        "required": ["type", "image_url", "detail"],
         "title": "Input image",
         "description": "An image input to the model. Learn about [image inputs](/docs/guides/vision)."
       },
@@ -3400,9 +3038,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_file"
-            ],
+            "enum": ["input_file"],
             "description": "The type of the input item. Always `input_file`.",
             "default": "input_file"
           },
@@ -3416,19 +3052,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "title": "Input file",
         "description": "A file input to the model."
       },
       "MessageStatus": {
         "type": "string",
-        "enum": [
-          "in_progress",
-          "completed",
-          "incomplete"
-        ],
+        "enum": ["in_progress", "completed", "incomplete"],
         "x-enumDescriptions": {
           "completed": "Model has finished sampling this item.",
           "in_progress": "Model is currently sampling this item.",
@@ -3439,9 +3069,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "message"
-            ],
+            "enum": ["message"],
             "description": "The type of the message. Always set to `message`.",
             "default": "message"
           },
@@ -3510,23 +3138,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "status",
-          "role",
-          "content"
-        ],
+        "required": ["type", "id", "status", "role", "content"],
         "title": "Message",
         "description": "A message to or from the model."
       },
       "FunctionCallStatus": {
         "type": "string",
-        "enum": [
-          "in_progress",
-          "completed",
-          "incomplete"
-        ],
+        "enum": ["in_progress", "completed", "incomplete"],
         "x-enumDescriptions": {
           "completed": "Model has finished sampling this item.",
           "in_progress": "Model is currently sampling this item.",
@@ -3537,9 +3155,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "function_call"
-            ],
+            "enum": ["function_call"],
             "description": "The type of the item. Always `function_call`.",
             "default": "function_call"
           },
@@ -3571,33 +3187,20 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "call_id",
-          "name",
-          "arguments",
-          "status"
-        ],
+        "required": ["type", "id", "call_id", "name", "arguments", "status"],
         "title": "Function call",
         "description": "A function tool call that was generated by the model."
       },
       "FunctionCallOutputStatusEnum": {
         "type": "string",
-        "enum": [
-          "in_progress",
-          "completed",
-          "incomplete"
-        ],
+        "enum": ["in_progress", "completed", "incomplete"],
         "description": "Similar to `FunctionCallStatus`. All three options are allowed here for compatibility, but because in practice these items will be provided by developers, only `completed` should be used."
       },
       "FunctionCallOutput": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "function_call_output"
-            ],
+            "enum": ["function_call_output"],
             "description": "The type of the function tool call output. Always `function_call_output`.",
             "default": "function_call_output"
           },
@@ -3650,13 +3253,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "call_id",
-          "output",
-          "status"
-        ],
+        "required": ["type", "id", "call_id", "output", "status"],
         "title": "Function call output",
         "description": "A function tool call output that was returned by the tool."
       },
@@ -3717,9 +3314,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "file_search_call"
-            ],
+            "enum": ["file_search_call"],
             "default": "file_search_call"
           },
           "id": {
@@ -3752,13 +3347,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "status",
-          "queries",
-          "results"
-        ]
+        "required": ["type", "id", "status", "queries", "results"]
       },
       "WebSearchCallStatus": {
         "type": "string",
@@ -3774,9 +3363,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "search"
-            ],
+            "enum": ["search"],
             "default": "search"
           },
           "query": {
@@ -3797,17 +3384,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "WebSearchCallActionOpenPage": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "open_page"
-            ],
+            "enum": ["open_page"],
             "default": "open_page"
           },
           "url": {
@@ -3822,17 +3405,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "WebSearchCallActionFindInPage": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "find_in_page"
-            ],
+            "enum": ["find_in_page"],
             "default": "find_in_page"
           },
           "url": {
@@ -3857,17 +3436,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "WebSearchCall": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "web_search_call"
-            ],
+            "enum": ["web_search_call"],
             "default": "web_search_call"
           },
           "id": {
@@ -3898,27 +3473,17 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "status"
-        ]
+        "required": ["type", "id", "status"]
       },
       "ImageGenAction": {
         "type": "string",
-        "enum": [
-          "generate",
-          "edit",
-          "auto"
-        ]
+        "enum": ["generate", "edit", "auto"]
       },
       "ImageGenCall": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "image_generation_call"
-            ],
+            "enum": ["image_generation_call"],
             "description": "The type of the image generation call. Always `image_generation_call`.",
             "default": "image_generation_call"
           },
@@ -3963,11 +3528,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "status"
-        ],
+        "required": ["type", "id", "status"],
         "title": "Image generation call",
         "description": "An image generation request made by the model."
       },
@@ -3982,9 +3543,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "click"
-            ],
+            "enum": ["click"],
             "description": "The type of the action. Always `click`.",
             "default": "click"
           },
@@ -4002,12 +3561,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "button",
-          "x",
-          "y"
-        ],
+        "required": ["type", "button", "x", "y"],
         "title": "Click action",
         "description": "A click action that was requested by the model."
       },
@@ -4023,10 +3577,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "x",
-          "y"
-        ],
+        "required": ["x", "y"],
         "title": "Coordinate",
         "description": "An x/y coordinate pair, e.g. `{ x: 100, y: 200 }`."
       },
@@ -4034,9 +3585,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "drag"
-            ],
+            "enum": ["drag"],
             "description": "The type of the action. Always `drag`.",
             "default": "drag"
           },
@@ -4049,10 +3598,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "path"
-        ],
+        "required": ["type", "path"],
         "title": "Drag action",
         "description": "A drag action that was requested by the model."
       },
@@ -4060,17 +3606,13 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "screenshot"
-            ],
+            "enum": ["screenshot"],
             "description": "The type of the action. Always `screenshot`.",
             "default": "screenshot"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "title": "Screenshot action",
         "description": "A screenshot action that was requested by the model."
       },
@@ -4078,9 +3620,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "double_click"
-            ],
+            "enum": ["double_click"],
             "description": "Specifies the event type. For a double click action, this property is always set to `double_click`.",
             "default": "double_click"
           },
@@ -4094,11 +3634,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "x",
-          "y"
-        ],
+        "required": ["type", "x", "y"],
         "title": "DoubleClick",
         "description": "A double click action."
       },
@@ -4106,9 +3642,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "scroll"
-            ],
+            "enum": ["scroll"],
             "description": "The type of the action. Always `scroll`.",
             "default": "scroll"
           },
@@ -4130,13 +3664,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "x",
-          "y",
-          "scroll_x",
-          "scroll_y"
-        ],
+        "required": ["type", "x", "y", "scroll_x", "scroll_y"],
         "title": "Scroll action",
         "description": "A scroll action that was requested by the model."
       },
@@ -4144,9 +3672,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "type"
-            ],
+            "enum": ["type"],
             "description": "The type of the action. Always `type`.",
             "default": "type"
           },
@@ -4156,10 +3682,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "text"
-        ],
+        "required": ["type", "text"],
         "title": "Type action",
         "description": "A typing action that was requested by the model."
       },
@@ -4167,17 +3690,13 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "wait"
-            ],
+            "enum": ["wait"],
             "description": "The type of the action. Always `wait`.",
             "default": "wait"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "title": "Wait action",
         "description": "A wait action that was requested by the model."
       },
@@ -4185,9 +3704,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "keypress"
-            ],
+            "enum": ["keypress"],
             "description": "Specifies the event type. For a keypress action, this property is always set to `keypress`.",
             "default": "keypress"
           },
@@ -4201,10 +3718,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "keys"
-        ],
+        "required": ["type", "keys"],
         "title": "KeyPress",
         "description": "A collection of keypresses the model would like to perform."
       },
@@ -4212,9 +3726,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "move"
-            ],
+            "enum": ["move"],
             "description": "The type of the action. Always `move`.",
             "default": "move"
           },
@@ -4228,11 +3740,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "x",
-          "y"
-        ],
+        "required": ["type", "x", "y"],
         "title": "Move action",
         "description": "A pointer move action that was requested by the model."
       },
@@ -4259,11 +3767,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "code",
-          "message"
-        ],
+        "required": ["id", "code", "message"],
         "title": "Safety check",
         "description": "A safety check that was recorded for a computer tool call."
       },
@@ -4271,9 +3775,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "computer_call"
-            ],
+            "enum": ["computer_call"],
             "description": "The type of the item. Always `computer_call`.",
             "default": "computer_call"
           },
@@ -4336,30 +3838,19 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "call_id",
-          "pending_safety_checks"
-        ],
+        "required": ["type", "id", "call_id", "pending_safety_checks"],
         "title": "Computer call",
         "description": "A computer tool call that was generated by the model."
       },
       "ComputerCallOutputStatus": {
         "type": "string",
-        "enum": [
-          "completed",
-          "incomplete",
-          "failed"
-        ]
+        "enum": ["completed", "incomplete", "failed"]
       },
       "ComputerCallOutput": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "computer_call_output"
-            ],
+            "enum": ["computer_call_output"],
             "description": "The type of the item. Always `computer_call_output`.",
             "default": "computer_call_output"
           },
@@ -4445,9 +3936,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "reasoning"
-            ],
+            "enum": ["reasoning"],
             "description": "The type of the item. Always `reasoning`.",
             "default": "reasoning"
           },
@@ -4533,11 +4022,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "summary"
-        ],
+        "required": ["type", "id", "summary"],
         "title": "Reasoning item",
         "description": "A reasoning item that was generated by the model."
       },
@@ -4555,9 +4040,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "logs"
-            ],
+            "enum": ["logs"],
             "description": "The type of the output. Always `logs`.",
             "default": "logs"
           },
@@ -4567,10 +4050,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "logs"
-        ],
+        "required": ["type", "logs"],
         "title": "Code interpreter output logs",
         "description": "The logs output from the code interpreter."
       },
@@ -4578,9 +4058,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "image"
-            ],
+            "enum": ["image"],
             "description": "The type of the output. Always `image`.",
             "default": "image"
           },
@@ -4590,10 +4068,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "url"
-        ],
+        "required": ["type", "url"],
         "title": "Code interpreter output image",
         "description": "The image output from the code interpreter."
       },
@@ -4601,9 +4076,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "code_interpreter_call"
-            ],
+            "enum": ["code_interpreter_call"],
             "default": "code_interpreter_call"
           },
           "id": {
@@ -4653,14 +4126,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "status",
-          "container_id",
-          "code",
-          "outputs"
-        ]
+        "required": ["type", "id", "status", "container_id", "code", "outputs"]
       },
       "MCPListToolsTool": {
         "properties": {
@@ -4687,20 +4153,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "description",
-          "input_schema",
-          "annotations"
-        ]
+        "required": ["name", "description", "input_schema", "annotations"]
       },
       "MCPListTools": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp_list_tools"
-            ],
+            "enum": ["mcp_list_tools"],
             "default": "mcp_list_tools"
           },
           "id": {
@@ -4717,20 +4176,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "server_label",
-          "tools"
-        ]
+        "required": ["type", "id", "server_label", "tools"]
       },
       "MCPApprovalRequest": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp_approval_request"
-            ],
+            "enum": ["mcp_approval_request"],
             "description": "The type of the item. Always `mcp_approval_request`.",
             "default": "mcp_approval_request"
           },
@@ -4752,13 +4204,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "server_label",
-          "name",
-          "arguments"
-        ],
+        "required": ["type", "id", "server_label", "name", "arguments"],
         "title": "MCP approval request",
         "description": "A request for human approval of a tool invocation."
       },
@@ -4766,9 +4212,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp_approval_response"
-            ],
+            "enum": ["mcp_approval_response"],
             "description": "The type of the item. Always `mcp_approval_response`.",
             "default": "mcp_approval_response"
           },
@@ -4797,33 +4241,19 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "id",
-          "approval_request_id",
-          "approve",
-          "reason"
-        ],
+        "required": ["type", "id", "approval_request_id", "approve", "reason"],
         "title": "MCP approval response",
         "description": "A response to an MCP approval request."
       },
       "MCPToolCallStatus": {
         "type": "string",
-        "enum": [
-          "in_progress",
-          "completed",
-          "incomplete",
-          "calling",
-          "failed"
-        ]
+        "enum": ["in_progress", "completed", "incomplete", "calling", "failed"]
       },
       "MCPProtocolError": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp_protocol_error"
-            ],
+            "enum": ["mcp_protocol_error"],
             "default": "mcp_protocol_error"
           },
           "code": {
@@ -4834,36 +4264,25 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "code",
-          "message"
-        ]
+        "required": ["type", "code", "message"]
       },
       "MCPToolExecutionError": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp_tool_execution_error"
-            ],
+            "enum": ["mcp_tool_execution_error"],
             "default": "mcp_tool_execution_error"
           },
           "content": {}
         },
         "type": "object",
-        "required": [
-          "type",
-          "content"
-        ]
+        "required": ["type", "content"]
       },
       "HTTPError": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "http_error"
-            ],
+            "enum": ["http_error"],
             "default": "http_error"
           },
           "code": {
@@ -4874,19 +4293,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "code",
-          "message"
-        ]
+        "required": ["type", "code", "message"]
       },
       "MCPToolCall": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp_call"
-            ],
+            "enum": ["mcp_call"],
             "default": "mcp_call"
           },
           "id": {
@@ -5023,10 +4436,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
+        "required": ["code", "message"],
         "title": "Error",
         "description": "An error that occurred while generating the response."
       },
@@ -5042,10 +4452,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "embedding_weight",
-          "text_weight"
-        ]
+        "required": ["embedding_weight", "text_weight"]
       },
       "RankingOptions": {
         "properties": {
@@ -5075,10 +4482,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "ranker",
-          "score_threshold"
-        ]
+        "required": ["ranker", "score_threshold"]
       },
       "ComparisonFilterFieldEQ": {
         "properties": {
@@ -5129,18 +4533,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "eq"
-            ],
+            "enum": ["eq"],
             "default": "eq"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldNE": {
         "properties": {
@@ -5191,18 +4589,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ne"
-            ],
+            "enum": ["ne"],
             "default": "ne"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldGT": {
         "properties": {
@@ -5253,18 +4645,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "gt"
-            ],
+            "enum": ["gt"],
             "default": "gt"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldGTE": {
         "properties": {
@@ -5315,18 +4701,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "gte"
-            ],
+            "enum": ["gte"],
             "default": "gte"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldLT": {
         "properties": {
@@ -5377,18 +4757,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "lt"
-            ],
+            "enum": ["lt"],
             "default": "lt"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldLTE": {
         "properties": {
@@ -5439,18 +4813,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "lte"
-            ],
+            "enum": ["lte"],
             "default": "lte"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldIN": {
         "properties": {
@@ -5501,18 +4869,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "in"
-            ],
+            "enum": ["in"],
             "default": "in"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldNIN": {
         "properties": {
@@ -5563,18 +4925,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "nin"
-            ],
+            "enum": ["nin"],
             "default": "nin"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldCONTAINS": {
         "properties": {
@@ -5625,18 +4981,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "contains"
-            ],
+            "enum": ["contains"],
             "default": "contains"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldNCONTAINS": {
         "properties": {
@@ -5687,18 +5037,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ncontains"
-            ],
+            "enum": ["ncontains"],
             "default": "ncontains"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldCONTAINSANY": {
         "properties": {
@@ -5749,18 +5093,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "containsany"
-            ],
+            "enum": ["containsany"],
             "default": "containsany"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "ComparisonFilterFieldNCONTAINSANY": {
         "properties": {
@@ -5811,26 +5149,18 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ncontainsany"
-            ],
+            "enum": ["ncontainsany"],
             "default": "ncontainsany"
           }
         },
         "type": "object",
-        "required": [
-          "key",
-          "value",
-          "type"
-        ]
+        "required": ["key", "value", "type"]
       },
       "CompoundFilterFieldAND": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "and"
-            ],
+            "enum": ["and"],
             "default": "and"
           },
           "filters": {
@@ -5841,18 +5171,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "filters"
-        ]
+        "required": ["type", "filters"]
       },
       "CompoundFilterFieldOR": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "or"
-            ],
+            "enum": ["or"],
             "default": "or"
           },
           "filters": {
@@ -5863,10 +5188,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "filters"
-        ]
+        "required": ["type", "filters"]
       },
       "Filters": {
         "oneOf": [
@@ -5922,9 +5244,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "file_search"
-            ],
+            "enum": ["file_search"],
             "description": "The type of the file search tool. Always `file_search`.",
             "default": "file_search"
           },
@@ -5982,9 +5302,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "function"
-            ],
+            "enum": ["function"],
             "description": "The type of the function tool. Always `function`.",
             "default": "function"
           },
@@ -6028,13 +5346,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "name",
-          "description",
-          "parameters",
-          "strict"
-        ],
+        "required": ["type", "name", "description", "parameters", "strict"],
         "title": "Function",
         "description": "Defines a function in your own code the model can choose to call. Learn more about [function calling](https://platform.openai.com/docs/guides/function-calling)."
       },
@@ -6042,9 +5354,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "approximate"
-            ],
+            "enum": ["approximate"],
             "description": "The type of location approximation. Always `approximate`.",
             "default": "approximate"
           },
@@ -6094,21 +5404,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "country",
-          "region",
-          "city",
-          "timezone"
-        ]
+        "required": ["type", "country", "region", "city", "timezone"]
       },
       "WebSearchPreviewTool": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "web_search_preview"
-            ],
+            "enum": ["web_search_preview"],
             "description": "The type of the web search tool. One of `web_search_preview` or `web_search_preview_2025_03_11`.",
             "default": "web_search_preview"
           },
@@ -6141,11 +5443,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "user_location",
-          "search_context_size"
-        ],
+        "required": ["type", "user_location", "search_context_size"],
         "title": "Web search preview",
         "description": "This tool searches the web for relevant results to use in a response. Learn more about the [web search tool](https://platform.openai.com/docs/guides/tools-web-search)."
       },
@@ -6169,10 +5467,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "tool_names",
-          "read_only"
-        ]
+        "required": ["tool_names", "read_only"]
       },
       "MCPRequireApprovalFilterField": {
         "properties": {
@@ -6198,25 +5493,17 @@
           }
         },
         "type": "object",
-        "required": [
-          "always",
-          "never"
-        ]
+        "required": ["always", "never"]
       },
       "MCPRequireApprovalFieldEnum": {
         "type": "string",
-        "enum": [
-          "always",
-          "never"
-        ]
+        "enum": ["always", "never"]
       },
       "MCPTool": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp"
-            ],
+            "enum": ["mcp"],
             "default": "mcp"
           },
           "server_label": {
@@ -6293,21 +5580,13 @@
       },
       "ComputerEnvironment1": {
         "type": "string",
-        "enum": [
-          "windows",
-          "mac",
-          "linux",
-          "ubuntu",
-          "browser"
-        ]
+        "enum": ["windows", "mac", "linux", "ubuntu", "browser"]
       },
       "ComputerUsePreviewTool": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "computer_use_preview"
-            ],
+            "enum": ["computer_use_preview"],
             "description": "The type of the computer use tool. Always `computer_use_preview`.",
             "default": "computer_use_preview"
           },
@@ -6331,12 +5610,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "environment",
-          "display_width",
-          "display_height"
-        ],
+        "required": ["type", "environment", "display_width", "display_height"],
         "title": "Computer use preview",
         "description": "A tool that controls a virtual computer. Learn more about the [computer tool](https://platform.openai.com/docs/guides/tools-computer-use)."
       },
@@ -6344,9 +5618,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "image_generation"
-            ],
+            "enum": ["image_generation"],
             "description": "The type of the image generation tool. Always `image_generation`.",
             "default": "image_generation"
           },
@@ -6506,24 +5778,18 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "code_interpreter"
-            ],
+            "enum": ["code_interpreter"],
             "default": "code_interpreter"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "FunctionToolChoice": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "function"
-            ],
+            "enum": ["function"],
             "default": "function"
           },
           "name": {
@@ -6531,17 +5797,13 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "MCPToolChoice": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "mcp"
-            ],
+            "enum": ["mcp"],
             "default": "mcp"
           },
           "server_label": {
@@ -6559,49 +5821,35 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "server_label",
-          "name"
-        ]
+        "required": ["type", "server_label", "name"]
       },
       "FileSearchToolChoice": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "file_search"
-            ],
+            "enum": ["file_search"],
             "default": "file_search"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "WebSearchToolChoice": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "web_search_preview"
-            ],
+            "enum": ["web_search_preview"],
             "default": "web_search_preview"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "AllowedToolChoice": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "allowed_tools"
-            ],
+            "enum": ["allowed_tools"],
             "default": "allowed_tools"
           },
           "tools": {
@@ -6631,49 +5879,35 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "tools",
-          "mode"
-        ]
+        "required": ["type", "tools", "mode"]
       },
       "TextResponseFormat": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "text"
-            ],
+            "enum": ["text"],
             "default": "text"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "JsonObjectResponseFormat": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "json_object"
-            ],
+            "enum": ["json_object"],
             "default": "json_object"
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "JsonSchemaResponseFormat": {
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "json_schema"
-            ],
+            "enum": ["json_schema"],
             "default": "json_schema"
           },
           "name": {
@@ -6701,13 +5935,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "name",
-          "description",
-          "schema",
-          "strict"
-        ]
+        "required": ["type", "name", "description", "schema", "strict"]
       },
       "TextField": {
         "properties": {
@@ -6729,9 +5957,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "format"
-        ]
+        "required": ["format"]
       },
       "Reasoning": {
         "properties": {
@@ -6769,10 +5995,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "effort",
-          "summary"
-        ],
+        "required": ["effort", "summary"],
         "title": "Reasoning",
         "description": "Reasoning configuration and metadata that were used for the response."
       },
@@ -6784,9 +6007,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "cached_tokens"
-        ],
+        "required": ["cached_tokens"],
         "title": "Input tokens details",
         "description": "A breakdown of input token usage that was recorded."
       },
@@ -6798,9 +6019,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "reasoning_tokens"
-        ],
+        "required": ["reasoning_tokens"],
         "title": "Output tokens details",
         "description": "A breakdown of output token usage that was recorded."
       },
@@ -6858,9 +6077,7 @@
           },
           "object": {
             "type": "string",
-            "enum": [
-              "response"
-            ],
+            "enum": ["response"],
             "description": "The object type, which was always `response`.",
             "default": "response"
           },
@@ -7206,9 +6423,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.created"
-            ],
+            "enum": ["response.created"],
             "description": "The type of the event, always `response.created`.",
             "default": "response.created"
           },
@@ -7228,11 +6443,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "response"
-        ],
+        "required": ["type", "sequence_number", "response"],
         "title": "Response created event",
         "description": "A streaming event that indicated the response was created."
       },
@@ -7240,9 +6451,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.queued"
-            ],
+            "enum": ["response.queued"],
             "description": "The type of the event, always `response.queued`.",
             "default": "response.queued"
           },
@@ -7262,11 +6471,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "response"
-        ],
+        "required": ["type", "sequence_number", "response"],
         "title": "Response queued event",
         "description": "A streaming event that indicated the response was queued."
       },
@@ -7274,9 +6479,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.in_progress"
-            ],
+            "enum": ["response.in_progress"],
             "description": "The type of the event, always `response.in_progress`.",
             "default": "response.in_progress"
           },
@@ -7296,11 +6499,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "response"
-        ],
+        "required": ["type", "sequence_number", "response"],
         "title": "Response in progress event",
         "description": "A streaming event that indicated the response was in progress."
       },
@@ -7308,9 +6507,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.completed"
-            ],
+            "enum": ["response.completed"],
             "description": "The type of the event, always `response.completed`.",
             "default": "response.completed"
           },
@@ -7330,11 +6527,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "response"
-        ],
+        "required": ["type", "sequence_number", "response"],
         "title": "Response completed event",
         "description": "A streaming event that indicated the response was completed."
       },
@@ -7342,9 +6535,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.failed"
-            ],
+            "enum": ["response.failed"],
             "description": "The type of the event, always `response.failed`.",
             "default": "response.failed"
           },
@@ -7364,11 +6555,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "response"
-        ],
+        "required": ["type", "sequence_number", "response"],
         "title": "Response failed event",
         "description": "A streaming event that indicated the response had failed."
       },
@@ -7376,9 +6563,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.incomplete"
-            ],
+            "enum": ["response.incomplete"],
             "description": "The type of the event, always `response.incomplete`.",
             "default": "response.incomplete"
           },
@@ -7398,11 +6583,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "response"
-        ],
+        "required": ["type", "sequence_number", "response"],
         "title": "Response incomplete event",
         "description": "A streaming event that indicated the response was incomplete."
       },
@@ -7410,9 +6591,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.output_item.added"
-            ],
+            "enum": ["response.output_item.added"],
             "description": "The type of the event, always `response.output_item.added`.",
             "default": "response.output_item.added"
           },
@@ -7443,12 +6622,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "output_index",
-          "item"
-        ],
+        "required": ["type", "sequence_number", "output_index", "item"],
         "title": "Response output item added event",
         "description": "A streaming event that indicated an output item was added to the response."
       },
@@ -7456,9 +6630,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.output_item.done"
-            ],
+            "enum": ["response.output_item.done"],
             "description": "The type of the event, always `response.output_item.done`.",
             "default": "response.output_item.done"
           },
@@ -7489,12 +6661,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "output_index",
-          "item"
-        ],
+        "required": ["type", "sequence_number", "output_index", "item"],
         "title": "Response output item done event",
         "description": "A streaming event that indicated an output item was completed."
       },
@@ -7502,9 +6669,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.reasoning_summary_part.added"
-            ],
+            "enum": ["response.reasoning_summary_part.added"],
             "description": "The type of the event, always `response.reasoning_summary_part.added`.",
             "default": "response.reasoning_summary_part.added"
           },
@@ -7573,9 +6738,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.reasoning_summary_part.done"
-            ],
+            "enum": ["response.reasoning_summary_part.done"],
             "description": "The type of the event, always `response.reasoning_summary_part.done`.",
             "default": "response.reasoning_summary_part.done"
           },
@@ -7644,9 +6807,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.content_part.added"
-            ],
+            "enum": ["response.content_part.added"],
             "description": "The type of the event, always `response.content_part.added`.",
             "default": "response.content_part.added"
           },
@@ -7715,9 +6876,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.content_part.done"
-            ],
+            "enum": ["response.content_part.done"],
             "description": "The type of the event, always `response.content_part.done`.",
             "default": "response.content_part.done"
           },
@@ -7786,9 +6945,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.output_text.delta"
-            ],
+            "enum": ["response.output_text.delta"],
             "description": "The type of the event, always `response.output_text.delta`.",
             "default": "response.output_text.delta"
           },
@@ -7831,8 +6988,7 @@
           "item_id",
           "output_index",
           "content_index",
-          "delta",
-          "logprobs"
+          "delta"
         ],
         "title": "Response output text delta event",
         "description": "A streaming event that indicated output text was incrementally added."
@@ -7841,9 +6997,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.output_text.done"
-            ],
+            "enum": ["response.output_text.done"],
             "description": "The type of the event, always `response.output_text.done`.",
             "default": "response.output_text.done"
           },
@@ -7882,8 +7036,7 @@
           "item_id",
           "output_index",
           "content_index",
-          "text",
-          "logprobs"
+          "text"
         ],
         "title": "Response output text done event",
         "description": "A streaming event that indicated output text was completed."
@@ -7892,9 +7045,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.refusal.delta"
-            ],
+            "enum": ["response.refusal.delta"],
             "description": "The type of the event, always `response.refusal.delta`.",
             "default": "response.refusal.delta"
           },
@@ -7935,9 +7086,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.refusal.done"
-            ],
+            "enum": ["response.refusal.done"],
             "description": "The type of the event, always `response.refusal.done`.",
             "default": "response.refusal.done"
           },
@@ -7978,9 +7127,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.reasoning.delta"
-            ],
+            "enum": ["response.reasoning.delta"],
             "description": "The type of the event, always `response.reasoning.delta`.",
             "default": "response.reasoning.delta"
           },
@@ -8025,9 +7172,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.reasoning.done"
-            ],
+            "enum": ["response.reasoning.done"],
             "description": "The type of the event, always `response.reasoning.done`.",
             "default": "response.reasoning.done"
           },
@@ -8068,9 +7213,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.reasoning_summary_text.delta"
-            ],
+            "enum": ["response.reasoning_summary_text.delta"],
             "description": "The type of the event, always `response.reasoning_summary.delta`.",
             "default": "response.reasoning_summary_text.delta"
           },
@@ -8115,9 +7258,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.reasoning_summary_text.done"
-            ],
+            "enum": ["response.reasoning_summary_text.done"],
             "description": "The type of the event, always `response.reasoning_summary.done`.",
             "default": "response.reasoning_summary_text.done"
           },
@@ -8158,9 +7299,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.output_text.annotation.added"
-            ],
+            "enum": ["response.output_text.annotation.added"],
             "description": "The type of the event, always `response.output_text.annotation.added`.",
             "default": "response.output_text.annotation.added"
           },
@@ -8219,9 +7358,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.function_call_arguments.delta"
-            ],
+            "enum": ["response.function_call_arguments.delta"],
             "description": "The type of the event, always `response.function_call_arguments.delta`.",
             "default": "response.function_call_arguments.delta"
           },
@@ -8261,9 +7398,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "response.function_call_arguments.done"
-            ],
+            "enum": ["response.function_call_arguments.done"],
             "description": "The type of the event, always `response.function_call_arguments.done`.",
             "default": "response.function_call_arguments.done"
           },
@@ -8337,12 +7472,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "code",
-          "message",
-          "param"
-        ],
+        "required": ["type", "code", "message", "param"],
         "title": "Error payload",
         "description": "An error payload that was emitted for a streaming error event."
       },
@@ -8350,9 +7480,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "error"
-            ],
+            "enum": ["error"],
             "description": "The type of the event, always `error`.",
             "default": "error"
           },
@@ -8372,11 +7500,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "sequence_number",
-          "error"
-        ],
+        "required": ["type", "sequence_number", "error"],
         "title": "Error event",
         "description": "A streaming event that indicated an error was emitted."
       },
@@ -8386,9 +7510,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "input_video"
-            ],
+            "enum": ["input_video"],
             "description": "The type of the input content. Always `input_video`."
           },
           "video_url": {
@@ -8396,10 +7518,7 @@
             "description": "A base64 or remote url that resolves to a video file."
           }
         },
-        "required": [
-          "type",
-          "video_url"
-        ]
+        "required": ["type", "video_url"]
       },
       "JsonSchemaResponseFormatParam": {
         "type": "object",
@@ -8407,9 +7526,7 @@
           "type": {
             "type": "string",
             "description": "The type of response format being defined. Always `json_schema`.",
-            "enum": [
-              "json_schema"
-            ]
+            "enum": ["json_schema"]
           },
           "description": {
             "type": "string",

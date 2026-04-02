@@ -42,8 +42,7 @@
     "item_id",
     "output_index",
     "content_index",
-    "text",
-    "logprobs"
+    "text"
   ],
   "title": "Response output text done event",
   "description": "A streaming event that indicated output text was completed.",

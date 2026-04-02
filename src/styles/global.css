@@ -52,6 +52,10 @@ body {
     img.nvidia {
       @apply h-8 lg:h-12;
     }
+
+    img.redhat {
+      @apply h-8 lg:h-12;
+    }
   }
 }
 

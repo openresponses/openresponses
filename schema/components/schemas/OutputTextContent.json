@@ -26,7 +26,7 @@
     }
   },
   "type": "object",
-  "required": ["type", "text", "annotations", "logprobs"],
+  "required": ["type", "text", "annotations"],
   "title": "Output text",
   "description": "A text output from the model.",
   "x-openai-class-name": "responses_common.api.resources.content_resource.OutputTextContent"
