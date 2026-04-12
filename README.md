@@ -11,9 +11,9 @@ At a high level, the spec centers on:
 
 ## What's in this repo
 
-- Full specification: `public/openapi/openapi.json`
-- Website documentation content (source): `src/pages`
-- Compliance tests: `bin/compliance-test.ts`
+- Full specification, which gets deployed concatenated as [`openapi.json`](https://www.openresponses.org/openapi/openapi.json) source is: [`public/openapi/openapi.json`](public/openapi/openapi.json)
+- [`openresponses.org`](https://www.openresponses.org) website documentation content (source): [`src/pages`](src/pages/)
+- Compliance tests: [`bin/compliance-test.ts`](bin/compliance-test.ts)
 
 ## Compliance testing
 
