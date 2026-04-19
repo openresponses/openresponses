@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "OpenResponses",
   "main": "index.js",
+  "workspaces": [
+    "state-machines/typescript"
+  ],
   "scripts": {
     "tsp": "tsp compile schema__tsp/schema.tsp",
     "tsp:watch": "tsp compile schema__tsp/schema.tsp --watch",

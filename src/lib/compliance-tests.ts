@@ -2,6 +2,8 @@ import type { z } from "zod";
 import type { createResponseBodySchema } from "../generated/kubb/zod/createResponseBodySchema";
 import { responseResourceSchema } from "../generated/kubb/zod/responseResourceSchema";
 import { parseSSEStream, type SSEParseResult } from "./sse-parser";
+import { ResponseStreamValidator } from "../../state-machines/typescript/src/index";
+import type { StreamingEvent as StateMachineEvent } from "../../state-machines/typescript/src/types";
 
 type ResponseResource = z.infer<typeof responseResourceSchema>;
 type CreateResponseBody = z.infer<typeof createResponseBodySchema>;
@@ -82,6 +84,29 @@ const streamingSchema: ResponseValidator = (_, context) => {
   return context.sseResult.errors;
 };
 
+const streamingEventOrder: ResponseValidator = (_, context) => {
+  if (!context.streaming || !context.sseResult) return [];
+
+  const validator = new ResponseStreamValidator();
+
+  for (const parsedEvent of context.sseResult.events) {
+    if (parsedEvent.validationResult.success) {
+      // Kubb-generated StreamingEvent is a structural superset of the
+      // state machine's minimal StreamingEvent union — cast is safe.
+      validator.send(
+        parsedEvent.validationResult.data as unknown as StateMachineEvent,
+      );
+    }
+  }
+
+  validator.finalize();
+
+  return validator.violations.map(
+    (v) =>
+      `[${v.rule}] ${v.message} (state: '${v.currentState}', event: '${v.event.type}')`,
+  );
+};
+
 export const testTemplates: TestTemplate[] = [
   {
     id: "basic-response",
@@ -103,13 +128,61 @@ export const testTemplates: TestTemplate[] = [
   {
     id: "streaming-response",
     name: "Streaming Response",
-    description: "Validates SSE streaming events and final response",
+    description:
+      "Validates SSE streaming events and final response without tools",
     streaming: true,
     getRequest: (config) => ({
       model: config.model,
       input: [{ type: "message", role: "user", content: "Count from 1 to 5." }],
     }),
-    validators: [streamingEvents, streamingSchema, completedStatus],
+    validators: [
+      streamingEvents,
+      streamingSchema,
+      streamingEventOrder,
+      completedStatus,
+    ],
+  },
+
+  {
+    id: "streaming-tool-call",
+    name: "Streaming Tool Call",
+    description:
+      "Validates SSE event ordering when a tool call is emitted mid-stream",
+    streaming: true,
+    getRequest: (config) => ({
+      model: config.model,
+      input: [
+        {
+          type: "message",
+          role: "user",
+          content: "What's the weather like in San Francisco?",
+        },
+      ],
+      tools: [
+        {
+          type: "function",
+          name: "get_weather",
+          description: "Get the current weather for a location",
+          parameters: {
+            type: "object",
+            properties: {
+              location: {
+                type: "string",
+                description: "The city and state, e.g. San Francisco, CA",
+              },
+            },
+            required: ["location"],
+          },
+        },
+      ],
+      tool_choice: { type: "function", name: "get_weather" },
+    }),
+    validators: [
+      streamingEvents,
+      streamingSchema,
+      streamingEventOrder,
+      hasOutputType("function_call"),
+    ],
   },
 
   {
