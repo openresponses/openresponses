@@ -60,6 +60,23 @@
         "type": "object",
         "required": ["type", "text"]
       },
+      "ReasoningContentParam": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["reasoning_text"],
+            "description": "The type of the reasoning text. Always `reasoning_text`.",
+            "default": "reasoning_text"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 10485760,
+            "description": "The reasoning text from the model."
+          }
+        },
+        "type": "object",
+        "required": ["type", "text"]
+      },
       "ReasoningItemParam": {
         "properties": {
           "id": {
@@ -89,6 +106,13 @@
           },
           "content": {
             "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ReasoningContentParam"
+                },
+                "type": "array",
+                "description": "Reasoning content for this item."
+              },
               {
                 "type": "null"
               }
@@ -2113,6 +2137,9 @@
           },
           "schema": {
             "anyOf": [
+              {
+                "type": "object"
+              },
               {
                 "type": "null"
               }

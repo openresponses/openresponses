@@ -50,6 +50,7 @@ export { outputTextContentParamSchema } from "./zod/outputTextContentParamSchema
 export { outputTextContentSchema } from "./zod/outputTextContentSchema.ts";
 export { outputTokensDetailsSchema } from "./zod/outputTokensDetailsSchema.ts";
 export { reasoningBodySchema } from "./zod/reasoningBodySchema.ts";
+export { reasoningContentParamSchema } from "./zod/reasoningContentParamSchema.ts";
 export { reasoningEffortEnumSchema } from "./zod/reasoningEffortEnumSchema.ts";
 export { reasoningItemParamSchema } from "./zod/reasoningItemParamSchema.ts";
 export { reasoningParamSchema } from "./zod/reasoningParamSchema.ts";

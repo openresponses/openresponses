@@ -9,6 +9,6 @@ export const jsonSchemaResponseFormatSchema = z.object({
   type: z.enum(["json_schema"]).default("json_schema"),
   name: z.string(),
   description: z.union([z.string(), z.null()]),
-  schema: z.null(),
+  schema: z.union([z.object({}), z.null()]),
   strict: z.boolean(),
 });
