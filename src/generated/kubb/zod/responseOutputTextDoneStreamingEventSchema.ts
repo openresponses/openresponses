@@ -29,12 +29,16 @@ export const responseOutputTextDoneStreamingEventSchema = z
       .int()
       .describe("The index of the content part that was completed."),
     text: z.string().describe("The final text that was emitted."),
-    logprobs: z
-      .array(
-        z.lazy(() => logProbSchema).describe("The log probability of a token."),
-      )
-      .describe(
-        "The token log probabilities that were emitted with the final text, if any.",
-      ),
+    logprobs: z.optional(
+      z
+        .array(
+          z
+            .lazy(() => logProbSchema)
+            .describe("The log probability of a token."),
+        )
+        .describe(
+          "The token log probabilities that were emitted with the final text, if any.",
+        ),
+    ),
   })
   .describe("A streaming event that indicated output text was completed.");

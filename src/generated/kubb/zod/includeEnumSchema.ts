@@ -6,6 +6,9 @@
 import { z } from "zod";
 
 export const includeEnumSchema = z.enum([
+  "file_search_call.results",
+  "web_search_call.action.sources",
+  "message.input_image.image_url",
   "reasoning.encrypted_content",
   "message.output_text.logprobs",
 ]);

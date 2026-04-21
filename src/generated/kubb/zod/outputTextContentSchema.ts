@@ -24,8 +24,10 @@ export const outputTextContentSchema = z
           .describe("An annotation that applies to a span of output text."),
       )
       .describe("The annotations of the text output."),
-    logprobs: z.array(
-      z.lazy(() => logProbSchema).describe("The log probability of a token."),
+    logprobs: z.optional(
+      z.array(
+        z.lazy(() => logProbSchema).describe("The log probability of a token."),
+      ),
     ),
   })
   .describe("A text output from the model.");

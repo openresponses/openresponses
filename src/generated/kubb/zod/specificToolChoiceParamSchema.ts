@@ -3,9 +3,13 @@
  * Do not edit manually.
  */
 
+import { specificFileSearchParamSchema } from "./specificFileSearchParamSchema.ts";
 import { specificFunctionParamSchema } from "./specificFunctionParamSchema.ts";
+import { specificWebSearchParamSchema } from "./specificWebSearchParamSchema.ts";
 import { z } from "zod";
 
-export const specificToolChoiceParamSchema = z.lazy(
-  () => specificFunctionParamSchema,
-);
+export const specificToolChoiceParamSchema = z.union([
+  z.lazy(() => specificFileSearchParamSchema),
+  z.lazy(() => specificWebSearchParamSchema),
+  z.lazy(() => specificFunctionParamSchema),
+]);

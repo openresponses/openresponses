@@ -3,10 +3,13 @@
  * Do not edit manually.
  */
 
+import { compactionBodySchema } from "./compactionBodySchema.ts";
+import { fileSearchCallSchema } from "./fileSearchCallSchema.ts";
 import { functionCallOutputSchema } from "./functionCallOutputSchema.ts";
 import { functionCallSchema } from "./functionCallSchema.ts";
 import { messageSchema } from "./messageSchema.ts";
 import { reasoningBodySchema } from "./reasoningBodySchema.ts";
+import { webSearchCallSchema } from "./webSearchCallSchema.ts";
 import { z } from "zod";
 
 /**
@@ -17,7 +20,10 @@ export const itemFieldSchema = z
     z.lazy(() => messageSchema),
     z.lazy(() => functionCallSchema),
     z.lazy(() => functionCallOutputSchema),
+    z.lazy(() => fileSearchCallSchema),
+    z.lazy(() => webSearchCallSchema),
     z.lazy(() => reasoningBodySchema),
+    z.lazy(() => compactionBodySchema),
   ])
   .describe(
     "An item representing a message, tool call, tool output, reasoning, or other response element.",

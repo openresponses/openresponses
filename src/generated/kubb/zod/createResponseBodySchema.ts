@@ -3,6 +3,7 @@
  * Do not edit manually.
  */
 
+import { conversationParamSchema } from "./conversationParamSchema.ts";
 import { includeEnumSchema } from "./includeEnumSchema.ts";
 import { itemParamSchema } from "./itemParamSchema.ts";
 import { metadataParamSchema } from "./metadataParamSchema.ts";
@@ -73,4 +74,10 @@ export const createResponseBodySchema = z.object({
   ),
   service_tier: z.optional(z.lazy(() => serviceTierEnumSchema).and(z.any())),
   top_logprobs: z.optional(z.union([z.number().int(), z.null()])),
+  conversation: z.optional(
+    z.union([
+      z.union([z.lazy(() => conversationParamSchema), z.string()]),
+      z.null(),
+    ]),
+  ),
 });

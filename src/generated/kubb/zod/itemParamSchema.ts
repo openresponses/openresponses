@@ -4,22 +4,28 @@
  */
 
 import { assistantMessageItemParamSchema } from "./assistantMessageItemParamSchema.ts";
+import { compactionSummaryItemParamSchema } from "./compactionSummaryItemParamSchema.ts";
 import { developerMessageItemParamSchema } from "./developerMessageItemParamSchema.ts";
+import { fileSearchCallItemParamSchema } from "./fileSearchCallItemParamSchema.ts";
 import { functionCallItemParamSchema } from "./functionCallItemParamSchema.ts";
 import { functionCallOutputItemParamSchema } from "./functionCallOutputItemParamSchema.ts";
 import { itemReferenceParamSchema } from "./itemReferenceParamSchema.ts";
 import { reasoningItemParamSchema } from "./reasoningItemParamSchema.ts";
 import { systemMessageItemParamSchema } from "./systemMessageItemParamSchema.ts";
 import { userMessageItemParamSchema } from "./userMessageItemParamSchema.ts";
+import { webSearchCallItemParamSchema } from "./webSearchCallItemParamSchema.ts";
 import { z } from "zod";
 
 export const itemParamSchema = z.union([
   z.lazy(() => itemReferenceParamSchema),
   z.lazy(() => reasoningItemParamSchema),
+  z.lazy(() => compactionSummaryItemParamSchema),
   z.lazy(() => userMessageItemParamSchema),
   z.lazy(() => systemMessageItemParamSchema),
   z.lazy(() => developerMessageItemParamSchema),
   z.lazy(() => assistantMessageItemParamSchema),
   z.lazy(() => functionCallItemParamSchema),
   z.lazy(() => functionCallOutputItemParamSchema),
+  z.lazy(() => webSearchCallItemParamSchema),
+  z.lazy(() => fileSearchCallItemParamSchema),
 ]);

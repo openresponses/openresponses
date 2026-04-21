@@ -1,19 +1,74 @@
 export { allowedToolChoiceSchema } from "./zod/allowedToolChoiceSchema.ts";
 export { allowedToolsParamSchema } from "./zod/allowedToolsParamSchema.ts";
 export { annotationSchema } from "./zod/annotationSchema.ts";
+export { apiSourceParamSchema } from "./zod/apiSourceParamSchema.ts";
+export { approximateLocationParamSchema } from "./zod/approximateLocationParamSchema.ts";
 export { assistantMessageItemParamSchema } from "./zod/assistantMessageItemParamSchema.ts";
+export { compactionBodySchema } from "./zod/compactionBodySchema.ts";
+export { compactionSummaryItemParamSchema } from "./zod/compactionSummaryItemParamSchema.ts";
+export { compactResourceSchema } from "./zod/compactResourceSchema.ts";
+export { compactResponseMethodPublicBodySchema } from "./zod/compactResponseMethodPublicBodySchema.ts";
+export {
+  compactResponse200Schema,
+  compactResponseMutationRequestSchema,
+  compactResponseMutationResponseSchema,
+} from "./zod/compactResponseSchema.ts";
+export { comparisonFilterFieldCONTAINSANYSchema } from "./zod/comparisonFilterFieldCONTAINSANYSchema.ts";
+export { comparisonFilterFieldCONTAINSSchema } from "./zod/comparisonFilterFieldCONTAINSSchema.ts";
+export { comparisonFilterFieldEQSchema } from "./zod/comparisonFilterFieldEQSchema.ts";
+export { comparisonFilterFieldGTESchema } from "./zod/comparisonFilterFieldGTESchema.ts";
+export { comparisonFilterFieldGTSchema } from "./zod/comparisonFilterFieldGTSchema.ts";
+export { comparisonFilterFieldINSchema } from "./zod/comparisonFilterFieldINSchema.ts";
+export { comparisonFilterFieldLTESchema } from "./zod/comparisonFilterFieldLTESchema.ts";
+export { comparisonFilterFieldLTSchema } from "./zod/comparisonFilterFieldLTSchema.ts";
+export { comparisonFilterFieldNCONTAINSANYSchema } from "./zod/comparisonFilterFieldNCONTAINSANYSchema.ts";
+export { comparisonFilterFieldNCONTAINSSchema } from "./zod/comparisonFilterFieldNCONTAINSSchema.ts";
+export { comparisonFilterFieldNESchema } from "./zod/comparisonFilterFieldNESchema.ts";
+export { comparisonFilterFieldNINSchema } from "./zod/comparisonFilterFieldNINSchema.ts";
+export { comparisonFilterParamContainsAnyParamSchema } from "./zod/comparisonFilterParamContainsAnyParamSchema.ts";
+export { comparisonFilterParamContainsParamSchema } from "./zod/comparisonFilterParamContainsParamSchema.ts";
+export { comparisonFilterParamEQParamSchema } from "./zod/comparisonFilterParamEQParamSchema.ts";
+export { comparisonFilterParamGTEParamSchema } from "./zod/comparisonFilterParamGTEParamSchema.ts";
+export { comparisonFilterParamGTParamSchema } from "./zod/comparisonFilterParamGTParamSchema.ts";
+export { comparisonFilterParamINParamSchema } from "./zod/comparisonFilterParamINParamSchema.ts";
+export { comparisonFilterParamLTEParamSchema } from "./zod/comparisonFilterParamLTEParamSchema.ts";
+export { comparisonFilterParamLTParamSchema } from "./zod/comparisonFilterParamLTParamSchema.ts";
+export { comparisonFilterParamNContainsAnyParamSchema } from "./zod/comparisonFilterParamNContainsAnyParamSchema.ts";
+export { comparisonFilterParamNContainsParamSchema } from "./zod/comparisonFilterParamNContainsParamSchema.ts";
+export { comparisonFilterParamNEParamSchema } from "./zod/comparisonFilterParamNEParamSchema.ts";
+export { comparisonFilterParamNINParamSchema } from "./zod/comparisonFilterParamNINParamSchema.ts";
+export { compoundFilterFieldANDSchema } from "./zod/compoundFilterFieldANDSchema.ts";
+export { compoundFilterFieldORSchema } from "./zod/compoundFilterFieldORSchema.ts";
+export { compoundFilterParamAndParamSchema } from "./zod/compoundFilterParamAndParamSchema.ts";
+export { compoundFilterParamOrParamSchema } from "./zod/compoundFilterParamOrParamSchema.ts";
+export { contextEditDetailsSchema } from "./zod/contextEditDetailsSchema.ts";
+export { contextEditSchema } from "./zod/contextEditSchema.ts";
+export { conversationParamSchema } from "./zod/conversationParamSchema.ts";
+export { conversationSchema } from "./zod/conversationSchema.ts";
 export { createResponseBodySchema } from "./zod/createResponseBodySchema.ts";
 export {
-  createresponse200Schema,
-  createresponseMutationRequestSchema,
-  createresponseMutationResponseSchema,
-} from "./zod/createresponseSchema.ts";
+  createResponse200Schema,
+  createResponseMutationRequestSchema,
+  createResponseMutationResponseSchema,
+} from "./zod/createResponseSchema.ts";
 export { detailEnumSchema } from "./zod/detailEnumSchema.ts";
 export { developerMessageItemParamSchema } from "./zod/developerMessageItemParamSchema.ts";
 export { emptyModelParamSchema } from "./zod/emptyModelParamSchema.ts";
 export { errorPayloadSchema } from "./zod/errorPayloadSchema.ts";
 export { errorSchema } from "./zod/errorSchema.ts";
 export { errorStreamingEventSchema } from "./zod/errorStreamingEventSchema.ts";
+export { fileCitationBodySchema } from "./zod/fileCitationBodySchema.ts";
+export { fileCitationParamSchema } from "./zod/fileCitationParamSchema.ts";
+export { fileSearchCallItemParamSchema } from "./zod/fileSearchCallItemParamSchema.ts";
+export { fileSearchCallSchema } from "./zod/fileSearchCallSchema.ts";
+export { fileSearchRankingOptionsParamSchema } from "./zod/fileSearchRankingOptionsParamSchema.ts";
+export { fileSearchResultSchema } from "./zod/fileSearchResultSchema.ts";
+export { fileSearchRetrievedChunksParamSchema } from "./zod/fileSearchRetrievedChunksParamSchema.ts";
+export { fileSearchToolCallStatusEnumSchema } from "./zod/fileSearchToolCallStatusEnumSchema.ts";
+export { fileSearchToolChoiceSchema } from "./zod/fileSearchToolChoiceSchema.ts";
+export { fileSearchToolParamSchema } from "./zod/fileSearchToolParamSchema.ts";
+export { fileSearchToolSchema } from "./zod/fileSearchToolSchema.ts";
+export { filtersSchema } from "./zod/filtersSchema.ts";
 export { functionCallItemParamSchema } from "./zod/functionCallItemParamSchema.ts";
 export { functionCallItemStatusSchema } from "./zod/functionCallItemStatusSchema.ts";
 export { functionCallOutputItemParamSchema } from "./zod/functionCallOutputItemParamSchema.ts";
@@ -24,6 +79,8 @@ export { functionCallStatusSchema } from "./zod/functionCallStatusSchema.ts";
 export { functionToolChoiceSchema } from "./zod/functionToolChoiceSchema.ts";
 export { functionToolParamSchema } from "./zod/functionToolParamSchema.ts";
 export { functionToolSchema } from "./zod/functionToolSchema.ts";
+export { hybridSearchOptionsParamSchema } from "./zod/hybridSearchOptionsParamSchema.ts";
+export { hybridSearchOptionsSchema } from "./zod/hybridSearchOptionsSchema.ts";
 export { imageDetailSchema } from "./zod/imageDetailSchema.ts";
 export { includeEnumSchema } from "./zod/includeEnumSchema.ts";
 export { incompleteDetailsSchema } from "./zod/incompleteDetailsSchema.ts";
@@ -49,6 +106,8 @@ export { metadataParamSchema } from "./zod/metadataParamSchema.ts";
 export { outputTextContentParamSchema } from "./zod/outputTextContentParamSchema.ts";
 export { outputTextContentSchema } from "./zod/outputTextContentSchema.ts";
 export { outputTokensDetailsSchema } from "./zod/outputTokensDetailsSchema.ts";
+export { rankerVersionTypeSchema } from "./zod/rankerVersionTypeSchema.ts";
+export { rankingOptionsSchema } from "./zod/rankingOptionsSchema.ts";
 export { reasoningBodySchema } from "./zod/reasoningBodySchema.ts";
 export { reasoningEffortEnumSchema } from "./zod/reasoningEffortEnumSchema.ts";
 export { reasoningItemParamSchema } from "./zod/reasoningItemParamSchema.ts";
@@ -64,6 +123,9 @@ export { responseContentPartAddedStreamingEventSchema } from "./zod/responseCont
 export { responseContentPartDoneStreamingEventSchema } from "./zod/responseContentPartDoneStreamingEventSchema.ts";
 export { responseCreatedStreamingEventSchema } from "./zod/responseCreatedStreamingEventSchema.ts";
 export { responseFailedStreamingEventSchema } from "./zod/responseFailedStreamingEventSchema.ts";
+export { responseFileSearchCallCompletedStreamingEventSchema } from "./zod/responseFileSearchCallCompletedStreamingEventSchema.ts";
+export { responseFileSearchCallInProgressStreamingEventSchema } from "./zod/responseFileSearchCallInProgressStreamingEventSchema.ts";
+export { responseFileSearchCallSearchingStreamingEventSchema } from "./zod/responseFileSearchCallSearchingStreamingEventSchema.ts";
 export { responseFunctionCallArgumentsDeltaStreamingEventSchema } from "./zod/responseFunctionCallArgumentsDeltaStreamingEventSchema.ts";
 export { responseFunctionCallArgumentsDoneStreamingEventSchema } from "./zod/responseFunctionCallArgumentsDoneStreamingEventSchema.ts";
 export { responseIncompleteStreamingEventSchema } from "./zod/responseIncompleteStreamingEventSchema.ts";
@@ -84,9 +146,15 @@ export { responseRefusalDeltaStreamingEventSchema } from "./zod/responseRefusalD
 export { responseRefusalDoneStreamingEventSchema } from "./zod/responseRefusalDoneStreamingEventSchema.ts";
 export { responseResourceSchema } from "./zod/responseResourceSchema.ts";
 export { responsesToolParamSchema } from "./zod/responsesToolParamSchema.ts";
+export { responseWebSearchCallCompletedStreamingEventSchema } from "./zod/responseWebSearchCallCompletedStreamingEventSchema.ts";
+export { responseWebSearchCallInProgressStreamingEventSchema } from "./zod/responseWebSearchCallInProgressStreamingEventSchema.ts";
+export { responseWebSearchCallSearchingStreamingEventSchema } from "./zod/responseWebSearchCallSearchingStreamingEventSchema.ts";
+export { searchContextSizeSchema } from "./zod/searchContextSizeSchema.ts";
 export { serviceTierEnumSchema } from "./zod/serviceTierEnumSchema.ts";
+export { specificFileSearchParamSchema } from "./zod/specificFileSearchParamSchema.ts";
 export { specificFunctionParamSchema } from "./zod/specificFunctionParamSchema.ts";
 export { specificToolChoiceParamSchema } from "./zod/specificToolChoiceParamSchema.ts";
+export { specificWebSearchParamSchema } from "./zod/specificWebSearchParamSchema.ts";
 export { streamOptionsParamSchema } from "./zod/streamOptionsParamSchema.ts";
 export { summaryTextContentSchema } from "./zod/summaryTextContentSchema.ts";
 export { systemMessageItemParamSchema } from "./zod/systemMessageItemParamSchema.ts";
@@ -102,6 +170,19 @@ export { topLogProbSchema } from "./zod/topLogProbSchema.ts";
 export { truncationEnumSchema } from "./zod/truncationEnumSchema.ts";
 export { urlCitationBodySchema } from "./zod/urlCitationBodySchema.ts";
 export { urlCitationParamSchema } from "./zod/urlCitationParamSchema.ts";
+export { urlSourceParamSchema } from "./zod/urlSourceParamSchema.ts";
 export { usageSchema } from "./zod/usageSchema.ts";
 export { userMessageItemParamSchema } from "./zod/userMessageItemParamSchema.ts";
 export { verbosityEnumSchema } from "./zod/verbosityEnumSchema.ts";
+export { webSearchCallActionFindInPageParamSchema } from "./zod/webSearchCallActionFindInPageParamSchema.ts";
+export { webSearchCallActionFindInPageSchema } from "./zod/webSearchCallActionFindInPageSchema.ts";
+export { webSearchCallActionOpenPageParamSchema } from "./zod/webSearchCallActionOpenPageParamSchema.ts";
+export { webSearchCallActionOpenPageSchema } from "./zod/webSearchCallActionOpenPageSchema.ts";
+export { webSearchCallActionSearchParamSchema } from "./zod/webSearchCallActionSearchParamSchema.ts";
+export { webSearchCallActionSearchSchema } from "./zod/webSearchCallActionSearchSchema.ts";
+export { webSearchCallItemParamSchema } from "./zod/webSearchCallItemParamSchema.ts";
+export { webSearchCallSchema } from "./zod/webSearchCallSchema.ts";
+export { webSearchCallStatusSchema } from "./zod/webSearchCallStatusSchema.ts";
+export { webSearchToolChoiceSchema } from "./zod/webSearchToolChoiceSchema.ts";
+export { webSearchToolParamSchema } from "./zod/webSearchToolParamSchema.ts";
+export { webSearchToolSchema } from "./zod/webSearchToolSchema.ts";

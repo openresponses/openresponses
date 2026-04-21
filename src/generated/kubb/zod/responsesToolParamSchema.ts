@@ -3,7 +3,13 @@
  * Do not edit manually.
  */
 
+import { fileSearchToolParamSchema } from "./fileSearchToolParamSchema.ts";
 import { functionToolParamSchema } from "./functionToolParamSchema.ts";
+import { webSearchToolParamSchema } from "./webSearchToolParamSchema.ts";
 import { z } from "zod";
 
-export const responsesToolParamSchema = z.lazy(() => functionToolParamSchema);
+export const responsesToolParamSchema = z.union([
+  z.lazy(() => functionToolParamSchema),
+  z.lazy(() => webSearchToolParamSchema),
+  z.lazy(() => fileSearchToolParamSchema),
+]);

@@ -10,16 +10,16 @@ import { z } from "zod";
 /**
  * @description Success
  */
-export const createresponse200Schema = z
+export const createResponse200Schema = z
   .lazy(() => responseResourceSchema)
   .describe(
     "The complete response object that was returned by the Responses API.",
   );
 
-export const createresponseMutationRequestSchema = z.lazy(
+export const createResponseMutationRequestSchema = z.lazy(
   () => createResponseBodySchema,
 );
 
-export const createresponseMutationResponseSchema = z.lazy(
-  () => createresponse200Schema,
+export const createResponseMutationResponseSchema = z.lazy(
+  () => createResponse200Schema,
 );

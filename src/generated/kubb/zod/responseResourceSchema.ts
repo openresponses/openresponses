@@ -4,7 +4,10 @@
  */
 
 import { allowedToolChoiceSchema } from "./allowedToolChoiceSchema.ts";
+import { contextEditSchema } from "./contextEditSchema.ts";
+import { conversationSchema } from "./conversationSchema.ts";
 import { errorSchema } from "./errorSchema.ts";
+import { fileSearchToolChoiceSchema } from "./fileSearchToolChoiceSchema.ts";
 import { functionToolChoiceSchema } from "./functionToolChoiceSchema.ts";
 import { incompleteDetailsSchema } from "./incompleteDetailsSchema.ts";
 import { itemFieldSchema } from "./itemFieldSchema.ts";
@@ -14,6 +17,7 @@ import { toolChoiceValueEnumSchema } from "./toolChoiceValueEnumSchema.ts";
 import { toolSchema } from "./toolSchema.ts";
 import { truncationEnumSchema } from "./truncationEnumSchema.ts";
 import { usageSchema } from "./usageSchema.ts";
+import { webSearchToolChoiceSchema } from "./webSearchToolChoiceSchema.ts";
 import { z } from "zod";
 
 /**
@@ -62,6 +66,8 @@ export const responseResourceSchema = z
       ),
     tool_choice: z.union([
       z.lazy(() => functionToolChoiceSchema),
+      z.lazy(() => fileSearchToolChoiceSchema),
+      z.lazy(() => webSearchToolChoiceSchema),
       z.lazy(() => toolChoiceValueEnumSchema),
       z.lazy(() => allowedToolChoiceSchema),
     ]),
@@ -111,6 +117,19 @@ export const responseResourceSchema = z
     service_tier: z
       .string()
       .describe("The service tier that was used for this response."),
+    context_edits: z.optional(
+      z
+        .array(
+          z
+            .lazy(() => contextEditSchema)
+            .describe(
+              "A record of context management changes that were applied during response generation.",
+            ),
+        )
+        .describe(
+          "The context management edits that were applied while generating this response, if any.",
+        ),
+    ),
     metadata: z
       .any()
       .describe(
@@ -118,6 +137,9 @@ export const responseResourceSchema = z
       ),
     safety_identifier: z.union([z.string(), z.null()]),
     prompt_cache_key: z.union([z.string(), z.null()]),
+    conversation: z.optional(
+      z.union([z.lazy(() => conversationSchema).and(z.any()), z.null()]),
+    ),
   })
   .describe(
     "The complete response object that was returned by the Responses API.",

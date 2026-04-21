@@ -14,6 +14,7 @@ export const inputFileContentParamSchema = z
       .enum(["input_file"])
       .default("input_file")
       .describe("The type of the input item. Always `input_file`."),
+    file_id: z.optional(z.union([z.string(), z.null()])),
     filename: z.optional(z.union([z.string(), z.null()])),
     file_data: z.optional(z.union([z.string(), z.null()])),
     file_url: z.optional(z.union([z.string(), z.null()])),

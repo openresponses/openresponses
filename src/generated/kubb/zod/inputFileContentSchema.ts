@@ -14,6 +14,7 @@ export const inputFileContentSchema = z
       .enum(["input_file"])
       .default("input_file")
       .describe("The type of the input item. Always `input_file`."),
+    file_id: z.union([z.string(), z.null()]),
     filename: z.optional(
       z.string().describe("The name of the file to be sent to the model."),
     ),

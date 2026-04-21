@@ -3,12 +3,18 @@
  * Do not edit manually.
  */
 
+import { fileSearchToolSchema } from "./fileSearchToolSchema.ts";
 import { functionToolSchema } from "./functionToolSchema.ts";
+import { webSearchToolSchema } from "./webSearchToolSchema.ts";
 import { z } from "zod";
 
 /**
  * @description A tool that can be used to generate a response.
  */
 export const toolSchema = z
-  .lazy(() => functionToolSchema)
+  .union([
+    z.lazy(() => fileSearchToolSchema),
+    z.lazy(() => functionToolSchema),
+    z.lazy(() => webSearchToolSchema),
+  ])
   .describe("A tool that can be used to generate a response.");

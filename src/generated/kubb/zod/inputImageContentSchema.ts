@@ -16,6 +16,7 @@ export const inputImageContentSchema = z
       .default("input_image")
       .describe("The type of the input item. Always `input_image`."),
     image_url: z.union([z.string(), z.null()]),
+    file_id: z.union([z.string(), z.null()]),
     detail: z.lazy(() => imageDetailSchema).and(z.any()),
   })
   .describe(

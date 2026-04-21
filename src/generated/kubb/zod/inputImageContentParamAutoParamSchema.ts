@@ -16,6 +16,7 @@ export const inputImageContentParamAutoParamSchema = z
       .default("input_image")
       .describe("The type of the input item. Always `input_image`."),
     image_url: z.optional(z.union([z.string(), z.null()])),
+    file_id: z.optional(z.union([z.string(), z.null()])),
     detail: z.optional(
       z.union([z.lazy(() => imageDetailSchema).and(z.any()), z.null()]),
     ),

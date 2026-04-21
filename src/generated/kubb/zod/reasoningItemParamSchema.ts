@@ -15,5 +15,6 @@ export const reasoningItemParamSchema = z.object({
   summary: z
     .array(z.lazy(() => reasoningSummaryContentParamSchema))
     .describe("Reasoning summary content associated with this item."),
+  content: z.optional(z.null()),
   encrypted_content: z.optional(z.union([z.string(), z.null()])),
 });

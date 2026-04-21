@@ -29,13 +29,17 @@ export const responseOutputTextDeltaStreamingEventSchema = z
       .int()
       .describe("The index of the content part that was updated."),
     delta: z.string().describe("The text delta that was appended."),
-    logprobs: z
-      .array(
-        z.lazy(() => logProbSchema).describe("The log probability of a token."),
-      )
-      .describe(
-        "The token log probabilities that were emitted with the delta, if any.",
-      ),
+    logprobs: z.optional(
+      z
+        .array(
+          z
+            .lazy(() => logProbSchema)
+            .describe("The log probability of a token."),
+        )
+        .describe(
+          "The token log probabilities that were emitted with the delta, if any.",
+        ),
+    ),
     obfuscation: z.optional(
       z
         .string()
