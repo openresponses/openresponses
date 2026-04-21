@@ -71,11 +71,9 @@ allow:
       - FileSearchCall
       - WebSearchCall
       - ReasoningBody
-      - CompactionBody
     ItemParam:
       - ItemReferenceParam
       - ReasoningItemParam
-      - CompactionSummaryItemParam
       - UserMessageItemParam
       - SystemMessageItemParam
       - DeveloperMessageItemParam

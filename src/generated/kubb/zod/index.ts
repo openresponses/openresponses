@@ -4,15 +4,6 @@ export { annotationSchema } from "./annotationSchema.ts";
 export { apiSourceParamSchema } from "./apiSourceParamSchema.ts";
 export { approximateLocationParamSchema } from "./approximateLocationParamSchema.ts";
 export { assistantMessageItemParamSchema } from "./assistantMessageItemParamSchema.ts";
-export { compactionBodySchema } from "./compactionBodySchema.ts";
-export { compactionSummaryItemParamSchema } from "./compactionSummaryItemParamSchema.ts";
-export { compactResourceSchema } from "./compactResourceSchema.ts";
-export { compactResponseMethodPublicBodySchema } from "./compactResponseMethodPublicBodySchema.ts";
-export {
-  compactResponse200Schema,
-  compactResponseMutationRequestSchema,
-  compactResponseMutationResponseSchema,
-} from "./compactResponseSchema.ts";
 export { comparisonFilterFieldCONTAINSANYSchema } from "./comparisonFilterFieldCONTAINSANYSchema.ts";
 export { comparisonFilterFieldCONTAINSSchema } from "./comparisonFilterFieldCONTAINSSchema.ts";
 export { comparisonFilterFieldEQSchema } from "./comparisonFilterFieldEQSchema.ts";

@@ -54,27 +54,6 @@ Parameters may be supplied as either `application/json` or `application/x-www-fo
 
 <Reference schemaName="ResponseResource" header="Response" includeSections={false} />
 
-<div class="mt-12 not-prose flex flex-row items-center gap-2 rounded-lg border-1 border-slate-300 bg-slate-100 p-2">
-  <span class="rounded border-1 border-blue-400 bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600">
-    POST
-  </span>
-  <span class="font-mono">/v1/responses/compact</span>
-</div>
-
-## Compact Request Parameters
-
-Compaction creates a smaller context representation from prior input or a previous response. It is part of the Responses API surface and does not require a separate Conversations API endpoint.
-
-### Body
-
-<Reference operationPath="/responses/compact" schemaName="CompactResponseMethodPublicBody" header="Compact Body Parameters" includeSections={false} />
-
-## Compact Response Parameters
-
-### Body
-
-<Reference schemaName="CompactResource" header="Compacted Response" includeSections={false} />
-
 # API Objects
 
-<ReferenceSections schemaNames={["CreateResponseBody", "ResponseResource", "CompactResponseMethodPublicBody", "CompactResource"]} />
+<ReferenceSections schemaNames={["CreateResponseBody", "ResponseResource"]} />

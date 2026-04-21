@@ -152,18 +152,6 @@ Servers SHOULD support `previous_response_id` for response chaining. Servers MAY
 }
 ```
 
-### Context Compaction
-
-Servers MAY expose `POST /v1/responses/compact` to summarize or compact prior context into a smaller set of response items. The endpoint accepts `model`, `input`, `previous_response_id`, and optional `instructions`, and returns a `response.compaction` object whose `output` can include `compaction` items.
-
-```json
-{
-  "model": "gpt-5",
-  "previous_response_id": "resp_123",
-  "instructions": "Compact the conversation while preserving user goals and open tasks."
-}
-```
-
 ### Semantic Search
 
 Semantic search is exposed through the Responses `file_search` tool. The tool MUST reference existing `vector_store_ids`; Open Responses does not define vector store creation, file ingestion, or vector store lifecycle endpoints. Providers that support file search SHOULD emit `file_search_call` items and MAY include retrieved chunks when the request includes `file_search_call.results`.

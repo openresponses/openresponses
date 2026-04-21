@@ -13,21 +13,17 @@ type Props = {
   schemaName?: string;
   header?: string;
   includeSections?: boolean;
-  operationPath?: string;
-  operationMethod?: "get" | "post" | "put" | "patch" | "delete";
 };
 
 const {
   schemaName: schemaNameProp,
   header = "Body Parameters",
   includeSections = true,
-  operationPath = "/responses",
-  operationMethod = "post",
 } = Astro.props as Props;
 
 // @ts-ignore
 const ApiReference = new Oas(apispec);
-const operation = ApiReference.operation(operationPath, operationMethod);
+const operation = ApiReference.operation("/responses", "post");
 const schema = operation.getRequestBody("application/json");
 
 const schemaRef = schema?.schema?.$ref;

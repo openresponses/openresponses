@@ -4,7 +4,6 @@
  */
 
 import { assistantMessageItemParamSchema } from "./assistantMessageItemParamSchema.ts";
-import { compactionSummaryItemParamSchema } from "./compactionSummaryItemParamSchema.ts";
 import { developerMessageItemParamSchema } from "./developerMessageItemParamSchema.ts";
 import { fileSearchCallItemParamSchema } from "./fileSearchCallItemParamSchema.ts";
 import { functionCallItemParamSchema } from "./functionCallItemParamSchema.ts";
@@ -19,7 +18,6 @@ import { z } from "zod";
 export const itemParamSchema = z.union([
   z.lazy(() => itemReferenceParamSchema),
   z.lazy(() => reasoningItemParamSchema),
-  z.lazy(() => compactionSummaryItemParamSchema),
   z.lazy(() => userMessageItemParamSchema),
   z.lazy(() => systemMessageItemParamSchema),
   z.lazy(() => developerMessageItemParamSchema),

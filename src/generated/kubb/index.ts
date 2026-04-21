@@ -4,15 +4,6 @@ export { annotationSchema } from "./zod/annotationSchema.ts";
 export { apiSourceParamSchema } from "./zod/apiSourceParamSchema.ts";
 export { approximateLocationParamSchema } from "./zod/approximateLocationParamSchema.ts";
 export { assistantMessageItemParamSchema } from "./zod/assistantMessageItemParamSchema.ts";
-export { compactionBodySchema } from "./zod/compactionBodySchema.ts";
-export { compactionSummaryItemParamSchema } from "./zod/compactionSummaryItemParamSchema.ts";
-export { compactResourceSchema } from "./zod/compactResourceSchema.ts";
-export { compactResponseMethodPublicBodySchema } from "./zod/compactResponseMethodPublicBodySchema.ts";
-export {
-  compactResponse200Schema,
-  compactResponseMutationRequestSchema,
-  compactResponseMutationResponseSchema,
-} from "./zod/compactResponseSchema.ts";
 export { comparisonFilterFieldCONTAINSANYSchema } from "./zod/comparisonFilterFieldCONTAINSANYSchema.ts";
 export { comparisonFilterFieldCONTAINSSchema } from "./zod/comparisonFilterFieldCONTAINSSchema.ts";
 export { comparisonFilterFieldEQSchema } from "./zod/comparisonFilterFieldEQSchema.ts";
