@@ -84,7 +84,7 @@ add:
           default: web_search
         user_location:
           anyOf:
-            - $ref: "#/components/schemas/ApproximateLocation"
+            - $ref: "#/components/schemas/ApproximateLocationParam"
               description: The user's approximate location.
             - type: "null"
         search_context_size:
