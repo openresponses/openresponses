@@ -6,17 +6,21 @@ allow:
     InputImageContent:
       - type
       - image_url
+      - file_id
       - detail
     InputFileContent:
       - type
+      - file_id
       - filename
       - file_url
     InputImageContentParamAutoParam:
       - type
       - image_url
+      - file_id
       - detail
     InputFileContentParam:
       - type
+      - file_id
       - filename
       - file_data
       - file_url
@@ -45,39 +49,65 @@ allow:
       - ResponseOutputTextAnnotationAddedStreamingEvent
       - ResponseFunctionCallArgumentsDeltaStreamingEvent
       - ResponseFunctionCallArgumentsDoneStreamingEvent
+      - ResponseFileSearchCallInProgressStreamingEvent
+      - ResponseFileSearchCallSearchingStreamingEvent
+      - ResponseFileSearchCallCompletedStreamingEvent
+      - ResponseWebSearchCallInProgressStreamingEvent
+      - ResponseWebSearchCallSearchingStreamingEvent
+      - ResponseWebSearchCallCompletedStreamingEvent
       - ErrorStreamingEvent
     AllowedToolChoice:
       - FunctionToolChoice
+      - FileSearchToolChoice
+      - WebSearchToolChoice
     ResponsesToolParam:
       - FunctionToolParam
+      - FileSearchToolParam
+      - WebSearchToolParam
     ItemField:
       - Message
       - FunctionCall
       - FunctionCallOutput
+      - FileSearchCall
+      - WebSearchCall
       - ReasoningBody
+      - CompactionBody
     ItemParam:
       - ItemReferenceParam
       - ReasoningItemParam
+      - CompactionSummaryItemParam
       - UserMessageItemParam
       - SystemMessageItemParam
       - DeveloperMessageItemParam
       - AssistantMessageItemParam
       - FunctionCallItemParam
       - FunctionCallOutputItemParam
+      - FileSearchCallItemParam
+      - WebSearchCallItemParam
     Tool:
       - FunctionTool
+      - FileSearchTool
     SpecificToolChoiceParam:
       - SpecificFunctionParam
+      - SpecificFileSearchParam
+      - SpecificWebSearchParam
     ResponseResource.tool_choice:
       - FunctionToolChoice
+      - FileSearchToolChoice
+      - WebSearchToolChoice
       - ToolChoiceValueEnum
       - AllowedToolChoice
     OutputTextContentParam.annotations:
+      - FileCitationParam
       - UrlCitationParam
     Annotation:
+      - FileCitationBody
       - UrlCitationBody
   enums:
     IncludeEnum:
+      - file_search_call.results
+      - web_search_call.action.sources
+      - message.input_image.image_url
       - reasoning.encrypted_content
       - message.output_text.logprobs
     MessageRole:
@@ -107,17 +137,14 @@ deny:
     CreateResponseBody:
       - user
       - prompt
-      - conversation
       - prompt_cache_retention
     ResponseResource:
       - next_response_ids
       - input
       - cost_token
       - billing
-      - context_edits
       - user
       - prompt
-      - conversation
       - prompt_cache_retention
     AutoCodeInterpreterToolParam:
       - memory_limit
@@ -132,9 +159,5 @@ deny:
   # You can scope to a specific property with "SchemaName.property".
   # You can also target operation schemas via:
   oneOf:
-    Tool:
-      - FileSearchTool
     ItemField:
-      - FileSearchCall
-      - WebSearchCall
       - ImageGenCall

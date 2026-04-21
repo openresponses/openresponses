@@ -12,6 +12,9 @@
   "paths": {
     "/responses": {
       "$ref": "paths/responses.json"
+    },
+    "/responses/compact": {
+      "$ref": "paths/responses_compact.json"
     }
   },
   "components": {

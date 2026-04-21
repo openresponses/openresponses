@@ -6,7 +6,7 @@
   "scripts": {
     "tsp": "tsp compile schema__tsp/schema.tsp",
     "tsp:watch": "tsp compile schema__tsp/schema.tsp --watch",
-    "spec": "python bin/inline_openapi_refs.py --entrypoint ./schema/openapi.json --endpoint 'POST /responses'  --manifest ./schema/openapi_filter_manifest.yaml --patches schema/openapi_additive_patches.yaml --output ./public/openapi/openapi.json",
+    "spec": "python bin/inline_openapi_refs.py --entrypoint ./schema/openapi.json --endpoint 'POST /responses' --endpoint 'POST /responses/compact' --manifest ./schema/openapi_filter_manifest.yaml --patches schema/openapi_additive_patches.yaml --output ./public/openapi/openapi.json",
     "llms": "python3 bin/build_llms_txt.py",
     "generate:zod": "kubb generate",
     "prettier": "prettier",

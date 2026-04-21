@@ -71,12 +71,40 @@ add:
       oneOf:
         - $ref: "#/components/schemas/TextResponseFormat"
         - $ref: "#/components/schemas/JsonSchemaResponseFormatParam"
+    WebSearchTool:
+      type: object
+      title: Web search
+      description: A tool that searches web content for relevant results. Set `external_web_access` to `false` to run in offline or cache-only mode.
+      properties:
+        type:
+          type: string
+          enum:
+            - web_search
+          description: The type of the web search tool. Always `web_search`.
+          default: web_search
+        user_location:
+          anyOf:
+            - $ref: "#/components/schemas/ApproximateLocation"
+              description: The user's approximate location.
+            - type: "null"
+        search_context_size:
+          $ref: "#/components/schemas/SearchContextSize"
+          description: High-level guidance for the amount of context to retrieve.
+        external_web_access:
+          type: boolean
+          description: Whether live internet access is allowed for web search. When `false`, the tool runs in offline or cache-only mode.
+      required:
+        - type
   schema_lists:
     - schema: Message
       keyword: oneOf
       path: /properties/content/items/oneOf
       refs:
         - InputVideoContent
+    - schema: Tool
+      path: /oneOf
+      refs:
+        - WebSearchTool
     - schema: FunctionCallOutput
       path: /properties/output/oneOf[1]/items/oneOf
       refs:
@@ -157,6 +185,20 @@ add:
       path: /properties/status/anyOf[0]/allOf[0]
       merge:
         $ref: "#/components/schemas/FunctionCallStatus"
+    - schema: WebSearchCallActionSearch
+      path: /properties
+      merge:
+        sources:
+          anyOf:
+            - items:
+                oneOf:
+                  - $ref: "#/components/schemas/UrlSourceParam"
+                  - $ref: "#/components/schemas/ApiSourceParam"
+                discriminator:
+                  propertyName: type
+              type: array
+              description: Sources used for the search when requested with `include`.
+            - type: "null"
     - schema: FunctionCallStatus
       path: ""
       merge:
@@ -180,10 +222,18 @@ add:
       path: ""
       merge:
         x-enumDescriptions:
+          file_search_call.results: includes file search results on file search call items.
+          message.input_image.image_url: includes image URLs from input image content.
           message.output_text.logprobs: includes sampled logprobs in assistant messages.
           reasoning.encrypted_content:
             includes encrypted reasoning content so that
             it may be rehydrated on a subsequent request.
+          web_search_call.action.sources: includes web search sources on web search call actions.
+  enums:
+    - schema: WebSearchToolChoice
+      path: /properties/type
+      values:
+        - web_search
     - schema: MessageRole
       path: ""
       merge:
