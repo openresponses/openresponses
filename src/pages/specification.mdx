@@ -94,6 +94,112 @@ event: response.output_text.delta
 data: { "type":"response.output_text.delta","sequence_number":10,"item_id":"msg_07315d23576898080068e95daa2e34819685fb0a98a0503f78","output_index":0,"content_index":0,"delta":" a","logprobs":[],"obfuscation":"Wd6S45xQ7SyQLT"}
 ```
 
+## Core Responses Capabilities
+
+### Chat Inference
+
+Servers MUST support `POST /v1/responses` with a `model` and either a string `input` or an array of input items. A string input is interpreted as a user message. A successful non-streaming request MUST return a `response` object with an `output` array containing model-produced items.
+
+```json
+{
+  "model": "gpt-5",
+  "input": "Write a one-sentence project status update."
+}
+```
+
+### File Input
+
+User message content MAY include `input_file` parts. A file input MUST use one of the response-level file reference forms: an existing `file_id`, a remote `file_url`, or base64 `file_data` with a `filename`. Open Responses does not define file upload endpoints; providers that accept `file_id` are responsible for defining how those IDs are created.
+
+```json
+{
+  "type": "message",
+  "role": "user",
+  "content": [
+    {
+      "type": "input_text",
+      "text": "Summarize this document."
+    },
+    {
+      "type": "input_file",
+      "file_id": "file-abc123"
+    }
+  ]
+}
+```
+
+### Tool Calling
+
+Developer-controlled tools are represented by `function` tool definitions. When the model chooses a function, the response output includes a `function_call` item with a `call_id`, `name`, and JSON-string `arguments`. Clients execute the function out of band and send the result back as a `function_call_output` item with the same `call_id`.
+
+```json
+{
+  "type": "function_call_output",
+  "call_id": "call_123",
+  "output": "64 degrees and clear"
+}
+```
+
+### Stateful Conversations
+
+Servers SHOULD support `previous_response_id` for response chaining. Servers MAY also support `conversation`, either as a conversation ID or a conversation object, to let the provider manage conversation state. A response that belongs to a conversation MUST identify that conversation in the returned `response.conversation` field when the provider stores or manages that state.
+
+```json
+{
+  "model": "gpt-5",
+  "previous_response_id": "resp_123",
+  "input": "What did I ask you to remember?"
+}
+```
+
+### Context Compaction
+
+Servers MAY expose `POST /v1/responses/compact` to summarize or compact prior context into a smaller set of response items. The endpoint accepts `model`, `input`, `previous_response_id`, and optional `instructions`, and returns a `response.compaction` object whose `output` can include `compaction` items.
+
+```json
+{
+  "model": "gpt-5",
+  "previous_response_id": "resp_123",
+  "instructions": "Compact the conversation while preserving user goals and open tasks."
+}
+```
+
+### Semantic Search
+
+Semantic search is exposed through the Responses `file_search` tool. The tool MUST reference existing `vector_store_ids`; Open Responses does not define vector store creation, file ingestion, or vector store lifecycle endpoints. Providers that support file search SHOULD emit `file_search_call` items and MAY include retrieved chunks when the request includes `file_search_call.results`.
+
+```json
+{
+  "model": "gpt-5",
+  "input": "Which policy mentions retention limits?",
+  "tools": [
+    {
+      "type": "file_search",
+      "vector_store_ids": ["vs_abc123"]
+    }
+  ],
+  "include": ["file_search_call.results"]
+}
+```
+
+### Offline Web Search
+
+Offline web search is exposed through the Responses `web_search` tool with `external_web_access` set to `false`. In this mode, providers MUST NOT fetch new live web content for the request. Provider-specific offline indexes MAY also be exposed as ordinary function tools when the provider does not implement hosted `web_search`.
+
+```json
+{
+  "model": "gpt-5",
+  "input": "Find the most relevant cached result for this topic.",
+  "tools": [
+    {
+      "type": "web_search",
+      "external_web_access": false
+    }
+  ],
+  "include": ["web_search_call.action.sources"]
+}
+```
+
 ## Items
 
 Items are the core unit of context in Open Responses. Open Responses defines a few types of items that are common to all providers, such as `message` or `function_call`, and defines how to define additional, provider-specific item types. There are some general principles that apply to all items:
