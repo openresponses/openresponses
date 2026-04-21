@@ -18,6 +18,8 @@ export default function ComplianceTester({ defaultApiKey = "" }: Props) {
     authHeaderName: "Authorization",
     useBearerPrefix: true,
     model: "gpt-4o-mini",
+    fileSearchVectorStoreId: "",
+    enableOfflineWebSearch: false,
   });
 
   const [results, setResults] = useState<Map<string, TestResult>>(new Map());
@@ -73,6 +75,8 @@ export default function ComplianceTester({ defaultApiKey = "" }: Props) {
         return <span className="text-green-600">✓</span>;
       case "failed":
         return <span className="text-red-600">✗</span>;
+      case "skipped":
+        return <span className="text-stone-400">−</span>;
     }
   };
 
@@ -86,6 +90,8 @@ export default function ComplianceTester({ defaultApiKey = "" }: Props) {
         return "border-green-500/50";
       case "failed":
         return "border-red-500/50";
+      case "skipped":
+        return "border-stone-300";
     }
   };
 
@@ -94,6 +100,9 @@ export default function ComplianceTester({ defaultApiKey = "" }: Props) {
   ).length;
   const failedCount = Array.from(results.values()).filter(
     (r) => r.status === "failed",
+  ).length;
+  const skippedCount = Array.from(results.values()).filter(
+    (r) => r.status === "skipped",
   ).length;
   const totalTests = testTemplates.length;
 
@@ -203,6 +212,51 @@ export default function ComplianceTester({ defaultApiKey = "" }: Props) {
               </span>
             </label>
           </div>
+
+          <div>
+            <label
+              htmlFor={`${id}-fileSearchVectorStoreId`}
+              className="mb-2 block text-sm font-medium text-stone-700"
+            >
+              File Search Vector Store ID
+            </label>
+            <input
+              id={`${id}-fileSearchVectorStoreId`}
+              type="text"
+              value={config.fileSearchVectorStoreId ?? ""}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  fileSearchVectorStoreId: e.target.value,
+                }))
+              }
+              className="w-full rounded-md border border-stone-300 bg-white px-4 py-2 font-mono text-sm text-stone-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/50 focus:outline-none"
+              placeholder="vs_..."
+            />
+          </div>
+
+          <div className="flex items-end">
+            <label
+              htmlFor={`${id}-enableOfflineWebSearch`}
+              className="mb-2 flex cursor-pointer items-center gap-3"
+            >
+              <input
+                id={`${id}-enableOfflineWebSearch`}
+                type="checkbox"
+                checked={config.enableOfflineWebSearch ?? false}
+                onChange={(e) =>
+                  setConfig((c) => ({
+                    ...c,
+                    enableOfflineWebSearch: e.target.checked,
+                  }))
+                }
+                className="h-4 w-4 rounded border-stone-300 bg-white text-orange-600 focus:ring-orange-500/50"
+              />
+              <span className="text-sm text-stone-600">
+                Run offline web search test
+              </span>
+            </label>
+          </div>
         </div>
 
         <div className="mt-6 flex items-center gap-4">
@@ -220,6 +274,8 @@ export default function ComplianceTester({ defaultApiKey = "" }: Props) {
               <span className="text-green-600">{passedCount} passed</span>
               {" · "}
               <span className="text-red-600">{failedCount} failed</span>
+              {" · "}
+              <span className="text-stone-500">{skippedCount} skipped</span>
               {" · "}
               <span className="text-stone-500">{totalTests} total</span>
             </div>

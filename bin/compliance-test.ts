@@ -20,6 +20,8 @@ interface CliArgs {
   model?: string;
   authHeader?: string;
   noBearer?: boolean;
+  fileSearchVectorStoreId?: string;
+  enableOfflineWebSearch?: boolean;
   filter?: string[];
   verbose?: boolean;
   json?: boolean;
@@ -56,6 +58,14 @@ function parseArgs(argv: string[]): CliArgs {
         break;
       case "--no-bearer":
         args.noBearer = true;
+        i += 1;
+        break;
+      case "--file-search-vector-store-id":
+        args.fileSearchVectorStoreId = nextArg;
+        i += 2;
+        break;
+      case "--enable-offline-web-search":
+        args.enableOfflineWebSearch = true;
         i += 1;
         break;
       case "--filter":
@@ -95,6 +105,10 @@ Options:
   -m, --model <model>         Model name (default: gpt-4o-mini)
       --auth-header <name>    Auth header name (default: Authorization)
       --no-bearer             Disable Bearer prefix in auth header
+      --file-search-vector-store-id <id>
+                              Enable file_search test with an existing vector store
+      --enable-offline-web-search
+                              Enable web_search test with external_web_access=false
   -f, --filter <ids>          Filter tests by ID (comma-separated)
   -v, --verbose               Verbose output with request/response details
       --json                  Output results as JSON
@@ -120,6 +134,8 @@ function getStatusIcon(status: TestResult["status"]): string {
       return colors.yellow("◉");
     case "pending":
       return colors.gray("○");
+    case "skipped":
+      return colors.gray("-");
   }
 }
 
@@ -132,6 +148,12 @@ function printResult(result: TestResult, verbose: boolean) {
     result.status === "failed" ? colors.red(result.name) : result.name;
 
   console.log(`${icon} ${name}${duration}${events}`);
+
+  if (result.status === "skipped" && result.errors?.length) {
+    for (const error of result.errors) {
+      console.log(`  ${colors.gray("-")} ${error}`);
+    }
+  }
 
   if (result.status === "failed" && result.errors?.length) {
     for (const error of result.errors) {
@@ -187,6 +209,8 @@ async function main() {
     model: args.model || "gpt-4o-mini",
     authHeaderName: args.authHeader || "Authorization",
     useBearerPrefix: !args.noBearer,
+    fileSearchVectorStoreId: args.fileSearchVectorStoreId,
+    enableOfflineWebSearch: args.enableOfflineWebSearch,
   };
 
   if (args.filter?.length) {
@@ -227,16 +251,18 @@ async function main() {
   await runAllTests(config, onProgress);
 
   const finalResults = allUpdates.filter(
-    (r) => r.status === "passed" || r.status === "failed",
+    (r) =>
+      r.status === "passed" || r.status === "failed" || r.status === "skipped",
   );
   const passed = finalResults.filter((r) => r.status === "passed").length;
   const failed = finalResults.filter((r) => r.status === "failed").length;
+  const skipped = finalResults.filter((r) => r.status === "skipped").length;
 
   if (args.json) {
     console.log(
       JSON.stringify(
         {
-          summary: { passed, failed, total: finalResults.length },
+          summary: { passed, failed, skipped, total: finalResults.length },
           results: finalResults,
         },
         null,
@@ -248,6 +274,9 @@ async function main() {
     console.log(
       `Results: ${colors.green(`${passed} passed`)}, ${colors.red(`${failed} failed`)}, ${finalResults.length} total`,
     );
+    if (skipped > 0) {
+      console.log(`${colors.gray(`${skipped} skipped`)}`);
+    }
 
     if (failed > 0) {
       console.log(`\nFailed tests:`);
