@@ -30,29 +30,29 @@ Modern LLM systems have converged on similar primitives—messages, function ca
 
 All models, to some extent, exhibit agency — the ability to perceive input, reason, act through tools, and reflect on outcomes.
 
-Open Responses at is core is designed to expose the power of this agentic loop to developers, making requests that allow the model to do multiple things and yield back a result, whether this is developer-hosted tool calls where control is yielded back to the user, or provider-hosted tools where control is held by the model provider until the model signals an exit criteria.
+Open Responses at is core is designed to expose the power of this agentic loop to developers, making requests that allow the model to do multiple things and yield back a result, whether this is developer-hosted tool calls where control is yielded back to the user, or provider-hosted tools where control is held by the model provider until the model signals an exit criterion.
 
-Open Responses defines a common pattern for defining control flow in the agent loop, a set of item definitions for developer-controlled tools, and pattern for defining provider and router-hosted tools.
+Open Responses defines a common pattern for defining control flow in the agent loop, a set of item definitions for developer-controlled tools, and pattern for defining provider- and router-hosted tools.
 
 ## Items → Items
 
-**Items** are the fundamental unit of context in Open Responses: they represent an atomic unit of model output, tool invocation, or reasoning state. Items are bidirectional, they can be provided as inputs to the model, or as outputs from the model.
+**Items** are the fundamental unit of context in Open Responses: they represent an atomic unit of model output, tool invocation, or reasoning state. Items are bidirectional: they can be provided as inputs to the model, or as outputs from the model.
 
-Each item type has a defined schema that binds it and contains properties specific to it’s unique purpose.
+Each item type has a defined schema that binds it and contains properties specific to its unique purpose.
 
-Open Responses defines a common set of items supported by a quorum of model providers, and defines how provider-specific item types can be defined.
+Open Responses establishes a common set of items supported by a quorum of model providers, and defines how provider-specific item types can be structured.
 
-## Semantic events
+## Semantic Events
 
 Streaming is modeled as a series of semantic events, not raw text or object deltas.
 
-Events describe meaningful transitions. They are either state transitions–`response.in_progress`, `response.completed`–or they can represent a delta from a previous state–`response.output_item.added`, `response.output_text.delta`.
+Events describe meaningful transitions. They are either state transitions (`response.in_progress`, `response.completed`) or they can represent a delta from a previous state (`response.output_item.added`, `response.output_text.delta`).
 
-Open Responses defines a common set of streaming events supported by a quorum of model providers, and defines how provider-specific streaming events can be defined.
+Open Responses establishes a common set of streaming events supported by a quorum of model providers, and defines how provider-specific streaming events can be structured.
 
-## State machines
+## State Machines
 
-Objects in Open Responses are state machines, that is, they can live in one of a finite number of states, such as `in_progress`, `completed`, or `failed`. The spec defines the set of valid states for each state machine in the API.
+Objects in Open Responses are state machines—that is, they can live in one of a finite number of states, such as `in_progress`, `completed`, or `failed`. The spec defines the set of valid states for each state machine in the API.
 
 # Specification
 
@@ -181,7 +181,7 @@ WebSocket failures MUST be sent as a JSON `error` envelope with a `status` code 
 
 ## Items
 
-Items are the core unit of context in Open Responses. Open Responses defines a few types of items that are common to all providers, such as `message` or `function_call`, and defines how to define additional, provider-specific item types. There are some general principles that apply to all items:
+Items are the core unit of context in Open Responses. Open Responses defines a few types of items that are common to all providers, such as `message` or `function_call`, and defines how to structure additional, provider-specific item types. There are some general principles that apply to all items:
 
 ### Items are polymorphic
 
@@ -224,17 +224,17 @@ Item shapes can vary depending on what purpose they serve. A `message` item, for
 
 In Open Responses, all items have a lifecycle. They can be `in_progress` if the model is sampling the current item, `incomplete` if the model exhausts its token budget before sampling finishes, or `completed` when they are fully done sampling.
 
-It's important to note that while items follow a state machine model—transitioning through these defined states—this does not necessarily mean they are stateful in the sense of being persisted to disk or stored long-term. The state machine describes the item's status within the response flow, but persistence is a separate concern and is not implied by the item's state transitions.
+It's important to note that while items follow a state machine model, transitioning through these defined states, this does not necessarily mean they are stateful in the sense of being persisted to disk or stored long-term. The state machine describes the item's status within the response flow, but persistence is a separate concern and is not implied by the item's state transitions.
 
 All item types should have these three basic status:
 
-- `in_progress` - the model is currently emitting tokens belonging to this item
-- `incomplete` - the model has exhausted its token budget while emitting tokens belonging to this item. This is a terminal state. If an item ends in a terminal state, it MUST be the last item emitted, and the containing response also MUST be in an `incomplete` state.
-- `completed` - the model has finished emitting tokens containing the item, and / or a tool call has completed successfully. This is a terminal status and no updates may be made to the item after the item has moved into this state.
+- `in_progress`: The model is currently emitting tokens belonging to this item
+- `incomplete`: The model has exhausted its token budget while emitting tokens belonging to this item. This is a terminal state. If an item ends in a terminal state, it MUST be the last item emitted, and the containing response also MUST be in an `incomplete` state.
+- `completed`: The model has finished emitting tokens containing the item, and/or a tool call has completed successfully. This is a terminal status, and no updates may be made to the item after the item has moved into this state.
 
 ### Items are streamable
 
-As items change states or values w/in an item change, Open Responses defines how those updates should be communicated in a response stream.
+As items change states or values within an item change, Open Responses defines how those updates should be communicated in a response stream.
 
 1. The first event MUST always be `response.output_item.added`. The item is echoed in the payload with as much detail as is available at that time. For `messages`, this means at least the `role`, and for `function_call`, this is at least the `name`. All fields not marked nullable MUST have a value. Use zero values where applicable.
 
@@ -343,7 +343,7 @@ As items change states or values w/in an item change, Open Responses defines how
 
 ### Items are extensible
 
-Model providers may emit their own types of items not contained in the Open Responses spec. These items MUST be prefixed with the canonical provider slug, eg
+Model providers may emit their own types of items not contained in the Open Responses spec. These items MUST be prefixed with the canonical provider slug, e.g.:
 
 ```json
 {
@@ -365,8 +365,8 @@ In Open Responses, “content” represents the raw material exchanged between t
 
 There are two top-level content unions:
 
-- **`UserContent`**: structured data provided by the user or client application.
-- **`ModelContent`**: structured data returned by the model.
+- **`UserContent`**: structured data provided by the user or client application
+- **`ModelContent`**: structured data returned by the model
 
 This distinction reflects the asymmetric nature of conversation turns. User inputs can include multiple modalities (e.g. text, images, audio, video), while model outputs are usually restricted to text, at least in the base protocol. Keeping these unions separate allows model providers to evolve their output schemas independently (for example, adding `output_image` or `output_tool_call` in the future) without over-generalizing the user side.
 
@@ -487,13 +487,13 @@ Other examples include:
 
 ## Tools
 
-Tool-use is at the heart of modern LLM’s agentic capabilities. There are generally two types of tools that can be exposed in Open Responses:
+Tool use is at the heart of modern LLM’s agentic capabilities. There are generally two types of tools that can be exposed in Open Responses:
 
-### Externally-hosted tools
+### Externally hosted tools
 
 Externally hosted tools are ones where the implementation lives outside of the model provider’s system. Functions are a great example, where the LLM is able to call the function, but the developer must run the function and return the output back to the LLM in a second request. MCP is another example, where external servers host the implementations, although control is not first yielded back to the developer.
 
-### Internally-hosted tools
+### Internally hosted tools
 
 Internally hosted tools are ones where the implementation lives inside the model provider’s system. An example is OpenAI’s file search tool, where the model is able to call file search, and the tool can execute and return results to the LLM without yielding control back to the developer.
 
@@ -551,7 +551,7 @@ Servers MUST enforce `allowed_tools` as a hard constraint:
 - If `allowed_tools` is present, any tool call to a tool not listed MUST be rejected or suppressed by the server (e.g., by treating it as a model error, translating it into a direct reply, or applying provider-specific fallback behavior).
 - Providers MAY also use `allowed_tools` as a training or routing hint, but this MUST NOT weaken the enforcement guarantee.
 
-Conceptually, `tools` defines the full tool universe visible to the model, while `allowed_tools` defines the subset that is executable for this request. This separation enables fine-grained, per-request tool governance—such as tenant-level policies, user roles, or feature flags—without requiring the client to rebuild or re-send large tool schemas or system prompts.
+Conceptually, `tools` defines the full tool universe visible to the model, while `allowed_tools` defines the subset that is executable for this request. This separation enables fine-grained, per-request tool governance—such as tenant-level policies, user roles, or feature flags—without requiring the client to rebuild or resend large tool schemas or system prompts.
 
 <details>
     <summary>**Example:**</summary>
@@ -630,11 +630,11 @@ Servers MAY expose multiple tiers (for example, `standard`, `priority`, or `batc
 
 In this example, the client requests the `custom_document_search` hosted tool exposed by the implementer. The implementer executes the tool directly, returning results to the client and abstracting away the internal workings.
 
-## The Agentic loop
+## The Agentic Loop
 
 The agentic loop is the core principle that enables Open Responses to interact intelligently with users, reason about tasks, and invoke tools as needed to complete complex workflows. In this loop, the language model analyzes the user's request, determines whether it can answer directly or needs to use a tool, and issues tool calls as required.
 
-When a tool needs to be used, the model emits a tool invocation event, such as a function call or a hosted tool call, containing the necessary parameters. For externally-hosted tools, the execution happens outside the model provider, and the result is returned in a follow-up request. For internally-hosted tools, the model provider executes the tool and immediately streams back the results.
+When a tool needs to be used, the model emits a tool invocation event, such as a function call or a hosted tool call, containing the necessary parameters. For externally hosted tools, the execution happens outside the model provider, and the result is returned in a follow-up request. For internally hosted tools, the model provider executes the tool and immediately streams back the results.
 
 This loop of reasoning, tool invocation, and response generation can repeat multiple times within a session, allowing the model to gather information, process data, or take actions through tools before producing a final answer for the user.
 
@@ -695,7 +695,7 @@ In this example, the client requests the `implementor_slug:custom_document_searc
 
 When building custom tools, the tool should have its own item type that provides developers a receipt of what occurred during tool call execution. The item at minimum should contain a representation of how the model invoked the tool, the status of the tool call, and the result from the tool.
 
-In the above example, as output the API may emit the following item as output:
+In the above example, the API may emit the following item as output:
 
 ```json
 {
@@ -714,7 +714,7 @@ In the above example, as output the API may emit the following item as output:
 
 ```
 
-The item’s schema should allow for enough information to pass to the developer that it can be round-tripped back to the API for lossless rehydration on a followup request.
+The item’s schema should allow for enough information to pass to the developer that it can be round-tripped back to the API for lossless rehydration on a follow-up request.
 
 ### Extending Items
 
@@ -794,6 +794,6 @@ To mitigate this, extensions to existing schemas SHOULD follow these guidelines:
 - Keep all standard fields intact and unchanged in meaning; extensions MUST NOT alter required core behavior.
 - Prefer optional fields so that portable clients can ignore them safely.
 - Document extension fields clearly, including their types, allowed values, and failure modes.
-- Avoid building cross-vendor contracts on top of non-standard fields; instead, propose commonly-used patterns for inclusion in the core spec via the TSC process.
+- Avoid building cross-vendor contracts on top of non-standard fields; instead, propose commonly used patterns for inclusion in the core spec via the TSC process.
 
 In practice, this means that extending existing schemas is an acceptable way to evolve an implementation, but implementors SHOULD treat those extensions as vendor-specific and avoid assuming that other Open Responses-compatible APIs will recognize or honor them.
