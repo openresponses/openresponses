@@ -140,6 +140,53 @@ export async function parseSSEStream(
 
   const decoder = new TextDecoder();
   let buffer = "";
+  let currentEvent = "";
+  let currentDataLines: string[] = [];
+
+  const getFieldValue = (value: string) => {
+    const fieldValue = value.endsWith("\r") ? value.slice(0, -1) : value;
+    return fieldValue.startsWith(" ") ? fieldValue.slice(1) : fieldValue;
+  };
+
+  const dispatchEvent = () => {
+    if (currentDataLines.length === 0) return;
+
+    const currentData = currentDataLines.join("\n");
+    if (currentData === "[DONE]") {
+      // Skip the [DONE] sentinel - it's not a real event
+    } else {
+      try {
+        const parsed = JSON.parse(currentData);
+        const parsedEvent = parseStreamingEventData(parsed, currentEvent);
+        events.push(parsedEvent);
+
+        if (!parsedEvent.validationResult.success) {
+          errors.push(
+            `Event validation failed for ${parsedEvent.event}: ${JSON.stringify(parsedEvent.validationResult.error.issues)}`,
+          );
+        }
+
+        finalResponse = getTerminalResponse(parsed) ?? finalResponse;
+      } catch {
+        errors.push(`Failed to parse event data: ${currentData}`);
+      }
+    }
+
+    currentEvent = "";
+    currentDataLines = [];
+  };
+
+  const processLine = (line: string) => {
+    if (line.endsWith("\r")) line = line.slice(0, -1);
+
+    if (line.startsWith("event:")) {
+      currentEvent = getFieldValue(line.slice(6));
+    } else if (line.startsWith("data:")) {
+      currentDataLines.push(getFieldValue(line.slice(5)));
+    } else if (line === "") {
+      dispatchEvent();
+    }
+  };
 
   try {
     while (true) {
@@ -150,39 +197,18 @@ export async function parseSSEStream(
       const lines = buffer.split("\n");
       buffer = lines.pop() || "";
 
-      let currentEvent = "";
-      let currentData = "";
-
       for (const line of lines) {
-        if (line.startsWith("event:")) {
-          currentEvent = line.slice(6).trim();
-        } else if (line.startsWith("data:")) {
-          currentData = line.slice(5).trim();
-        } else if (line === "" && currentData) {
-          if (currentData === "[DONE]") {
-            // Skip the [DONE] sentinel - it's not a real event
-          } else {
-            try {
-              const parsed = JSON.parse(currentData);
-              const parsedEvent = parseStreamingEventData(parsed, currentEvent);
-              events.push(parsedEvent);
-
-              if (!parsedEvent.validationResult.success) {
-                errors.push(
-                  `Event validation failed for ${parsedEvent.event}: ${JSON.stringify(parsedEvent.validationResult.error.issues)}`,
-                );
-              }
-
-              finalResponse = getTerminalResponse(parsed) ?? finalResponse;
-            } catch {
-              errors.push(`Failed to parse event data: ${currentData}`);
-            }
-          }
-          currentEvent = "";
-          currentData = "";
-        }
+        processLine(line);
       }
     }
+
+    buffer += decoder.decode();
+    if (buffer) {
+      for (const line of buffer.split("\n")) {
+        processLine(line);
+      }
+    }
+    dispatchEvent();
   } finally {
     reader.releaseLock();
   }
