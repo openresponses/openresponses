@@ -11,9 +11,9 @@ import { z } from "zod";
 export const responseReasoningDeltaStreamingEventSchema = z
   .object({
     type: z
-      .enum(["response.reasoning.delta"])
-      .default("response.reasoning.delta")
-      .describe("The type of the event, always `response.reasoning.delta`."),
+      .enum(["response.reasoning_text.delta"])
+      .default("response.reasoning_text.delta")
+      .describe("The type of the event, always `response.reasoning_text.delta`."),
     sequence_number: z
       .number()
       .int()

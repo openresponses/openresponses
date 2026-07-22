@@ -2,9 +2,9 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": ["response.reasoning.done"],
-      "description": "The type of the event, always `response.reasoning.done`.",
-      "default": "response.reasoning.done",
+      "enum": ["response.reasoning_text.done"],
+      "description": "The type of the event, always `response.reasoning_text.done`.",
+      "default": "response.reasoning_text.done",
       "x-stainless-const": true
     },
     "sequence_number": {

@@ -3485,9 +3485,9 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["response.reasoning.delta"],
-            "description": "The type of the event, always `response.reasoning.delta`.",
-            "default": "response.reasoning.delta"
+            "enum": ["response.reasoning_text.delta"],
+            "description": "The type of the event, always `response.reasoning_text.delta`.",
+            "default": "response.reasoning_text.delta"
           },
           "sequence_number": {
             "type": "integer",
@@ -3530,9 +3530,9 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["response.reasoning.done"],
-            "description": "The type of the event, always `response.reasoning.done`.",
-            "default": "response.reasoning.done"
+            "enum": ["response.reasoning_text.done"],
+            "description": "The type of the event, always `response.reasoning_text.done`.",
+            "default": "response.reasoning_text.done"
           },
           "sequence_number": {
             "type": "integer",

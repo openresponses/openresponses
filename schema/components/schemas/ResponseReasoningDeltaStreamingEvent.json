@@ -2,9 +2,9 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": ["response.reasoning.delta"],
-      "description": "The type of the event, always `response.reasoning.delta`.",
-      "default": "response.reasoning.delta",
+      "enum": ["response.reasoning_text.delta"],
+      "description": "The type of the event, always `response.reasoning_text.delta`.",
+      "default": "response.reasoning_text.delta",
       "x-stainless-const": true
     },
     "sequence_number": {
