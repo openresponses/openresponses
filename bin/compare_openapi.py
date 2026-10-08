@@ -335,6 +335,12 @@ def prepare_document(document):
         for key in fields & node.keys():
             docs[pointer(path, key)] = node[key]
             result.pop(key)
+        if kind == "document" and result.get("tags") == []:
+            result.pop("tags")
+        if kind == "server" and result.get("variables") == {}:
+            result.pop("variables")
+        if kind == "request_body" and result.get("required") is False:
+            result.pop("required")
         return normalize(result) if kind == "schema" else result
 
     return visit(document, "document", ""), docs

@@ -43,7 +43,6 @@ model TextParam {
   format?: TextFormatParam | null;
 
   /** Controls the level of detail in generated text output. */
-  @refDoc
   verbosity?: VerbosityEnum;
 }
 
@@ -100,7 +99,6 @@ model ReasoningParam {
   effort?: ReasoningEffortEnum | null;
 
   /** Controls whether the response includes a reasoning summary. */
-  @refDoc
   summary?: ReasoningSummaryEnum | null;
 }
 
@@ -162,7 +160,6 @@ model Reasoning {
   effort: ReasoningEffortEnum | null;
 
   /** A model-generated summary of its reasoning that was produced, if available. */
-  @refDoc
   summary: ReasoningSummaryEnum | null;
 }
 

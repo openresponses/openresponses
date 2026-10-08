@@ -12,7 +12,6 @@ model ResponseCreatedStreamingEvent {
   sequence_number: integer;
 
   /** The response snapshot that was emitted with the event. */
-  @refDoc
   response: ResponseResource;
 }
 
@@ -26,7 +25,6 @@ model ResponseQueuedStreamingEvent {
   sequence_number: integer;
 
   /** The response snapshot that was emitted with the event. */
-  @refDoc
   response: ResponseResource;
 }
 
@@ -40,7 +38,6 @@ model ResponseInProgressStreamingEvent {
   sequence_number: integer;
 
   /** The response snapshot that was emitted with the event. */
-  @refDoc
   response: ResponseResource;
 }
 
@@ -54,7 +51,6 @@ model ResponseCompletedStreamingEvent {
   sequence_number: integer;
 
   /** The response snapshot that was emitted with the event. */
-  @refDoc
   response: ResponseResource;
 }
 
@@ -68,7 +64,6 @@ model ResponseFailedStreamingEvent {
   sequence_number: integer;
 
   /** The response snapshot that was emitted with the event. */
-  @refDoc
   response: ResponseResource;
 }
 
@@ -82,7 +77,6 @@ model ResponseIncompleteStreamingEvent {
   sequence_number: integer;
 
   /** The response snapshot that was emitted with the event. */
-  @refDoc
   response: ResponseResource;
 }
 
@@ -102,7 +96,6 @@ model ResponseOutputItemAddedStreamingEvent {
    * An item representing a message, tool call, tool output, reasoning, or other
    * response element.
    */
-  @refDoc
   item: ItemField | null;
 }
 
@@ -122,7 +115,6 @@ model ResponseOutputItemDoneStreamingEvent {
    * An item representing a message, tool call, tool output, reasoning, or other
    * response element.
    */
-  @refDoc
   item: ItemField | null;
 }
 
@@ -467,7 +459,6 @@ model ResponseOutputTextAnnotationAddedStreamingEvent {
   annotation_index: integer;
 
   /** An annotation that applies to a span of output text. */
-  @refDoc
   annotation: Annotation | null;
 }
 
@@ -543,7 +534,6 @@ model ErrorStreamingEvent {
   sequence_number: integer;
 
   /** The error payload that was emitted. */
-  @refDoc
   error: ErrorPayload;
 }
 

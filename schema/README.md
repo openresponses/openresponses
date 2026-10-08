@@ -22,9 +22,8 @@ source. Keep descriptions above fields, not inside type arguments. The scalar
 helpers apply constraints and defaults to individual union members.
 
 `helpers.tsp`, `decorators.mjs`, and `emitter.mjs` handle the schema forms and
-metadata the standard emitter cannot preserve directly. Keep `@refDoc` on
-reference descriptions: its `allOf` wrapper lets generated Zod validators
-preserve unknown nested fields.
+metadata the standard emitter cannot preserve directly. Kubb compatibility
+belongs in `kubb.config.ts`, not in the TypeSpec definitions or published schema.
 
 ## Checking changes
 

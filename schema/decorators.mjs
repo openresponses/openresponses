@@ -50,10 +50,6 @@ export function $arrayDoc(context, property, description) {
   );
 }
 
-export function $refDoc(context, property) {
-  setExtension(context.program, property, "x-typespec-ref-description", true);
-}
-
 export function $intersect(context, model, base) {
   setExtension(
     context.program,

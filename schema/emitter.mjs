@@ -15,21 +15,6 @@ function arrays(schema) {
 
 function finishSchema(schema) {
   if (typeof schema !== "object" || schema === null) return;
-  if (schema.description === "") delete schema.description;
-  const referenceDocumentation = schema["x-typespec-ref-description"];
-  delete schema["x-typespec-ref-description"];
-  if (referenceDocumentation) {
-    const refDescription = schema.description;
-    delete schema.description;
-    const target = schema.$ref
-      ? schema
-      : schema.anyOf?.find((branch) => branch.$ref);
-    if (!target)
-      throw new Error("@refDoc requires a reference or nullable reference");
-    const ref = target.$ref;
-    delete target.$ref;
-    target.allOf = [{ $ref: ref }, { description: refDescription }];
-  }
   if (schema["x-typespec-nullable-one-of"]) {
     delete schema["x-typespec-nullable-one-of"];
     const alternatives = schema.anyOf.filter(
@@ -80,12 +65,6 @@ export async function $onEmit(context) {
     document.components.securitySchemes =
       document["x-openresponses-security-schemes"];
     delete document["x-openresponses-security-schemes"];
-    if (document.tags?.length === 0) delete document.tags;
-    for (const server of document.servers ?? []) {
-      if (server.description === "") delete server.description;
-      if (Object.keys(server.variables ?? {}).length === 0)
-        delete server.variables;
-    }
     for (const item of Object.values(document.paths)) {
       for (const operation of Object.values(item)) {
         if (operation["x-openresponses-websocket"]) {
@@ -93,8 +72,6 @@ export async function $onEmit(context) {
             operation["x-openresponses-websocket"];
           delete operation["x-openresponses-websocket"];
         }
-        if (operation.requestBody?.required === false)
-          delete operation.requestBody.required;
       }
     }
     for (const [name, schema] of Object.entries(document.components.schemas)) {

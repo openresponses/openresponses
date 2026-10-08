@@ -62,7 +62,6 @@ model AllowedToolsParam {
   tools: SpecificToolChoiceParam[];
 
   /** How to select a tool from the allowed set. */
-  @refDoc
   mode?: ToolChoiceValueEnum;
 }
 

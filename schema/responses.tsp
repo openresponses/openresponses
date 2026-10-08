@@ -25,7 +25,6 @@ model CreateResponseBody {
 
   /** Controls which tool the model should use, if any. */
   @extension("x-unionTitle", "ToolChoiceParam")
-  @refDoc
   tool_choice?: ToolChoiceParam | null;
 
   /**
@@ -35,11 +34,9 @@ model CreateResponseBody {
    * length of 64 characters. Values are strings with a maximum length of 512
    * characters.
    */
-  @refDoc
   metadata?: MetadataParam | null;
 
   /** Configuration options for text output. */
-  @refDoc
   text?: TextParam | null;
 
   /**
@@ -67,7 +64,6 @@ model CreateResponseBody {
   stream?: boolean;
 
   /** Options that control streamed response behavior. */
-  @refDoc
   stream_options?: StreamOptionsParam | null;
 
   /** Whether to run the request in the background and return immediately. */
@@ -82,7 +78,6 @@ model CreateResponseBody {
   max_tool_calls?: MinInteger<1> | null;
 
   /** Configuration options for reasoning behavior. */
-  @refDoc
   reasoning?: ReasoningParam | null;
 
   /** A stable identifier used for safety monitoring and abuse detection. */
@@ -95,7 +90,6 @@ model CreateResponseBody {
    * Controls how the service truncates the input when it exceeds the model context
    * window.
    */
-  @refDoc
   truncation?: TruncationEnum;
 
   /** Additional instructions to guide the model for this request. */
@@ -105,7 +99,6 @@ model CreateResponseBody {
   store?: boolean;
 
   /** The service tier to use for this request. */
-  @refDoc
   service_tier?: ServiceTierEnum;
 
   /**
@@ -159,11 +152,9 @@ model Usage {
   total_tokens: integer;
 
   /** A breakdown of input token usage that was recorded. */
-  @refDoc
   input_tokens_details: InputTokensDetails;
 
   /** A breakdown of output token usage that was recorded. */
-  @refDoc
   output_tokens_details: OutputTokensDetails;
 }
 
@@ -237,7 +228,6 @@ model ResponseResource {
   status: string;
 
   /** Details about why the response was incomplete, if applicable. */
-  @refDoc
   incomplete_details: IncompleteDetails | null;
 
   /** The model that generated this response. */
@@ -253,7 +243,6 @@ model ResponseResource {
   output: ItemField[];
 
   /** The error that occurred, if the response failed. */
-  @refDoc
   error: Error | null;
 
   /** The tools that were available to the model during response generation. */
@@ -266,14 +255,12 @@ model ResponseResource {
    * How the input was truncated by the service when it exceeded the model context
    * window.
    */
-  @refDoc
   truncation: TruncationEnum;
 
   /** Whether the model was allowed to call multiple tools in parallel. */
   parallel_tool_calls: boolean;
 
   /** Configuration options for text output that were used. */
-  @refDoc
   text: TextField;
 
   /** The nucleus sampling parameter that was used for this response. */
@@ -301,11 +288,9 @@ model ResponseResource {
   temperature: numeric;
 
   /** Reasoning configuration and outputs that were produced for this response. */
-  @refDoc
   reasoning: Reasoning | null;
 
   /** Token usage statistics that were recorded for the response, if available. */
-  @refDoc
   usage: Usage | null;
 
   /**
@@ -430,6 +415,5 @@ model CompactResource {
    * Token accounting for the compaction pass, including cached, reasoning, and total
    * tokens.
    */
-  @refDoc
   usage: Usage;
 }

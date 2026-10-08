@@ -235,6 +235,28 @@ def test_document_and_operation_contract_changes_fail(documents, path, value):
 
 
 @pytest.mark.parametrize(
+    "path, default, changed",
+    [
+        (("tags",), [], [{"name": "new"}]),
+        (("servers", 0, "variables"), {}, {"region": {"default": "us"}}),
+        (("paths", "/responses", "post", "requestBody", "required"), False, True),
+    ],
+)
+def test_openapi_defaults_are_equivalent_but_nondefaults_are_detected(
+    documents, path, default, changed
+):
+    baseline, generated = documents
+    target = generated
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = default
+    assert not compare_documents(baseline, generated)[0]
+    assert not compare_documents(generated, baseline)[0]
+    target[path[-1]] = changed
+    assert compare_documents(baseline, generated)[0]
+
+
+@pytest.mark.parametrize(
     "path",
     [
         ("paths", "/responses/compact"),

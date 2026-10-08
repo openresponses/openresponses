@@ -172,7 +172,6 @@ model FunctionCallItemParam {
   arguments: string;
 
   /** The status of the function tool call. */
-  @refDoc
   status?: FunctionCallStatus | null;
 }
 
@@ -214,7 +213,6 @@ model FunctionCallOutputItemParam {
    * The status of the item. One of `in_progress`, `completed`, or `incomplete`.
    * Populated when items are returned via API.
    */
-  @refDoc
   status?: FunctionCallStatus | null;
 }
 
@@ -278,14 +276,12 @@ model Message {
    * The status of item. One of `in_progress`, `completed`, or `incomplete`. Populated
    * when items are returned via API.
    */
-  @refDoc
   status: MessageStatus;
 
   /**
    * The role of the message. One of `unknown`, `user`, `assistant`, `system`, `critic`,
    * `discriminator`, `developer`, or `tool`.
    */
-  @refDoc
   role: MessageRole;
 
   /** The content of the message */
@@ -344,7 +340,6 @@ model FunctionCall {
   arguments: string;
 
   /** The status of the function call item that was recorded. */
-  @refDoc
   status: FunctionCallStatus;
 }
 
@@ -387,7 +382,6 @@ model FunctionCallOutput {
    * The status of the item. One of `in_progress`, `completed`, or `incomplete`.
    * Populated when items are returned via API.
    */
-  @refDoc
   status: FunctionCallOutputStatusEnum;
 }
 

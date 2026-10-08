@@ -54,7 +54,6 @@ model InputImageContentParamAutoParam {
    * The detail level of the image to be sent to the model. One of `high`, `low`, or
    * `auto`. Defaults to `auto`.
    */
-  @refDoc
   detail?: ImageDetail | null;
 }
 
@@ -250,7 +249,6 @@ model InputImageContent {
    * The detail level of the image to be sent to the model. One of `high`, `low`, or
    * `auto`. Defaults to `auto`.
    */
-  @refDoc
   detail: ImageDetail;
 }
 
