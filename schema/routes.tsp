@@ -41,7 +41,7 @@ alias StreamingEvent =
   | ResponseFunctionCallArgumentsDoneStreamingEvent
   | ErrorStreamingEvent;
 
-@doc("Success")
+/** Success */
 model SuccessfulResponse<
   Body,
   ContentType extends string = "application/json"
@@ -54,10 +54,10 @@ model SuccessfulResponse<
   body: Body;
 }
 
+/** Creates a response. */
 @route("/responses")
 @post
 @summary("Create response")
-@doc("Creates a response.")
 @operationId("createResponse")
 @extension(
   "x-openresponses-websocket",
@@ -78,10 +78,10 @@ op createResponse(
   "text/event-stream"
 >;
 
+/** Compact a conversation. Returns a compacted response object. */
 @route("/responses/compact")
 @post
 @summary("Compact a response")
-@doc("Compact a conversation. Returns a compacted response object.")
 @operationId("compactResponse")
 @extension("x-openresponses-added-in", "2026-04-24")
 op compactResponse(

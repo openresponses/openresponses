@@ -2,135 +2,149 @@ using TypeSpec.OpenAPI;
 using OpenResponsesSchema;
 namespace OpenResponses;
 
+/** A streaming event that indicated the response was created. */
 @summary("Response created event")
-@doc("A streaming event that indicated the response was created.")
 model ResponseCreatedStreamingEvent {
-  @doc("The type of the event, always `response.created`.")
+  /** The type of the event, always `response.created`. */
   type: "response.created" = "response.created";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The response snapshot that was emitted with the event.")
+  /** The response snapshot that was emitted with the event. */
+  @refDoc
   response: ResponseResource;
 }
 
+/** A streaming event that indicated the response was queued. */
 @summary("Response queued event")
-@doc("A streaming event that indicated the response was queued.")
 model ResponseQueuedStreamingEvent {
-  @doc("The type of the event, always `response.queued`.")
+  /** The type of the event, always `response.queued`. */
   type: "response.queued" = "response.queued";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The response snapshot that was emitted with the event.")
+  /** The response snapshot that was emitted with the event. */
+  @refDoc
   response: ResponseResource;
 }
 
+/** A streaming event that indicated the response was in progress. */
 @summary("Response in progress event")
-@doc("A streaming event that indicated the response was in progress.")
 model ResponseInProgressStreamingEvent {
-  @doc("The type of the event, always `response.in_progress`.")
+  /** The type of the event, always `response.in_progress`. */
   type: "response.in_progress" = "response.in_progress";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The response snapshot that was emitted with the event.")
+  /** The response snapshot that was emitted with the event. */
+  @refDoc
   response: ResponseResource;
 }
 
+/** A streaming event that indicated the response was completed. */
 @summary("Response completed event")
-@doc("A streaming event that indicated the response was completed.")
 model ResponseCompletedStreamingEvent {
-  @doc("The type of the event, always `response.completed`.")
+  /** The type of the event, always `response.completed`. */
   type: "response.completed" = "response.completed";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The response snapshot that was emitted with the event.")
+  /** The response snapshot that was emitted with the event. */
+  @refDoc
   response: ResponseResource;
 }
 
+/** A streaming event that indicated the response had failed. */
 @summary("Response failed event")
-@doc("A streaming event that indicated the response had failed.")
 model ResponseFailedStreamingEvent {
-  @doc("The type of the event, always `response.failed`.")
+  /** The type of the event, always `response.failed`. */
   type: "response.failed" = "response.failed";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The response snapshot that was emitted with the event.")
+  /** The response snapshot that was emitted with the event. */
+  @refDoc
   response: ResponseResource;
 }
 
+/** A streaming event that indicated the response was incomplete. */
 @summary("Response incomplete event")
-@doc("A streaming event that indicated the response was incomplete.")
 model ResponseIncompleteStreamingEvent {
-  @doc("The type of the event, always `response.incomplete`.")
+  /** The type of the event, always `response.incomplete`. */
   type: "response.incomplete" = "response.incomplete";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The response snapshot that was emitted with the event.")
+  /** The response snapshot that was emitted with the event. */
+  @refDoc
   response: ResponseResource;
 }
 
+/** A streaming event that indicated an output item was added to the response. */
 @summary("Response output item added event")
-@doc("A streaming event that indicated an output item was added to the response.")
 model ResponseOutputItemAddedStreamingEvent {
-  @doc("The type of the event, always `response.output_item.added`.")
+  /** The type of the event, always `response.output_item.added`. */
   type: "response.output_item.added" = "response.output_item.added";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The index of the output item that was added.")
+  /** The index of the output item that was added. */
   output_index: integer;
 
-  @refDoc("An item representing a message, tool call, tool output, reasoning, or other response element.")
+  /**
+   * An item representing a message, tool call, tool output, reasoning, or other
+   * response element.
+   */
+  @refDoc
   item: ItemField | null;
 }
 
+/** A streaming event that indicated an output item was completed. */
 @summary("Response output item done event")
-@doc("A streaming event that indicated an output item was completed.")
 model ResponseOutputItemDoneStreamingEvent {
-  @doc("The type of the event, always `response.output_item.done`.")
+  /** The type of the event, always `response.output_item.done`. */
   type: "response.output_item.done" = "response.output_item.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The index of the output item that was completed.")
+  /** The index of the output item that was completed. */
   output_index: integer;
 
-  @refDoc("An item representing a message, tool call, tool output, reasoning, or other response element.")
+  /**
+   * An item representing a message, tool call, tool output, reasoning, or other
+   * response element.
+   */
+  @refDoc
   item: ItemField | null;
 }
 
+/** A streaming event that indicated a reasoning summary part was added. */
 @summary("Response reasoning summary part added event")
-@doc("A streaming event that indicated a reasoning summary part was added.")
 model ResponseReasoningSummaryPartAddedStreamingEvent {
-  @doc("The type of the event, always `response.reasoning_summary_part.added`.")
+  /** The type of the event, always `response.reasoning_summary_part.added`. */
   type: "response.reasoning_summary_part.added" = "response.reasoning_summary_part.added";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the summary part that was added.")
+  /** The index of the summary part that was added. */
   summary_index: integer;
 
-  @doc("A content part that makes up an input or output item.")
+  /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
   part:
@@ -144,25 +158,25 @@ model ResponseReasoningSummaryPartAddedStreamingEvent {
     | InputFileContent;
 }
 
+/** A streaming event that indicated a reasoning summary part was completed. */
 @summary("Response reasoning summary part done event")
-@doc("A streaming event that indicated a reasoning summary part was completed.")
 model ResponseReasoningSummaryPartDoneStreamingEvent {
-  @doc("The type of the event, always `response.reasoning_summary_part.done`.")
+  /** The type of the event, always `response.reasoning_summary_part.done`. */
   type: "response.reasoning_summary_part.done" = "response.reasoning_summary_part.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the summary part that was completed.")
+  /** The index of the summary part that was completed. */
   summary_index: integer;
 
-  @doc("A content part that makes up an input or output item.")
+  /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
   part:
@@ -176,25 +190,25 @@ model ResponseReasoningSummaryPartDoneStreamingEvent {
     | InputFileContent;
 }
 
+/** A streaming event that indicated a content part was added. */
 @summary("Response content part added event")
-@doc("A streaming event that indicated a content part was added.")
 model ResponseContentPartAddedStreamingEvent {
-  @doc("The type of the event, always `response.content_part.added`.")
+  /** The type of the event, always `response.content_part.added`. */
   type: "response.content_part.added" = "response.content_part.added";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the content part that was added.")
+  /** The index of the content part that was added. */
   content_index: integer;
 
-  @doc("A content part that makes up an input or output item.")
+  /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
   part:
@@ -208,25 +222,25 @@ model ResponseContentPartAddedStreamingEvent {
     | InputFileContent;
 }
 
+/** A streaming event that indicated a content part was completed. */
 @summary("Response content part done event")
-@doc("A streaming event that indicated a content part was completed.")
 model ResponseContentPartDoneStreamingEvent {
-  @doc("The type of the event, always `response.content_part.done`.")
+  /** The type of the event, always `response.content_part.done`. */
   type: "response.content_part.done" = "response.content_part.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the content part that was completed.")
+  /** The index of the content part that was completed. */
   content_index: integer;
 
-  @doc("A content part that makes up an input or output item.")
+  /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
   part:
@@ -240,342 +254,361 @@ model ResponseContentPartDoneStreamingEvent {
     | InputFileContent;
 }
 
+/** A streaming event that indicated output text was incrementally added. */
 @summary("Response output text delta event")
-@doc("A streaming event that indicated output text was incrementally added.")
 model ResponseOutputTextDeltaStreamingEvent {
-  @doc("The type of the event, always `response.output_text.delta`.")
+  /** The type of the event, always `response.output_text.delta`. */
   type: "response.output_text.delta" = "response.output_text.delta";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the content part that was updated.")
+  /** The index of the content part that was updated. */
   content_index: integer;
 
-  @doc("The text delta that was appended.")
+  /** The text delta that was appended. */
   delta: string;
 
-  @doc("The token log probabilities that were emitted with the delta, if any.")
+  /** The token log probabilities that were emitted with the delta, if any. */
   logprobs?: LogProb[];
 
-  @doc("An obfuscation string that was added to pad the event payload.")
+  /** An obfuscation string that was added to pad the event payload. */
   obfuscation?: string;
 }
 
+/** A streaming event that indicated output text was completed. */
 @summary("Response output text done event")
-@doc("A streaming event that indicated output text was completed.")
 model ResponseOutputTextDoneStreamingEvent {
-  @doc("The type of the event, always `response.output_text.done`.")
+  /** The type of the event, always `response.output_text.done`. */
   type: "response.output_text.done" = "response.output_text.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the content part that was completed.")
+  /** The index of the content part that was completed. */
   content_index: integer;
 
-  @doc("The final text that was emitted.")
+  /** The final text that was emitted. */
   text: string;
 
-  @doc("The token log probabilities that were emitted with the final text, if any.")
+  /** The token log probabilities that were emitted with the final text, if any. */
   logprobs?: LogProb[];
 }
 
+/** A streaming event that indicated refusal text was incrementally added. */
 @summary("Response refusal delta event")
-@doc("A streaming event that indicated refusal text was incrementally added.")
 model ResponseRefusalDeltaStreamingEvent {
-  @doc("The type of the event, always `response.refusal.delta`.")
+  /** The type of the event, always `response.refusal.delta`. */
   type: "response.refusal.delta" = "response.refusal.delta";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the refusal content that was updated.")
+  /** The index of the refusal content that was updated. */
   content_index: integer;
 
-  @doc("The refusal text delta that was appended.")
+  /** The refusal text delta that was appended. */
   delta: string;
 }
 
+/** A streaming event that indicated refusal text was completed. */
 @summary("Response refusal done event")
-@doc("A streaming event that indicated refusal text was completed.")
 model ResponseRefusalDoneStreamingEvent {
-  @doc("The type of the event, always `response.refusal.done`.")
+  /** The type of the event, always `response.refusal.done`. */
   type: "response.refusal.done" = "response.refusal.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the refusal content that was completed.")
+  /** The index of the refusal content that was completed. */
   content_index: integer;
 
-  @doc("The final refusal text that was emitted.")
+  /** The final refusal text that was emitted. */
   refusal: string;
 }
 
+/** A streaming event that indicated reasoning text was incrementally added. */
 @summary("Response reasoning delta event")
-@doc("A streaming event that indicated reasoning text was incrementally added.")
 model ResponseReasoningDeltaStreamingEvent {
-  @doc("The type of the event, always `response.reasoning.delta`.")
+  /** The type of the event, always `response.reasoning.delta`. */
   type: "response.reasoning.delta" = "response.reasoning.delta";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the reasoning content that was updated.")
+  /** The index of the reasoning content that was updated. */
   content_index: integer;
 
-  @doc("The reasoning text delta that was appended.")
+  /** The reasoning text delta that was appended. */
   delta: string;
 
-  @doc("An obfuscation string that was added to pad the event payload.")
+  /** An obfuscation string that was added to pad the event payload. */
   obfuscation?: string;
 }
 
+/** A streaming event that indicated reasoning text was completed. */
 @summary("Response reasoning done event")
-@doc("A streaming event that indicated reasoning text was completed.")
 model ResponseReasoningDoneStreamingEvent {
-  @doc("The type of the event, always `response.reasoning.done`.")
+  /** The type of the event, always `response.reasoning.done`. */
   type: "response.reasoning.done" = "response.reasoning.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the reasoning content that was completed.")
+  /** The index of the reasoning content that was completed. */
   content_index: integer;
 
-  @doc("The final reasoning text that was emitted.")
+  /** The final reasoning text that was emitted. */
   text: string;
 }
 
+/** A streaming event that indicated a reasoning summary was incrementally added. */
 @summary("Response reasoning summary delta event")
-@doc("A streaming event that indicated a reasoning summary was incrementally added.")
 model ResponseReasoningSummaryDeltaStreamingEvent {
-  @doc("The type of the event, always `response.reasoning_summary.delta`.")
+  /** The type of the event, always `response.reasoning_summary.delta`. */
   type: "response.reasoning_summary_text.delta" = "response.reasoning_summary_text.delta";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the summary content that was updated.")
+  /** The index of the summary content that was updated. */
   summary_index: integer;
 
-  @doc("The summary text delta that was appended.")
+  /** The summary text delta that was appended. */
   delta: string;
 
-  @doc("An obfuscation string that was added to pad the event payload.")
+  /** An obfuscation string that was added to pad the event payload. */
   obfuscation?: string;
 }
 
+/** A streaming event that indicated a reasoning summary was completed. */
 @summary("Response reasoning summary done event")
-@doc("A streaming event that indicated a reasoning summary was completed.")
 model ResponseReasoningSummaryDoneStreamingEvent {
-  @doc("The type of the event, always `response.reasoning_summary.done`.")
+  /** The type of the event, always `response.reasoning_summary.done`. */
   type: "response.reasoning_summary_text.done" = "response.reasoning_summary_text.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the summary content that was completed.")
+  /** The index of the summary content that was completed. */
   summary_index: integer;
 
-  @doc("The final summary text that was emitted.")
+  /** The final summary text that was emitted. */
   text: string;
 }
 
+/** A streaming event that indicated an output text annotation was added. */
 @summary("Response output text annotation added event")
-@doc("A streaming event that indicated an output text annotation was added.")
 model ResponseOutputTextAnnotationAddedStreamingEvent {
-  @doc("The type of the event, always `response.output_text.annotation.added`.")
+  /** The type of the event, always `response.output_text.annotation.added`. */
   type: "response.output_text.annotation.added" = "response.output_text.annotation.added";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the item that was updated.")
+  /** The ID of the item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The index of the output text content that was updated.")
+  /** The index of the output text content that was updated. */
   content_index: integer;
 
-  @doc("The index of the annotation that was added.")
+  /** The index of the annotation that was added. */
   annotation_index: integer;
 
-  @refDoc("An annotation that applies to a span of output text.")
+  /** An annotation that applies to a span of output text. */
+  @refDoc
   annotation: Annotation | null;
 }
 
+/**
+ * A streaming event that indicated function call arguments were incrementally added.
+ */
 @summary("Response function call arguments delta event")
-@doc("A streaming event that indicated function call arguments were incrementally added.")
 model ResponseFunctionCallArgumentsDeltaStreamingEvent {
-  @doc("The type of the event, always `response.function_call_arguments.delta`.")
+  /** The type of the event, always `response.function_call_arguments.delta`. */
   type: "response.function_call_arguments.delta" = "response.function_call_arguments.delta";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the tool call item that was updated.")
+  /** The ID of the tool call item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The arguments delta that was appended.")
+  /** The arguments delta that was appended. */
   delta: string;
 
-  @doc("An obfuscation string that was added to pad the event payload.")
+  /** An obfuscation string that was added to pad the event payload. */
   obfuscation?: string;
 }
 
+/** A streaming event that indicated function call arguments were completed. */
 @summary("Response function call arguments done event")
-@doc("A streaming event that indicated function call arguments were completed.")
 model ResponseFunctionCallArgumentsDoneStreamingEvent {
-  @doc("The type of the event, always `response.function_call_arguments.done`.")
+  /** The type of the event, always `response.function_call_arguments.done`. */
   type: "response.function_call_arguments.done" = "response.function_call_arguments.done";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @doc("The ID of the tool call item that was updated.")
+  /** The ID of the tool call item that was updated. */
   item_id: string;
 
-  @doc("The index of the output item that was updated.")
+  /** The index of the output item that was updated. */
   output_index: integer;
 
-  @doc("The final arguments string that was emitted.")
+  /** The final arguments string that was emitted. */
   arguments: string;
 }
 
+/** An error payload that was emitted for a streaming error event. */
 @summary("Error payload")
-@doc("An error payload that was emitted for a streaming error event.")
 model ErrorPayload {
-  @doc("The error type that was emitted.")
+  /** The error type that was emitted. */
   type: string;
 
-  code: DescribedString<"The error code that was emitted, if any."> | null;
+  /** The error code that was emitted, if any. */
+  code: string | null;
 
-  @doc("The human-readable error message that was emitted.")
+  /** The human-readable error message that was emitted. */
   message: string;
 
-  param: DescribedString<"The parameter name that was associated with the error, if any."> | null;
+  /** The parameter name that was associated with the error, if any. */
+  param: string | null;
 
-  @doc("The response headers that were emitted with the error, if any.")
-  headers?: Record<DescribedString<"The header value that was emitted.">>;
+  /** The response headers that were emitted with the error, if any. */
+  headers?: Record<string>;
 }
 
+/** A streaming event that indicated an error was emitted. */
 @summary("Error event")
-@doc("A streaming event that indicated an error was emitted.")
 model ErrorStreamingEvent {
-  @doc("The type of the event, always `error`.")
+  /** The type of the event, always `error`. */
   type: "error" = "error";
 
-  @doc("The sequence number of the event that was emitted.")
+  /** The sequence number of the event that was emitted. */
   sequence_number: integer;
 
-  @refDoc("The error payload that was emitted.")
+  /** The error payload that was emitted. */
+  @refDoc
   error: ErrorPayload;
 }
 
+/**
+ * A client-sent WebSocket event that starts a Responses turn. It uses the normal
+ * response-create body plus a required `type` field.
+ */
 @summary("WebSocket response create event")
-@doc("A client-sent WebSocket event that starts a Responses turn. It uses the normal response-create body plus a required `type` field.")
 @extension("x-openresponses-added-in", "2026-04-24")
 @intersect(CreateResponseBody)
 model WebSocketResponseCreateEvent {
-  @doc("The client event type. Always `response.create`.")
+  /** The client event type. Always `response.create`. */
   type: "response.create" = "response.create";
 
-  @doc("This HTTP streaming field MUST NOT be sent in WebSocket `response.create` messages.")
+  /**
+   * This HTTP streaming field MUST NOT be sent in WebSocket `response.create` messages.
+   */
   @extension("x-openresponses-disallowed", true)
   @extension("minLength", 1)
   @extension("maxLength", 0)
   stream?: string;
 
-  @doc("This HTTP streaming options field MUST NOT be sent in WebSocket `response.create` messages.")
+  /**
+   * This HTTP streaming options field MUST NOT be sent in WebSocket `response.create`
+   * messages.
+   */
   @extension("x-openresponses-disallowed", true)
   @extension("minLength", 1)
   @extension("maxLength", 0)
   stream_options?: string;
 
-  @doc("This HTTP background-mode field MUST NOT be sent in WebSocket `response.create` messages.")
+  /**
+   * This HTTP background-mode field MUST NOT be sent in WebSocket `response.create`
+   * messages.
+   */
   @extension("x-openresponses-disallowed", true)
   @extension("minLength", 1)
   @extension("maxLength", 0)
   background?: string;
 }
 
+/** A WebSocket error envelope returned for Responses WebSocket mode failures. */
 @summary("WebSocket error event")
-@doc("A WebSocket error envelope returned for Responses WebSocket mode failures.")
 @extension("x-openresponses-added-in", "2026-04-24")
 model WebSocketErrorEvent {
-  @doc("The event type. Always `error`.")
+  /** The event type. Always `error`. */
   type: "error" = "error";
 
-  @doc("The HTTP-style status code for the WebSocket error.")
+  /** The HTTP-style status code for the WebSocket error. */
   status: integer;
 
-  @doc("The WebSocket error payload.")
+  /** The WebSocket error payload. */
   error: {
-    @doc("The error type, when supplied.")
+    /** The error type, when supplied. */
     type?: string;
 
-    @doc("A machine-readable error code.")
+    /** A machine-readable error code. */
     code: string;
 
-    @doc("A human-readable error message.")
+    /** A human-readable error message. */
     message: string;
 
-    param?: DescribedString<"The request parameter associated with the error, when supplied."> | null;
+    /** The request parameter associated with the error, when supplied. */
+    param?: string | null;
+
     ...Record<unknown>;
   };
 }

@@ -418,13 +418,13 @@
           "image_url": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The URL of the image to be sent to the model. A fully qualified URL or base64 encoded image in a data URL."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The URL of the image to be sent to the model. A fully qualified URL or base64\nencoded image in a data URL."
           },
           "detail": {
             "allOf": [
@@ -432,7 +432,7 @@
                 "$ref": "#/components/schemas/ImageDetail"
               },
               {
-                "description": "The detail level of the image to be sent to the model. One of `high`, `low`, or `auto`. Defaults to `auto`."
+                "description": "The detail level of the image to be sent to the model. One of `high`, `low`, or\n`auto`. Defaults to `auto`."
               }
             ]
           }
@@ -498,7 +498,7 @@
                 "$ref": "#/components/schemas/MessageStatus"
               },
               {
-                "description": "The status of item. One of `in_progress`, `completed`, or `incomplete`. Populated when items are returned via API."
+                "description": "The status of item. One of `in_progress`, `completed`, or `incomplete`. Populated\nwhen items are returned via API."
               }
             ]
           },
@@ -508,7 +508,7 @@
                 "$ref": "#/components/schemas/MessageRole"
               },
               {
-                "description": "The role of the message. One of `unknown`, `user`, `assistant`, `system`, `critic`, `discriminator`, `developer`, or `tool`."
+                "description": "The role of the message. One of `unknown`, `user`, `assistant`, `system`, `critic`,\n`discriminator`, `developer`, or `tool`."
               }
             ]
           },
@@ -554,7 +554,7 @@
           "phase": {
             "type": "string",
             "enum": ["commentary", "final_answer"],
-            "description": "Labels an `assistant` message as intermediate commentary (`commentary`) or the final answer (`final_answer`). For models like `gpt-5.3-codex` and beyond, when sending follow-up requests, preserve and resend phase on all assistant messages. Omitting it can degrade performance. Not used for user messages.",
+            "description": "Labels an `assistant` message as intermediate commentary (`commentary`) or the\nfinal answer (`final_answer`). For models like `gpt-5.3-codex` and beyond, when\nsending follow-up requests, preserve and resend phase on all assistant messages.\nOmitting it can degrade performance. Not used for user messages.",
             "x-openresponses-added-in": "2026-04-24"
           }
         },
@@ -613,7 +613,7 @@
       "FunctionCallOutputStatusEnum": {
         "type": "string",
         "enum": ["in_progress", "completed", "incomplete"],
-        "description": "Similar to `FunctionCallStatus`. All three options are allowed here for compatibility, but because in practice these items will be provided by developers, only `completed` should be used."
+        "description": "Similar to `FunctionCallStatus`. All three options are allowed here for\ncompatibility, but because in practice these items will be provided by developers,\nonly `completed` should be used."
       },
       "FunctionCallOutput": {
         "type": "object",
@@ -627,7 +627,7 @@
           },
           "id": {
             "type": "string",
-            "description": "The unique ID of the function tool call output. Populated when this item is returned via API."
+            "description": "The unique ID of the function tool call output. Populated when this item is\nreturned via API."
           },
           "call_id": {
             "type": "string",
@@ -636,8 +636,7 @@
           "output": {
             "oneOf": [
               {
-                "type": "string",
-                "description": "A JSON string of the output of the function tool call."
+                "type": "string"
               },
               {
                 "type": "array",
@@ -660,7 +659,8 @@
                 },
                 "description": "An array of output contents (images, files, text) for the function tool call."
               }
-            ]
+            ],
+            "description": "The function tool call output, as a JSON string or an array of text, image,\nor file content."
           },
           "status": {
             "allOf": [
@@ -668,7 +668,7 @@
                 "$ref": "#/components/schemas/FunctionCallOutputStatusEnum"
               },
               {
-                "description": "The status of the item. One of `in_progress`, `completed`, or `incomplete`. Populated when items are returned via API."
+                "description": "The status of the item. One of `in_progress`, `completed`, or `incomplete`.\nPopulated when items are returned via API."
               }
             ]
           }
@@ -793,7 +793,7 @@
             "description": "The identifier of the actor that created the item."
           }
         },
-        "description": "A compaction item generated by the [`v1/responses/compact` API](/docs/api-reference/responses/compact).",
+        "description": "A compaction item generated by the [`v1/responses/compact`\nAPI](/docs/api-reference/responses/compact).",
         "title": "Compaction item",
         "x-openresponses-added-in": "2026-04-24"
       },
@@ -815,7 +815,7 @@
             "$ref": "#/components/schemas/CompactionBody"
           }
         ],
-        "description": "An item representing a message, tool call, tool output, reasoning, or other response element.",
+        "description": "An item representing a message, tool call, tool output, reasoning, or other response\nelement.",
         "discriminator": {
           "propertyName": "type"
         }
@@ -853,13 +853,13 @@
           "description": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "A description of the function. Used by the model to determine whether or not to call the function."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A description of the function. Used by the model to determine whether or not to\ncall the function."
           },
           "parameters": {
             "anyOf": [
@@ -876,16 +876,16 @@
           "strict": {
             "anyOf": [
               {
-                "type": "boolean",
-                "description": "Whether to enforce strict parameter validation. Default `true`."
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Whether to enforce strict parameter validation. Default `true`."
           }
         },
-        "description": "Defines a function in your own code the model can choose to call. Learn more about [function calling](https://platform.openai.com/docs/guides/function-calling).",
+        "description": "Defines a function in your own code the model can choose to call. Learn more about\n[function calling](https://platform.openai.com/docs/guides/function-calling).",
         "title": "Function"
       },
       "Tool": {
@@ -1209,13 +1209,13 @@
           "completed_at": {
             "anyOf": [
               {
-                "type": "integer",
-                "description": "The Unix timestamp (in seconds) for when the response was completed, if it was completed."
+                "type": "integer"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The Unix timestamp (in seconds) for when the response was completed, if it was\ncompleted."
           },
           "status": {
             "type": "string",
@@ -1245,13 +1245,13 @@
           "previous_response_id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The ID of the previous response in the chain that was referenced, if any."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The ID of the previous response in the chain that was referenced, if any."
           },
           "instructions": {
             "anyOf": [
@@ -1314,7 +1314,7 @@
                 "$ref": "#/components/schemas/TruncationEnum"
               },
               {
-                "description": "How the input was truncated by the service when it exceeded the model context window."
+                "description": "How the input was truncated by the service when it exceeded the model context\nwindow."
               }
             ]
           },
@@ -1338,15 +1338,15 @@
           },
           "presence_penalty": {
             "type": "number",
-            "description": "The presence penalty that was used to penalize new tokens based on whether they appear in the text so far."
+            "description": "The presence penalty that was used to penalize new tokens based on whether they\nappear in the text so far."
           },
           "frequency_penalty": {
             "type": "number",
-            "description": "The frequency penalty that was used to penalize new tokens based on their frequency in the text so far."
+            "description": "The frequency penalty that was used to penalize new tokens based on their frequency\nin the text so far."
           },
           "top_logprobs": {
             "type": "integer",
-            "description": "The number of most likely tokens that were returned at each position, along with their log probabilities."
+            "description": "The number of most likely tokens that were returned at each position, along with\ntheir log probabilities."
           },
           "temperature": {
             "type": "number",
@@ -1389,24 +1389,24 @@
           "max_output_tokens": {
             "anyOf": [
               {
-                "type": "integer",
-                "description": "The maximum number of tokens the model was allowed to generate for this response."
+                "type": "integer"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The maximum number of tokens the model was allowed to generate for this response."
           },
           "max_tool_calls": {
             "anyOf": [
               {
-                "type": "integer",
-                "description": "The maximum number of tool calls the model was allowed to make while generating the response."
+                "type": "integer"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The maximum number of tool calls the model was allowed to make while generating the\nresponse."
           },
           "store": {
             "type": "boolean",
@@ -1426,24 +1426,24 @@
           "safety_identifier": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "A stable identifier that was used for safety monitoring and abuse detection."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A stable identifier that was used for safety monitoring and abuse detection."
           },
           "prompt_cache_key": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "A key that was used to read from or write to the prompt cache."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A key that was used to read from or write to the prompt cache."
           }
         },
         "description": "The complete response object that was returned by the Responses API.",
@@ -1696,7 +1696,7 @@
                     "$ref": "#/components/schemas/ItemField"
                   },
                   {
-                    "description": "An item representing a message, tool call, tool output, reasoning, or other response element."
+                    "description": "An item representing a message, tool call, tool output, reasoning, or other\nresponse element."
                   }
                 ]
               },
@@ -1735,7 +1735,7 @@
                     "$ref": "#/components/schemas/ItemField"
                   },
                   {
-                    "description": "An item representing a message, tool call, tool output, reasoning, or other response element."
+                    "description": "An item representing a message, tool call, tool output, reasoning, or other\nresponse element."
                   }
                 ]
               },
@@ -2524,13 +2524,13 @@
           "code": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The error code that was emitted, if any."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The error code that was emitted, if any."
           },
           "message": {
             "type": "string",
@@ -2539,20 +2539,19 @@
           "param": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The parameter name that was associated with the error, if any."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The parameter name that was associated with the error, if any."
           },
           "headers": {
             "type": "object",
             "description": "The response headers that were emitted with the error, if any.",
             "additionalProperties": {
-              "type": "string",
-              "description": "The header value that was emitted."
+              "type": "string"
             }
           }
         },
@@ -2595,14 +2594,14 @@
             "anyOf": [
               {
                 "type": "string",
-                "description": "The type of item to reference. Always `item_reference`.",
                 "default": "item_reference",
                 "enum": ["item_reference"]
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The type of item to reference. Always `item_reference`."
           },
           "id": {
             "type": "string",
@@ -2636,14 +2635,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of this reasoning item.",
-                "example": "rs_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of this reasoning item.",
+            "example": "rs_123"
           },
           "type": {
             "type": "string",
@@ -2664,13 +2663,13 @@
           "encrypted_content": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "An encrypted representation of the reasoning content."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "An encrypted representation of the reasoning content."
           }
         }
       },
@@ -2681,14 +2680,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The ID of the compaction item.",
-                "example": "cmp_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The ID of the compaction item.",
+            "example": "cmp_123"
           },
           "type": {
             "type": "string",
@@ -2702,7 +2701,7 @@
             "description": "The encrypted content of the compaction summary."
           }
         },
-        "description": "A compaction item generated by the [`v1/responses/compact` API](/docs/api-reference/responses/compact).",
+        "description": "A compaction item generated by the [`v1/responses/compact`\nAPI](/docs/api-reference/responses/compact).",
         "title": "Compaction item",
         "x-openresponses-added-in": "2026-04-24"
       },
@@ -2741,13 +2740,13 @@
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 20971520,
-                "description": "The URL of the image to be sent to the model. A fully qualified URL or base64 encoded image in a data URL."
+                "maxLength": 20971520
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The URL of the image to be sent to the model. A fully qualified URL or base64\nencoded image in a data URL."
           },
           "detail": {
             "anyOf": [
@@ -2757,7 +2756,7 @@
                     "$ref": "#/components/schemas/ImageDetail"
                   },
                   {
-                    "description": "The detail level of the image to be sent to the model. One of `high`, `low`, or `auto`. Defaults to `auto`."
+                    "description": "The detail level of the image to be sent to the model. One of `high`, `low`, or\n`auto`. Defaults to `auto`."
                   }
                 ]
               },
@@ -2783,36 +2782,36 @@
           "filename": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The name of the file to be sent to the model."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The name of the file to be sent to the model."
           },
           "file_data": {
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 33554432,
-                "description": "The base64-encoded data of the file to be sent to the model."
+                "maxLength": 33554432
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The base64-encoded data of the file to be sent to the model."
           },
           "file_url": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The URL of the file to be sent to the model."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The URL of the file to be sent to the model."
           }
         },
         "description": "A file input to the model.",
@@ -2825,14 +2824,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of this message item.",
-                "example": "msg_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of this message item.",
+            "example": "msg_123"
           },
           "type": {
             "type": "string",
@@ -2870,22 +2869,21 @@
               },
               {
                 "type": "string",
-                "maxLength": 10485760,
-                "description": "The message content, as a single string."
+                "maxLength": 10485760
               }
             ],
-            "description": "The message content, as an array of content parts."
+            "description": "The message content, as a string or an array of content parts."
           },
           "status": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The status of the message item."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The status of the message item."
           }
         }
       },
@@ -2896,14 +2894,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of this message item.",
-                "example": "msg_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of this message item.",
+            "example": "msg_123"
           },
           "type": {
             "type": "string",
@@ -2930,22 +2928,21 @@
               },
               {
                 "type": "string",
-                "maxLength": 10485760,
-                "description": "The message content, as a single string."
+                "maxLength": 10485760
               }
             ],
-            "description": "The message content, as an array of content parts."
+            "description": "The message content, as a string or an array of content parts."
           },
           "status": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The status of the message item."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The status of the message item."
           }
         }
       },
@@ -2956,14 +2953,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of this message item.",
-                "example": "msg_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of this message item.",
+            "example": "msg_123"
           },
           "type": {
             "type": "string",
@@ -2990,22 +2987,21 @@
               },
               {
                 "type": "string",
-                "maxLength": 10485760,
-                "description": "The message content, as a single string."
+                "maxLength": 10485760
               }
             ],
-            "description": "The message content, as an array of content parts."
+            "description": "The message content, as a string or an array of content parts."
           },
           "status": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The status of the message item."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The status of the message item."
           }
         }
       },
@@ -3087,14 +3083,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of this message item.",
-                "example": "msg_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of this message item.",
+            "example": "msg_123"
           },
           "type": {
             "type": "string",
@@ -3129,28 +3125,27 @@
               },
               {
                 "type": "string",
-                "maxLength": 10485760,
-                "description": "The message content, as a single string."
+                "maxLength": 10485760
               }
             ],
-            "description": "The message content, as an array of content parts."
+            "description": "The message content, as a string or an array of content parts."
           },
           "phase": {
             "type": "string",
             "enum": ["commentary", "final_answer"],
-            "description": "Labels an `assistant` message as intermediate commentary (`commentary`) or the final answer (`final_answer`). For models like `gpt-5.3-codex` and beyond, when sending follow-up requests, preserve and resend phase on all assistant messages. Omitting it can degrade performance. Not used for user messages.",
+            "description": "Labels an `assistant` message as intermediate commentary (`commentary`) or the\nfinal answer (`final_answer`). For models like `gpt-5.3-codex` and beyond, when\nsending follow-up requests, preserve and resend phase on all assistant messages.\nOmitting it can degrade performance. Not used for user messages.",
             "x-openresponses-added-in": "2026-04-24"
           },
           "status": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The status of the message item."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The status of the message item."
           }
         }
       },
@@ -3161,14 +3156,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of this function tool call.",
-                "example": "fc_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of this function tool call.",
+            "example": "fc_123"
           },
           "call_id": {
             "type": "string",
@@ -3219,14 +3214,14 @@
           "id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of the function tool call output. Populated when this item is returned via API.",
-                "example": "fc_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of the function tool call output. Populated when this item is\nreturned via API.",
+            "example": "fc_123"
           },
           "call_id": {
             "type": "string",
@@ -3244,8 +3239,7 @@
             "oneOf": [
               {
                 "type": "string",
-                "maxLength": 10485760,
-                "description": "A JSON string of the output of the function tool call."
+                "maxLength": 10485760
               },
               {
                 "type": "array",
@@ -3272,7 +3266,7 @@
                 "description": "An array of content outputs (text, image, file) for the function tool call."
               }
             ],
-            "description": "Text, image, or file output of the function tool call."
+            "description": "The function tool call output, as a JSON string or an array of text, image,\nor file content."
           },
           "status": {
             "anyOf": [
@@ -3282,7 +3276,7 @@
                     "$ref": "#/components/schemas/FunctionCallStatus"
                   },
                   {
-                    "description": "The status of the item. One of `in_progress`, `completed`, or `incomplete`. Populated when items are returned via API."
+                    "description": "The status of the item. One of `in_progress`, `completed`, or `incomplete`.\nPopulated when items are returned via API."
                   }
                 ]
               },
@@ -3456,7 +3450,7 @@
       },
       "MetadataParam": {
         "type": "object",
-        "description": "Set of 16 key-value pairs that can be attached to an object. This can be         useful for storing additional information about the object in a structured         format, and querying for objects via API or the dashboard.\n        Keys are strings with a maximum length of 64 characters. Values are strings         with a maximum length of 512 characters.",
+        "description": "Set of 16 key-value pairs that can be attached to an object. This can be useful for\nstoring additional information about the object in a structured format, and querying\nfor objects via API or the dashboard. Keys are strings with a maximum length of 64\ncharacters. Values are strings with a maximum length of 512 characters.",
         "maxProperties": 16,
         "additionalProperties": {
           "type": "string",
@@ -3473,15 +3467,15 @@
           },
           "description": {
             "type": "string",
-            "description": "A description of what the response format is for, used by the model to\ndetermine how to respond in the format.\n"
+            "description": "A description of what the response format is for, used by the model to determine\nhow to respond in the format."
           },
           "name": {
             "type": "string",
-            "description": "The name of the response format. Must be a-z, A-Z, 0-9, or contain\nunderscores and dashes, with a maximum length of 64.\n"
+            "description": "The name of the response format. Must be a-z, A-Z, 0-9, or contain underscores and\ndashes, with a maximum length of 64."
           },
           "schema": {
             "type": "object",
-            "description": "The schema for the response format, described as a JSON Schema object.\n",
+            "description": "The schema for the response format, described as a JSON Schema object.",
             "title": "JSON schema",
             "additionalProperties": {}
           },
@@ -3489,13 +3483,13 @@
             "anyOf": [
               {
                 "type": "boolean",
-                "description": "Whether to enable strict schema adherence when generating the output.\nIf set to true, the model will always follow the exact schema defined\nin the `schema` field. Only a subset of JSON Schema is supported when\n`strict` is `true`.\n",
                 "default": false
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Whether to enable strict schema adherence when generating the output. If set to\ntrue, the model will always follow the exact schema defined in the `schema` field.\nOnly a subset of JSON Schema is supported when `strict` is `true`."
           }
         }
       },
@@ -3557,7 +3551,7 @@
                 "type": "null"
               }
             ],
-            "description": "Controls the level of reasoning effort the model should apply. Higher effort may increase latency and cost."
+            "description": "Controls the level of reasoning effort the model should apply. Higher effort may\nincrease latency and cost."
           },
           "summary": {
             "anyOf": [
@@ -3577,7 +3571,7 @@
             ]
           }
         },
-        "description": "**gpt-5 and o-series models only** Configuration options for [reasoning models](https://platform.openai.com/docs/guides/reasoning)."
+        "description": "**gpt-5 and o-series models only** Configuration options for [reasoning\nmodels](https://platform.openai.com/docs/guides/reasoning)."
       },
       "ServiceTierEnum": {
         "type": "string",
@@ -3595,13 +3589,13 @@
           "model": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The model to use for this request, e.g. 'gpt-5.2'."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The model to use for this request, e.g. 'gpt-5.2'."
           },
           "input": {
             "anyOf": [
@@ -3623,19 +3617,19 @@
                 "type": "null"
               }
             ],
-            "description": "Context to provide to the model for the scope of this request. May either be a string or an array of input items. If a string is provided, it is interpreted as a user message."
+            "description": "Context to provide to the model for the scope of this request. May either be a\nstring or an array of input items. If a string is provided, it is interpreted as a\nuser message."
           },
           "previous_response_id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The ID of the response to use as the prior turn for this request.",
-                "example": "resp_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The ID of the response to use as the prior turn for this request.",
+            "example": "resp_123"
           },
           "include": {
             "type": "array",
@@ -3683,7 +3677,7 @@
                     "$ref": "#/components/schemas/MetadataParam"
                   },
                   {
-                    "description": "Set of 16 key-value pairs that can be attached to an object. This can be         useful for storing additional information about the object in a structured         format, and querying for objects via API or the dashboard.\n        Keys are strings with a maximum length of 64 characters. Values are strings         with a maximum length of 512 characters."
+                    "description": "Set of 16 key-value pairs that can be attached to an object. This can be useful for\nstoring additional information about the object in a structured format, and\nquerying for objects via API or the dashboard. Keys are strings with a maximum\nlength of 64 characters. Values are strings with a maximum length of 512\ncharacters."
                   }
                 ]
               },
@@ -3712,57 +3706,57 @@
           "temperature": {
             "anyOf": [
               {
-                "type": "number",
-                "description": "Sampling temperature to use, between 0 and 2. Higher values make the output more random."
+                "type": "number"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Sampling temperature to use, between 0 and 2. Higher values make the output more\nrandom."
           },
           "top_p": {
             "anyOf": [
               {
-                "type": "number",
-                "description": "Nucleus sampling parameter, between 0 and 1. The model considers only the tokens with the top cumulative probability."
+                "type": "number"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Nucleus sampling parameter, between 0 and 1. The model considers only the tokens\nwith the top cumulative probability."
           },
           "presence_penalty": {
             "anyOf": [
               {
-                "type": "number",
-                "description": "Penalizes new tokens based on whether they appear in the text so far."
+                "type": "number"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Penalizes new tokens based on whether they appear in the text so far."
           },
           "frequency_penalty": {
             "anyOf": [
               {
-                "type": "number",
-                "description": "Penalizes new tokens based on their frequency in the text so far."
+                "type": "number"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Penalizes new tokens based on their frequency in the text so far."
           },
           "parallel_tool_calls": {
             "anyOf": [
               {
-                "type": "boolean",
-                "description": "Whether the model may call multiple tools in parallel."
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Whether the model may call multiple tools in parallel."
           },
           "stream": {
             "type": "boolean",
@@ -3793,25 +3787,25 @@
             "anyOf": [
               {
                 "type": "integer",
-                "minimum": 16,
-                "description": "The maximum number of tokens the model may generate for this response."
+                "minimum": 16
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The maximum number of tokens the model may generate for this response."
           },
           "max_tool_calls": {
             "anyOf": [
               {
                 "type": "integer",
-                "minimum": 1,
-                "description": "The maximum number of tool calls the model may make while generating the response."
+                "minimum": 1
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The maximum number of tool calls the model may make while generating the response."
           },
           "reasoning": {
             "anyOf": [
@@ -3834,25 +3828,25 @@
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 64,
-                "description": "A stable identifier used for safety monitoring and abuse detection."
+                "maxLength": 64
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A stable identifier used for safety monitoring and abuse detection."
           },
           "prompt_cache_key": {
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 64,
-                "description": "A key to use when reading from or writing to the prompt cache."
+                "maxLength": 64
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A key to use when reading from or writing to the prompt cache."
           },
           "truncation": {
             "allOf": [
@@ -3860,20 +3854,20 @@
                 "$ref": "#/components/schemas/TruncationEnum"
               },
               {
-                "description": "Controls how the service truncates the input when it exceeds the model context window."
+                "description": "Controls how the service truncates the input when it exceeds the model context\nwindow."
               }
             ]
           },
           "instructions": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "Additional instructions to guide the model for this request."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Additional instructions to guide the model for this request."
           },
           "store": {
             "type": "boolean",
@@ -3894,13 +3888,13 @@
               {
                 "type": "integer",
                 "minimum": 0,
-                "maximum": 20,
-                "description": "The number of most likely tokens to return at each position, along with their log probabilities."
+                "maximum": 20
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The number of most likely tokens to return at each position, along with their log\nprobabilities."
           }
         }
       },
@@ -3935,7 +3929,7 @@
                 "$ref": "#/components/schemas/Usage"
               },
               {
-                "description": "Token accounting for the compaction pass, including cached, reasoning, and total tokens."
+                "description": "Token accounting for the compaction pass, including cached, reasoning, and total\ntokens."
               }
             ]
           }
@@ -3984,7 +3978,7 @@
         "properties": {
           "model": {
             "type": "string",
-            "description": "Model ID used to generate the response, like `gpt-5` or `o3`. OpenAI offers a wide range of models with different capabilities, performance characteristics, and price points. Refer to the [model guide](/docs/models) to browse and compare available models."
+            "description": "Model ID used to generate the response, like `gpt-5` or `o3`. OpenAI offers a wide\nrange of models with different capabilities, performance characteristics, and price\npoints. Refer to the [model guide](/docs/models) to browse and compare available\nmodels."
           },
           "input": {
             "anyOf": [
@@ -3992,8 +3986,7 @@
                 "oneOf": [
                   {
                     "type": "string",
-                    "maxLength": 10485760,
-                    "description": "A text input to the model, equivalent to a text input with the `user` role."
+                    "maxLength": 10485760
                   },
                   {
                     "type": "array",
@@ -4008,42 +4001,42 @@
                 "type": "null"
               }
             ],
-            "description": "Text, image, or file inputs to the model, used to generate a response"
+            "description": "Text, image, or file inputs to the model, used to generate a response.\nA string is treated as text input with the `user` role."
           },
           "previous_response_id": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "The unique ID of the previous response to the model. Use this to create multi-turn conversations. Learn more about [conversation state](/docs/guides/conversation-state). Cannot be used in conjunction with `conversation`.",
-                "example": "resp_123"
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The unique ID of the previous response to the model. Use this to create multi-turn\nconversations. Learn more about [conversation\nstate](/docs/guides/conversation-state). Cannot be used in conjunction with\n`conversation`.",
+            "example": "resp_123"
           },
           "instructions": {
             "anyOf": [
               {
-                "type": "string",
-                "description": "A system (or developer) message inserted into the model's context.\nWhen used along with `previous_response_id`, the instructions from a previous response will not be carried over to the next response. This makes it simple to swap out system (or developer) messages in new responses."
+                "type": "string"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A system (or developer) message inserted into the model's context. When used along\nwith `previous_response_id`, the instructions from a previous response will not be\ncarried over to the next response. This makes it simple to swap out system (or\ndeveloper) messages in new responses."
           },
           "prompt_cache_key": {
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 64,
-                "description": "A key to use when reading from or writing to the prompt cache."
+                "maxLength": 64
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A key to use when reading from or writing to the prompt cache."
           }
         },
         "x-openresponses-added-in": "2026-04-24"
@@ -4068,14 +4061,14 @@
               },
               "stream_options": {
                 "type": "string",
-                "description": "This HTTP streaming options field MUST NOT be sent in WebSocket `response.create` messages.",
+                "description": "This HTTP streaming options field MUST NOT be sent in WebSocket `response.create`\nmessages.",
                 "maxLength": 0,
                 "minLength": 1,
                 "x-openresponses-disallowed": true
               },
               "background": {
                 "type": "string",
-                "description": "This HTTP background-mode field MUST NOT be sent in WebSocket `response.create` messages.",
+                "description": "This HTTP background-mode field MUST NOT be sent in WebSocket `response.create`\nmessages.",
                 "maxLength": 0,
                 "minLength": 1,
                 "x-openresponses-disallowed": true
@@ -4087,7 +4080,7 @@
             "$ref": "#/components/schemas/CreateResponseBody"
           }
         ],
-        "description": "A client-sent WebSocket event that starts a Responses turn. It uses the normal response-create body plus a required `type` field.",
+        "description": "A client-sent WebSocket event that starts a Responses turn. It uses the normal\nresponse-create body plus a required `type` field.",
         "title": "WebSocket response create event",
         "x-openresponses-added-in": "2026-04-24"
       },
@@ -4123,13 +4116,13 @@
               "param": {
                 "anyOf": [
                   {
-                    "type": "string",
-                    "description": "The request parameter associated with the error, when supplied."
+                    "type": "string"
                   },
                   {
                     "type": "null"
                   }
-                ]
+                ],
+                "description": "The request parameter associated with the error, when supplied."
               }
             },
             "required": ["code", "message"],

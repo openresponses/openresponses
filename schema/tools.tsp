@@ -26,10 +26,10 @@ union ResponsesToolParam {
 }
 
 model SpecificFunctionParam {
-  @doc("The tool to call. Always `function`.")
+  /** The tool to call. Always `function`. */
   type: "function" = "function";
 
-  @doc("The name of the function tool to call.")
+  /** The name of the function tool to call. */
   name: string;
 }
 
@@ -53,19 +53,20 @@ enum ToolChoiceValueEnum {
 }
 
 model AllowedToolsParam {
-  @doc("The tool choice type. Always `allowed_tools`.")
+  /** The tool choice type. Always `allowed_tools`. */
   type: "allowed_tools" = "allowed_tools";
 
-  @doc("The list of tools that are permitted for this request.")
+  /** The list of tools that are permitted for this request. */
   @minItems(1)
   @maxItems(128)
   tools: SpecificToolChoiceParam[];
 
-  @refDoc("How to select a tool from the allowed set.")
+  /** How to select a tool from the allowed set. */
+  @refDoc
   mode?: ToolChoiceValueEnum;
 }
 
-@doc("Controls which tool the model should use, if any.")
+/** Controls which tool the model should use, if any. */
 @oneOf
 union ToolChoiceParam {
   SpecificToolChoiceParam,
@@ -73,24 +74,32 @@ union ToolChoiceParam {
   AllowedToolsParam,
 }
 
+/**
+ * Defines a function in your own code the model can choose to call. Learn more about
+ * [function calling](https://platform.openai.com/docs/guides/function-calling).
+ */
 @summary("Function")
-@doc("Defines a function in your own code the model can choose to call. Learn more about [function calling](https://platform.openai.com/docs/guides/function-calling).")
 model FunctionTool {
-  @doc("The type of the function tool. Always `function`.")
+  /** The type of the function tool. Always `function`. */
   type: "function" = "function";
 
-  @doc("The name of the function to call.")
+  /** The name of the function to call. */
   name: string;
 
-  description: DescribedString<"A description of the function. Used by the model to determine whether or not to call the function."> | null;
+  /**
+   * A description of the function. Used by the model to determine whether or not to
+   * call the function.
+   */
+  description: string | null;
 
-  @doc("A JSON schema object describing the parameters of the function.")
+  /** A JSON schema object describing the parameters of the function. */
   parameters: Record<unknown> | null;
 
-  strict: DescribedBoolean<"Whether to enforce strict parameter validation. Default `true`."> | null;
+  /** Whether to enforce strict parameter validation. Default `true`. */
+  strict: boolean | null;
 }
 
-@doc("A tool that can be used to generate a response.")
+/** A tool that can be used to generate a response. */
 @extension("discriminator", #{ propertyName: "type" })
 @oneOf
 @extension("discriminator", #{ propertyName: "type" })

@@ -3,137 +3,172 @@ using OpenResponsesSchema;
 namespace OpenResponses;
 
 model CreateResponseBody {
-  `model`?: DescribedString<"The model to use for this request, e.g. 'gpt-5.2'."> | null;
+  /** The model to use for this request, e.g. 'gpt-5.2'. */
+  `model`?: string | null;
 
-  @doc("Context to provide to the model for the scope of this request. May either be a string or an array of input items. If a string is provided, it is interpreted as a user message.")
+  /**
+   * Context to provide to the model for the scope of this request. May either be a
+   * string or an array of input items. If a string is provided, it is interpreted as a
+   * user message.
+   */
   @nestedOneOf
-  input?: BoundedString<10485760, ""> | ItemParam[] | null;
+  input?: BoundedString<10485760> | ItemParam[] | null;
 
-  previous_response_id?: ExampleString<
-    "The ID of the response to use as the prior turn for this request.",
-    "resp_123"
-  > | null;
+  /** The ID of the response to use as the prior turn for this request. */
+  @extension("example", "resp_123")
+  previous_response_id?: string | null;
+
   include?: IncludeEnum[];
 
   @arrayDoc("A list of tools that the model may call while generating the response.")
   tools?: ResponsesToolParam[] | null;
 
+  /** Controls which tool the model should use, if any. */
   @extension("x-unionTitle", "ToolChoiceParam")
-  @refDoc("Controls which tool the model should use, if any.")
+  @refDoc
   tool_choice?: ToolChoiceParam | null;
 
-  @refDoc("Set of 16 key-value pairs that can be attached to an object. This can be         useful for storing additional information about the object in a structured         format, and querying for objects via API or the dashboard.\n        Keys are strings with a maximum length of 64 characters. Values are strings         with a maximum length of 512 characters.")
+  /**
+   * Set of 16 key-value pairs that can be attached to an object. This can be useful for
+   * storing additional information about the object in a structured format, and
+   * querying for objects via API or the dashboard. Keys are strings with a maximum
+   * length of 64 characters. Values are strings with a maximum length of 512
+   * characters.
+   */
+  @refDoc
   metadata?: MetadataParam | null;
 
-  @refDoc("Configuration options for text output.")
+  /** Configuration options for text output. */
+  @refDoc
   text?: TextParam | null;
 
-  temperature?: DescribedNumber<"Sampling temperature to use, between 0 and 2. Higher values make the output more random."> | null;
-  top_p?: DescribedNumber<"Nucleus sampling parameter, between 0 and 1. The model considers only the tokens with the top cumulative probability."> | null;
-  presence_penalty?: DescribedNumber<"Penalizes new tokens based on whether they appear in the text so far."> | null;
-  frequency_penalty?: DescribedNumber<"Penalizes new tokens based on their frequency in the text so far."> | null;
-  parallel_tool_calls?: DescribedBoolean<"Whether the model may call multiple tools in parallel."> | null;
+  /**
+   * Sampling temperature to use, between 0 and 2. Higher values make the output more
+   * random.
+   */
+  temperature?: numeric | null;
 
-  @doc("Whether to stream response events as server-sent events.")
+  /**
+   * Nucleus sampling parameter, between 0 and 1. The model considers only the tokens
+   * with the top cumulative probability.
+   */
+  top_p?: numeric | null;
+
+  /** Penalizes new tokens based on whether they appear in the text so far. */
+  presence_penalty?: numeric | null;
+
+  /** Penalizes new tokens based on their frequency in the text so far. */
+  frequency_penalty?: numeric | null;
+
+  /** Whether the model may call multiple tools in parallel. */
+  parallel_tool_calls?: boolean | null;
+
+  /** Whether to stream response events as server-sent events. */
   stream?: boolean;
 
-  @refDoc("Options that control streamed response behavior.")
+  /** Options that control streamed response behavior. */
+  @refDoc
   stream_options?: StreamOptionsParam | null;
 
-  @doc("Whether to run the request in the background and return immediately.")
+  /** Whether to run the request in the background and return immediately. */
   background?: boolean;
 
-  max_output_tokens?: MinInteger<
-    16,
-    "The maximum number of tokens the model may generate for this response."
-  > | null;
-  max_tool_calls?: MinInteger<
-    1,
-    "The maximum number of tool calls the model may make while generating the response."
-  > | null;
+  /** The maximum number of tokens the model may generate for this response. */
+  max_output_tokens?: MinInteger<16> | null;
 
-  @refDoc("Configuration options for reasoning behavior.")
+  /**
+   * The maximum number of tool calls the model may make while generating the response.
+   */
+  max_tool_calls?: MinInteger<1> | null;
+
+  /** Configuration options for reasoning behavior. */
+  @refDoc
   reasoning?: ReasoningParam | null;
 
-  safety_identifier?: BoundedString<
-    64,
-    "A stable identifier used for safety monitoring and abuse detection."
-  > | null;
-  prompt_cache_key?: BoundedString<
-    64,
-    "A key to use when reading from or writing to the prompt cache."
-  > | null;
+  /** A stable identifier used for safety monitoring and abuse detection. */
+  safety_identifier?: BoundedString<64> | null;
 
-  @refDoc("Controls how the service truncates the input when it exceeds the model context window.")
+  /** A key to use when reading from or writing to the prompt cache. */
+  prompt_cache_key?: BoundedString<64> | null;
+
+  /**
+   * Controls how the service truncates the input when it exceeds the model context
+   * window.
+   */
+  @refDoc
   truncation?: TruncationEnum;
 
-  instructions?: DescribedString<"Additional instructions to guide the model for this request."> | null;
+  /** Additional instructions to guide the model for this request. */
+  instructions?: string | null;
 
-  @doc("Whether to store the response so it can be retrieved later.")
+  /** Whether to store the response so it can be retrieved later. */
   store?: boolean;
 
-  @refDoc("The service tier to use for this request.")
+  /** The service tier to use for this request. */
+  @refDoc
   service_tier?: ServiceTierEnum;
 
-  top_logprobs?: RangeInteger<
-    0,
-    20,
-    "The number of most likely tokens to return at each position, along with their log probabilities."
-  > | null;
+  /**
+   * The number of most likely tokens to return at each position, along with their log
+   * probabilities.
+   */
+  top_logprobs?: RangeInteger<0, 20> | null;
 }
 
+/** Details about why the response was incomplete. */
 @summary("Incomplete details")
-@doc("Details about why the response was incomplete.")
 model IncompleteDetails {
-  @doc("The reason the response could not be completed.")
+  /** The reason the response could not be completed. */
   reason: string;
 }
 
+/** An error that occurred while generating the response. */
 @summary("Error")
-@doc("An error that occurred while generating the response.")
 model Error {
-  @doc("A machine-readable error code that was returned.")
+  /** A machine-readable error code that was returned. */
   code: string;
 
-  @doc("A human-readable description of the error that was returned.")
+  /** A human-readable description of the error that was returned. */
   message: string;
 }
 
+/** A breakdown of input token usage that was recorded. */
 @summary("Input tokens details")
-@doc("A breakdown of input token usage that was recorded.")
 model InputTokensDetails {
-  @doc("The number of input tokens that were served from cache.")
+  /** The number of input tokens that were served from cache. */
   cached_tokens: integer;
 }
 
+/** A breakdown of output token usage that was recorded. */
 @summary("Output tokens details")
-@doc("A breakdown of output token usage that was recorded.")
 model OutputTokensDetails {
-  @doc("The number of output tokens that were attributed to reasoning.")
+  /** The number of output tokens that were attributed to reasoning. */
   reasoning_tokens: integer;
 }
 
+/** Token usage statistics that were recorded for the response. */
 @summary("Usage")
-@doc("Token usage statistics that were recorded for the response.")
 model Usage {
-  @doc("The number of input tokens that were used to generate the response.")
+  /** The number of input tokens that were used to generate the response. */
   input_tokens: integer;
 
-  @doc("The number of output tokens that were generated by the model.")
+  /** The number of output tokens that were generated by the model. */
   output_tokens: integer;
 
-  @doc("The total number of tokens that were used.")
+  /** The total number of tokens that were used. */
   total_tokens: integer;
 
-  @refDoc("A breakdown of input token usage that was recorded.")
+  /** A breakdown of input token usage that was recorded. */
+  @refDoc
   input_tokens_details: InputTokensDetails;
 
-  @refDoc("A breakdown of output token usage that was recorded.")
+  /** A breakdown of output token usage that was recorded. */
+  @refDoc
   output_tokens_details: OutputTokensDetails;
 }
 
+/** The complete response object that was returned by the Responses API. */
 @summary("The response object")
-@doc("The complete response object that was returned by the Responses API.")
 @extension(
   "example",
   #{
@@ -183,114 +218,163 @@ model Usage {
   }
 )
 model ResponseResource {
-  @doc("The unique ID of the response that was created.")
+  /** The unique ID of the response that was created. */
   id: string;
 
-  @doc("The object type, which was always `response`.")
+  /** The object type, which was always `response`. */
   object: "response" = "response";
 
-  @doc("The Unix timestamp (in seconds) for when the response was created.")
+  /** The Unix timestamp (in seconds) for when the response was created. */
   created_at: integer;
 
-  completed_at: DescribedInteger<"The Unix timestamp (in seconds) for when the response was completed, if it was completed."> | null;
+  /**
+   * The Unix timestamp (in seconds) for when the response was completed, if it was
+   * completed.
+   */
+  completed_at: integer | null;
 
-  @doc("The status that was set for the response.")
+  /** The status that was set for the response. */
   status: string;
 
-  @refDoc("Details about why the response was incomplete, if applicable.")
+  /** Details about why the response was incomplete, if applicable. */
+  @refDoc
   incomplete_details: IncompleteDetails | null;
 
-  @doc("The model that generated this response.")
+  /** The model that generated this response. */
   `model`: string;
 
-  previous_response_id: DescribedString<"The ID of the previous response in the chain that was referenced, if any."> | null;
+  /** The ID of the previous response in the chain that was referenced, if any. */
+  previous_response_id: string | null;
 
-  @doc("Additional instructions that were used to guide the model for this response.")
+  /** Additional instructions that were used to guide the model for this response. */
   instructions: string | null;
 
-  @doc("The output items that were generated by the model.")
+  /** The output items that were generated by the model. */
   output: ItemField[];
 
-  @refDoc("The error that occurred, if the response failed.")
+  /** The error that occurred, if the response failed. */
+  @refDoc
   error: Error | null;
 
-  @doc("The tools that were available to the model during response generation.")
+  /** The tools that were available to the model during response generation. */
   tools: Tool[];
 
   @oneOf
   tool_choice: FunctionToolChoice | ToolChoiceValueEnum | AllowedToolChoice;
 
-  @refDoc("How the input was truncated by the service when it exceeded the model context window.")
+  /**
+   * How the input was truncated by the service when it exceeded the model context
+   * window.
+   */
+  @refDoc
   truncation: TruncationEnum;
 
-  @doc("Whether the model was allowed to call multiple tools in parallel.")
+  /** Whether the model was allowed to call multiple tools in parallel. */
   parallel_tool_calls: boolean;
 
-  @refDoc("Configuration options for text output that were used.")
+  /** Configuration options for text output that were used. */
+  @refDoc
   text: TextField;
 
-  @doc("The nucleus sampling parameter that was used for this response.")
+  /** The nucleus sampling parameter that was used for this response. */
   top_p: numeric;
 
-  @doc("The presence penalty that was used to penalize new tokens based on whether they appear in the text so far.")
+  /**
+   * The presence penalty that was used to penalize new tokens based on whether they
+   * appear in the text so far.
+   */
   presence_penalty: numeric;
 
-  @doc("The frequency penalty that was used to penalize new tokens based on their frequency in the text so far.")
+  /**
+   * The frequency penalty that was used to penalize new tokens based on their frequency
+   * in the text so far.
+   */
   frequency_penalty: numeric;
 
-  @doc("The number of most likely tokens that were returned at each position, along with their log probabilities.")
+  /**
+   * The number of most likely tokens that were returned at each position, along with
+   * their log probabilities.
+   */
   top_logprobs: integer;
 
-  @doc("The sampling temperature that was used for this response.")
+  /** The sampling temperature that was used for this response. */
   temperature: numeric;
 
-  @refDoc("Reasoning configuration and outputs that were produced for this response.")
+  /** Reasoning configuration and outputs that were produced for this response. */
+  @refDoc
   reasoning: Reasoning | null;
 
-  @refDoc("Token usage statistics that were recorded for the response, if available.")
+  /** Token usage statistics that were recorded for the response, if available. */
+  @refDoc
   usage: Usage | null;
 
-  max_output_tokens: DescribedInteger<"The maximum number of tokens the model was allowed to generate for this response."> | null;
-  max_tool_calls: DescribedInteger<"The maximum number of tool calls the model was allowed to make while generating the response."> | null;
+  /**
+   * The maximum number of tokens the model was allowed to generate for this response.
+   */
+  max_output_tokens: integer | null;
 
-  @doc("Whether this response was stored so it can be retrieved later.")
+  /**
+   * The maximum number of tool calls the model was allowed to make while generating the
+   * response.
+   */
+  max_tool_calls: integer | null;
+
+  /** Whether this response was stored so it can be retrieved later. */
   store: boolean;
 
-  @doc("Whether this request was run in the background.")
+  /** Whether this request was run in the background. */
   background: boolean;
 
-  @doc("The service tier that was used for this response.")
+  /** The service tier that was used for this response. */
   service_tier: string;
 
-  @doc("Developer-defined metadata that was associated with the response.")
+  /** Developer-defined metadata that was associated with the response. */
   metadata: unknown;
 
-  safety_identifier: DescribedString<"A stable identifier that was used for safety monitoring and abuse detection."> | null;
-  prompt_cache_key: DescribedString<"A key that was used to read from or write to the prompt cache."> | null;
+  /** A stable identifier that was used for safety monitoring and abuse detection. */
+  safety_identifier: string | null;
+
+  /** A key that was used to read from or write to the prompt cache. */
+  prompt_cache_key: string | null;
 }
 
 @extension("x-openresponses-added-in", "2026-04-24")
 model CompactResponseMethodPublicBody {
-  @doc("Model ID used to generate the response, like `gpt-5` or `o3`. OpenAI offers a wide range of models with different capabilities, performance characteristics, and price points. Refer to the [model guide](/docs/models) to browse and compare available models.")
+  /**
+   * Model ID used to generate the response, like `gpt-5` or `o3`. OpenAI offers a wide
+   * range of models with different capabilities, performance characteristics, and price
+   * points. Refer to the [model guide](/docs/models) to browse and compare available
+   * models.
+   */
   `model`: string;
 
-  @doc("Text, image, or file inputs to the model, used to generate a response")
+  /**
+   * Text, image, or file inputs to the model, used to generate a response.
+   * A string is treated as text input with the `user` role.
+   */
   @nestedOneOf
   @arrayDoc("A list of one or many input items to the model, containing different content types.")
-  input?: BoundedString<
-    10485760,
-    "A text input to the model, equivalent to a text input with the `user` role."
-  > | ItemParam[] | null;
+  input?: BoundedString<10485760> | ItemParam[] | null;
 
-  previous_response_id?: ExampleString<
-    "The unique ID of the previous response to the model. Use this to create multi-turn conversations. Learn more about [conversation state](/docs/guides/conversation-state). Cannot be used in conjunction with `conversation`.",
-    "resp_123"
-  > | null;
-  instructions?: DescribedString<"A system (or developer) message inserted into the model's context.\nWhen used along with `previous_response_id`, the instructions from a previous response will not be carried over to the next response. This makes it simple to swap out system (or developer) messages in new responses."> | null;
-  prompt_cache_key?: BoundedString<
-    64,
-    "A key to use when reading from or writing to the prompt cache."
-  > | null;
+  /**
+   * The unique ID of the previous response to the model. Use this to create multi-turn
+   * conversations. Learn more about [conversation
+   * state](/docs/guides/conversation-state). Cannot be used in conjunction with
+   * `conversation`.
+   */
+  @extension("example", "resp_123")
+  previous_response_id?: string | null;
+
+  /**
+   * A system (or developer) message inserted into the model's context. When used along
+   * with `previous_response_id`, the instructions from a previous response will not be
+   * carried over to the next response. This makes it simple to swap out system (or
+   * developer) messages in new responses.
+   */
+  instructions?: string | null;
+
+  /** A key to use when reading from or writing to the prompt cache. */
+  prompt_cache_key?: BoundedString<64> | null;
 }
 
 @summary("The compacted response object")
@@ -330,18 +414,22 @@ model CompactResponseMethodPublicBody {
 )
 @extension("x-openresponses-added-in", "2026-04-24")
 model CompactResource {
-  @doc("The unique identifier for the compacted response.")
+  /** The unique identifier for the compacted response. */
   id: string;
 
-  @doc("The object type. Always `response.compaction`.")
+  /** The object type. Always `response.compaction`. */
   object: "response.compaction" = "response.compaction";
 
-  @doc("The compacted list of output items.")
+  /** The compacted list of output items. */
   output: ItemField[];
 
-  @doc("Unix timestamp (in seconds) when the compacted conversation was created.")
+  /** Unix timestamp (in seconds) when the compacted conversation was created. */
   created_at: integer;
 
-  @refDoc("Token accounting for the compaction pass, including cached, reasoning, and total tokens.")
+  /**
+   * Token accounting for the compaction pass, including cached, reasoning, and total
+   * tokens.
+   */
+  @refDoc
   usage: Usage;
 }

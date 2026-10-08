@@ -17,6 +17,10 @@ Keep request and response types separate: their required fields, nullability,
 and supported variants differ. Defaults do not make required fields optional.
 Preserve null-only fields when syncing changes from another implementation.
 
+Use `/** ... */` comments for published descriptions; `//` comments stay in the
+source. Keep descriptions above fields, not inside type arguments. The scalar
+helpers apply constraints and defaults to individual union members.
+
 `helpers.tsp`, `decorators.mjs`, and `emitter.mjs` handle the schema forms and
 metadata the standard emitter cannot preserve directly. Keep `@refDoc` on
 reference descriptions: its `allOf` wrapper lets generated Zod validators

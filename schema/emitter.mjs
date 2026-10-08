@@ -16,9 +16,11 @@ function arrays(schema) {
 function finishSchema(schema) {
   if (typeof schema !== "object" || schema === null) return;
   if (schema.description === "") delete schema.description;
-  const refDescription = schema["x-typespec-ref-description"];
+  const referenceDocumentation = schema["x-typespec-ref-description"];
   delete schema["x-typespec-ref-description"];
-  if (refDescription !== undefined) {
+  if (referenceDocumentation) {
+    const refDescription = schema.description;
+    delete schema.description;
     const target = schema.$ref
       ? schema
       : schema.anyOf?.find((branch) => branch.$ref);
