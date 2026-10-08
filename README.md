@@ -19,33 +19,27 @@ At a high level, the spec centers on:
 
 ## Generating the schema
 
-The contract is authored in TypeSpec under `schema/` and requires Node 22 or newer.
-Run `bun install` once,
-then `bun run spec` to generate `public/openapi/openapi.json`. Generation is
-local and does not import an upstream OpenAI schema.
-
-Run `bun run spec:check` to compile into a temporary output directory and check
-that the published schema matches the source, including documentation. CI runs
-this check alongside the contract tests.
-
-Request and response types are intentionally separate. Preserve their existing
-required fields, nullable values, defaults, and supported variants when syncing
-changes from another implementation. See [schema/README.md](schema/README.md)
-for the source layout and emitter details.
-
-Dated releases under `public/openapi/<YYYY-MM-DD>/` are immutable. To publish a
-new version, update the version in `schema/routes.tsp` and run
-`bun run spec:release`. The TypeSpec migration retains the existing version and
-contract; its documentation placement changes do not rewrite the dated release.
-
-For focused local validation:
+Use Bun, Node 22 or newer, and Python 3. Edit the TypeSpec files in `schema/`,
+then generate and check the OpenAPI document:
 
 ```sh
+bun install
+bun run spec
 bun run spec:check
-python3 -m pytest bin/compare_openapi_test.py bin/typespec_contract_test.py
 ```
 
-The Python tests require `pytest` and `jsonschema`.
+Prettier formats staged files, including `.tsp` files, on commit.
+See [schema/README.md](schema/README.md) for the source layout and comparison tools.
+
+To release a new version, update the version in `schema/routes.tsp` and run
+`bun run spec:release`. Dated releases in `public/openapi/<YYYY-MM-DD>/` are
+immutable.
+
+For the schema tests, install `pytest` and `jsonschema`, then run:
+
+```sh
+python3 -m pytest bin/compare_openapi_test.py bin/typespec_contract_test.py bin/openresponses_contract_test.py
+```
 
 ## Compliance testing
 

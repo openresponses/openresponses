@@ -1,46 +1,31 @@
-# Authoring the Open Responses contract
+# Schema authoring
 
-`main.tsp` imports the complete contract. Edit the TypeSpec sources, then run
-`bun run spec` from the repository root.
+Edit these TypeSpec files, then run `bun run spec` from the repository root.
+`main.tsp` imports the complete contract.
 
-| File                | Definitions                                                  |
+| File                | Contents                                                     |
 | ------------------- | ------------------------------------------------------------ |
 | `content.tsp`       | Text, images, files, video, citations, and log probabilities |
-| `items.tsp`         | Request and response items, messages, and item unions        |
-| `tools.tsp`         | Function tools and tool selection                            |
+| `items.tsp`         | Messages, tool calls, and other request/response items       |
+| `tools.tsp`         | Tool definitions and selection                               |
 | `configuration.tsp` | Reasoning, text formats, metadata, and request options       |
-| `responses.tsp`     | Create/compact request bodies, response envelopes, and usage |
+| `responses.tsp`     | Request bodies, response objects, and usage                  |
 | `events.tsp`        | Streaming and WebSocket events                               |
-| `routes.tsp`        | HTTP operations, version, server, and transport metadata     |
+| `routes.tsp`        | HTTP operations, version, and transport metadata             |
 
-Requiredness and nullability are independent. A property with a default can
-still be required. Request items and returned items have different constraints
-and supported variants. The current contract also contains null-only fields;
-do not widen these during a mechanical sync from another implementation.
+Keep request and response types separate: their required fields, nullability,
+and supported variants differ. Defaults do not make required fields optional.
+Preserve null-only fields when syncing changes from another implementation.
 
-## Emitter support
+`helpers.tsp`, `decorators.mjs`, and `emitter.mjs` handle the schema forms and
+metadata the standard emitter cannot preserve directly. Keep `@refDoc` on
+reference descriptions: its `allOf` wrapper lets generated Zod validators
+preserve unknown nested fields.
 
-Most schemas use the standard OpenAPI 3.1 emitter. `helpers.tsp` and
-`decorators.mjs` express the few shapes that need extra metadata: exclusive
-array-element unions, nullable exclusive unions, array-branch documentation,
-reference documentation wrappers, and the WebSocket intersection. Scalar templates preserve constraints,
-descriptions, and defaults inside nullable branches without adding component
-names.
+## Checking changes
 
-`emitter.mjs` uses TypeSpec's OpenAPI document API and applies that metadata. It
-also places the WebSocket extension on the path, retains the declared bearer
-scheme without adding an authentication requirement, and renders simple record
-constraints as `additionalProperties`. It does not read the published schema,
-a dated release, or an upstream schema to generate or repair output.
-
-## Comparison and releases
-
-`bun run spec:check` compares a fresh compilation with the published file. The
-comparison covers every component and operation, request/response media types,
-security metadata, defaults, constraints, unions, and extensions. It ignores
-object-key ordering and narrowly equivalent schema representations.
-
-For a migration or proposed upstream sync, compare against a dated release:
+`bun run spec:check` verifies that the generated document matches the TypeSpec
+source, including documentation. To compare a proposed change with a release:
 
 ```sh
 python3 bin/compare_openapi.py \
@@ -48,15 +33,6 @@ python3 bin/compare_openapi.py \
   --generated public/openapi/openapi.json
 ```
 
-Documentation differences are reported separately; use `--check-documentation`
-to make them fail the check. `--report PATH` writes the detailed comparison as
-JSON. The contract tests also exercise payload boundaries against both the
-current document and the April release.
-
-The TypeSpec migration preserves all 108 component names, both operations,
-and their validation contract. Every nonempty description, title, and example
-is retained. Reference descriptions keep their existing `allOf` wrappers because
-Kubb uses those wrappers when preserving unknown nested fields. Six other
-descriptions move from nullable branches to their containing property without
-changing their text. One empty description is omitted. Array-branch descriptions
-and dated releases are preserved.
+The comparison checks the full contract and reports documentation changes
+separately. Add `--check-documentation` to fail on those changes too, or
+`--report PATH` to save the result as JSON.
