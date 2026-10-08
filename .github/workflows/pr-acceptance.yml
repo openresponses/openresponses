@@ -39,6 +39,9 @@ jobs:
       - name: Check Generated Schema
         run: bun run spec:check
 
+      - name: Build Website
+        run: bun run build
+
       - name: Bun Run
         run: bun test
 

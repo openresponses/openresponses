@@ -14,6 +14,7 @@
     "prepare": "husky",
     "dev:astro": "astro dev",
     "dev": "bun run spec && bun run llms && bun run dev:astro",
+    "build": "astro build",
     "preview": "astro preview",
     "test:compliance": "bun run bin/compliance-test.ts",
     "spec:check": "tsp compile schema --config tspconfig.yaml --output-dir .schema-output && python3 bin/compare_openapi.py --baseline public/openapi/openapi.json --generated .schema-output/openapi.json --check-documentation"
@@ -54,7 +55,7 @@
     "astro": "5.16.6",
     "astro-expressive-code": "^0.41.3",
     "astro-mermaid": "^1.2.0",
-    "mermaid": "^11.12.2",
+    "mermaid": "11.12.3",
     "oas": "^28.8.2",
     "railroad-diagrams": "^1.0.0",
     "react": "^19.2.0",
