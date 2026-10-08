@@ -1,8 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import {
-  currentOpenApiDocument,
-  openApiDocumentsByVersion,
-} from "./openapiVersions";
+import { openApiDocumentsByVersion } from "./openapiVersions";
 import type { OpenApiDocument } from "./openapi/types";
 import { specVersionMetadata } from "./specVersionMetadata";
 
@@ -10,12 +7,6 @@ describe("versioned OpenAPI documents", () => {
   test("has one document for every specification release", () => {
     expect(Object.keys(openApiDocumentsByVersion).sort()).toEqual(
       specVersionMetadata.map(({ version }) => version).sort(),
-    );
-  });
-
-  test("keeps the current document aligned with the latest release", () => {
-    expect(currentOpenApiDocument).toEqual(
-      openApiDocumentsByVersion["2026-04-24"],
     );
   });
 

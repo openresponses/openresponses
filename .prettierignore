@@ -1,2 +1,5 @@
 **/.venv/**
+**/.pytest_cache/**
 **/*.mdx
+
+.schema-output/

@@ -1,5 +1,0 @@
-{
-  "type": "string",
-  "enum": ["completed", "incomplete", "failed"],
-  "x-openai-class-name": "responses_common.api.resources.item_resource.ComputerCallOutputStatus"
-}

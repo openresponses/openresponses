@@ -1,5 +1,0 @@
-{
-  "type": "string",
-  "enum": ["in_progress", "completed", "incomplete"],
-  "x-openai-class-name": "responses_common.api.params.input_item_param.FunctionCallItemStatus"
-}

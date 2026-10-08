@@ -1,5 +1,0 @@
-{
-  "type": "string",
-  "enum": ["none", "auto", "required"],
-  "x-openai-class-name": "responses_common.api.params.tool_choice_param.ToolChoiceValueEnum"
-}

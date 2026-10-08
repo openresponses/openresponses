@@ -3,6 +3,9 @@ node_modules/
 dist/
 .astro/
 __pycache__/
+.pytest_cache/
 .env.local.DS_Store
 .DS_Store
 .envrc
+
+.schema-output/
