@@ -4,12 +4,8 @@ using TypeSpec.OpenAPI;
 namespace OpenResponsesSchema;
 
 // Metadata for unions, nested documentation, and WebSocket composition.
-extern dec oneOfItems(
-  target: ModelProperty,
-  discriminator?: valueof string,
-  description?: valueof string
-);
-extern dec oneOfBody(target: ModelProperty, discriminator?: valueof string);
+extern dec oneOfItems(target: ModelProperty, description?: valueof string);
+extern dec oneOfBody(target: ModelProperty);
 extern dec nestedOneOf(target: ModelProperty);
 extern dec intersect(target: Model, base: Model);
 

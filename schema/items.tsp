@@ -61,10 +61,7 @@ model UserMessageItemParam {
 
   /** The message content, as a string or an array of content parts. */
   @oneOf
-  @oneOfItems(
-    "type",
-    "A piece of message content, such as text, an image, or a file."
-  )
+  @oneOfItems("A piece of message content, such as text, an image, or a file.")
   content: (InputTextContentParam | InputImageContentParamAutoParam | InputFileContentParam)[] | BoundedString<10485760>;
 
   /** The status of the message item. */
@@ -84,7 +81,7 @@ model SystemMessageItemParam {
 
   /** The message content, as a string or an array of content parts. */
   @oneOf
-  @oneOfItems("type", "")
+  @oneOfItems
   content: InputTextContentParam[] | BoundedString<10485760>;
 
   /** The status of the message item. */
@@ -104,7 +101,7 @@ model DeveloperMessageItemParam {
 
   /** The message content, as a string or an array of content parts. */
   @oneOf
-  @oneOfItems("type", "")
+  @oneOfItems
   content: InputTextContentParam[] | BoundedString<10485760>;
 
   /** The status of the message item. */
@@ -124,10 +121,7 @@ model AssistantMessageItemParam {
 
   /** The message content, as a string or an array of content parts. */
   @oneOf
-  @oneOfItems(
-    "type",
-    "A piece of assistant message content, such as text or a refusal."
-  )
+  @oneOfItems("A piece of assistant message content, such as text or a refusal.")
   content: (OutputTextContentParam | RefusalContentParam)[] | BoundedString<10485760>;
 
   /**
@@ -198,10 +192,7 @@ model FunctionCallOutputItemParam {
    * or file content.
    */
   @oneOf
-  @oneOfItems(
-    "type",
-    "A piece of message content, such as text, an image, or a file."
-  )
+  @oneOfItems("A piece of message content, such as text, an image, or a file.")
   output: BoundedString<10485760> | (
     | InputTextContentParam
     | InputImageContentParamAutoParam
@@ -283,7 +274,7 @@ model Message {
   role: MessageRole;
 
   /** The content of the message */
-  @oneOfItems("type", "A content part that makes up an input or output item.")
+  @oneOfItems("A content part that makes up an input or output item.")
   content: (ContentPart | InputVideoContent)[];
 
   /**
@@ -363,7 +354,7 @@ model FunctionCallOutput {
    * or file content.
    */
   @oneOf
-  @oneOfItems("type", "A content part that makes up an input or output item.")
+  @oneOfItems("A content part that makes up an input or output item.")
   output: string | (InputTextContent | InputImageContent | InputFileContent)[];
 
   /**
@@ -383,11 +374,11 @@ model ReasoningBody {
   id: string;
 
   /** The reasoning content that was generated. */
-  @oneOfItems("type", "A content part that makes up an input or output item.")
+  @oneOfItems("A content part that makes up an input or output item.")
   content?: ContentPart[];
 
   /** The reasoning summary content that was generated. */
-  @oneOfItems("type", "A content part that makes up an input or output item.")
+  @oneOfItems("A content part that makes up an input or output item.")
   summary: ContentPart[];
 
   /** The encrypted reasoning content that was generated. */

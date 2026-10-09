@@ -7,7 +7,7 @@ const variants = (type) =>
     ? [...type.variants.values()].map((variant) => variant.type)
     : [type];
 
-export function $oneOfItems(context, property, discriminator, description) {
+export function $oneOfItems(context, property, description) {
   for (const type of variants(property.type)) {
     if (!isArrayModelType(context.program, type)) continue;
     if (type.indexer.value.kind !== "Union") {
@@ -15,26 +15,24 @@ export function $oneOfItems(context, property, discriminator, description) {
         context.program,
         property,
         "x-typespec-items-discriminator",
-        discriminator,
+        "type",
       );
       continue;
     }
     $oneOf(context, type.indexer.value);
     if (description) $doc(context, type.indexer.value, description);
-    if (discriminator)
-      setExtension(context.program, type.indexer.value, "discriminator", {
-        propertyName: discriminator,
-      });
+    setExtension(context.program, type.indexer.value, "discriminator", {
+      propertyName: "type",
+    });
   }
 }
 
-export function $oneOfBody(context, property, discriminator) {
+export function $oneOfBody(context, property) {
   if (property.type.kind !== "Union") return;
   $oneOf(context, property.type);
-  if (discriminator)
-    setExtension(context.program, property.type, "discriminator", {
-      propertyName: discriminator,
-    });
+  setExtension(context.program, property.type, "discriminator", {
+    propertyName: "type",
+  });
 }
 
 export function $nestedOneOf(context, property) {

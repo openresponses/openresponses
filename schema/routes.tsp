@@ -50,7 +50,7 @@ model SuccessfulResponse<
   @header contentType: ContentType;
 
   @body
-  @oneOfBody("type")
+  @oneOfBody
   body: Body;
 }
 

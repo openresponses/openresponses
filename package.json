@@ -32,8 +32,6 @@
     "@typespec/openapi": "1.16.0",
     "@typespec/openapi3": "1.16.0",
     "@typespec/prettier-plugin-typespec": "^1.8.0",
-    "autoprefixer": "^10.4.21",
-    "concurrently": "^9.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "postcss": "^8.5.6",
