@@ -389,6 +389,10 @@
   margin: 32px 0 48px;
 }
 
+.schema-section h3 {
+  margin-top: 8px;
+}
+
 .schema-section > p {
   margin: 12px 0 20px;
   line-height: 1.65;

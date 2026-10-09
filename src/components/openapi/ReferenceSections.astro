@@ -25,12 +25,12 @@ const sections = buildReferenceSections(apiSpec, schemas);
           id={section.id}
           aria-labelledby={`${section.id}-title`}
         >
+          {section.addedIn && <AddedIn version={section.addedIn} compact />}
           <h3 id={`${section.id}-title`}>
             <a href={`#${section.id}`}>
               <code>{section.name}</code>
             </a>
           </h3>
-          {section.addedIn && <AddedIn version={section.addedIn} compact />}
           {section.description && (
             <p set:html={parseInlineMarkdown(section.description)} />
           )}
@@ -53,12 +53,12 @@ const sections = buildReferenceSections(apiSpec, schemas);
           id={section.id}
           aria-labelledby={`${section.id}-title`}
         >
+          {section.addedIn && <AddedIn version={section.addedIn} compact />}
           <h3 id={`${section.id}-title`}>
             <a href={`#${section.id}`}>
               <code>{section.name}</code>
             </a>
           </h3>
-          {section.addedIn && <AddedIn version={section.addedIn} compact />}
           {section.description && (
             <p set:html={parseInlineMarkdown(section.description)} />
           )}
@@ -78,12 +78,12 @@ const sections = buildReferenceSections(apiSpec, schemas);
           id={section.id}
           aria-labelledby={`${section.id}-title`}
         >
+          {section.addedIn && <AddedIn version={section.addedIn} compact />}
           <h3 id={`${section.id}-title`}>
             <a href={`#${section.id}`}>
               <code>{section.name}</code>
             </a>
           </h3>
-          {section.addedIn && <AddedIn version={section.addedIn} compact />}
           {section.description && (
             <p set:html={parseInlineMarkdown(section.description)} />
           )}
