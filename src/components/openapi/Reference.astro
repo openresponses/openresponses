@@ -40,7 +40,7 @@ const example = JSON.stringify(
   )
 }
 <div class="parameter-columns" aria-hidden="true">
-  <span>Parameter</span><span>Description</span>
+  <span>Parameter</span><span>Type</span><span>Description</span>
 </div>
 <div class="parameter-list">
   {
@@ -59,9 +59,9 @@ const example = JSON.stringify(
                 {row.required ? "required" : "optional"}
               </span>
             </>
+            {row.addedIn && <AddedIn version={row.addedIn} compact />}
           </div>
           <TypeBadgeGroup row={row} />
-          {row.addedIn && <AddedIn version={row.addedIn} compact />}
         </div>
         <div class="parameter-description">
           {row.description && (

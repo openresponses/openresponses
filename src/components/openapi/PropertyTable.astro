@@ -26,11 +26,11 @@ const { rows } = Astro.props as Props;
                 {row.required ? "required" : "optional"}
               </span>
             </>
+            {row.addedIn && <AddedIn version={row.addedIn} compact />}
           </div>
           <div class="parameter-type">
             <code>{row.typeSummary}</code>
           </div>
-          {row.addedIn && <AddedIn version={row.addedIn} compact />}
         </div>
         <div class="parameter-description">
           {row.description && (
