@@ -9,33 +9,165 @@ type Props = {
 const { currentVersion, basePath } = Astro.props as Props;
 ---
 
-<label
-  class="not-prose inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white/70 px-2 py-1 text-xs font-medium text-slate-500"
->
-  <span class="hidden sm:inline">Version</span>
-  <select
-    id="spec-version-picker"
-    aria-label="Open Responses version"
-    class="cursor-pointer bg-transparent font-mono text-xs font-semibold text-slate-700"
-  >
+<details id="spec-version-picker" class="version-picker not-prose">
+  <summary aria-label={`Open Responses version: ${currentVersion}`}>
+    <span class="hidden sm:inline">Version</span>
+    <span class="version-number">{currentVersion}</span>
+    <span class="version-caret" aria-hidden="true">▾</span>
+  </summary>
+  <nav class="version-menu" aria-label="Specification versions">
     {
       specVersionMetadata.map((release) => (
-        <option
-          value={`${basePath}/${release.version}`}
-          selected={release.version === currentVersion}
+        <a
+          href={`${basePath}/${release.version}`}
+          aria-current={release.version === currentVersion ? "page" : undefined}
         >
-          {release.version}
-        </option>
+          <span class="version-number">{release.version}</span>
+          {release.version === currentVersion && (
+            <span class="version-current">Current</span>
+          )}
+        </a>
       ))
     }
-  </select>
-</label>
+  </nav>
+</details>
+
+<style>
+  .version-picker {
+    position: relative;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-slate-500);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 8px;
+    background: var(--color-white);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover,
+  .version-picker[open] > summary {
+    border-color: var(--color-slate-300);
+    background: var(--color-slate-50);
+  }
+
+  .version-picker > summary:focus-visible,
+  .version-menu a:focus-visible {
+    outline: 2px solid var(--color-slate-500);
+    outline-offset: 2px;
+  }
+
+  .version-number {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-slate-700);
+  }
+
+  .version-caret {
+    color: var(--color-slate-400);
+  }
+
+  .version-picker[open] .version-caret {
+    transform: rotate(180deg);
+  }
+
+  .version-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 224px;
+    max-height: calc(100dvh - 80px);
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 10px;
+    background: var(--color-white);
+    box-shadow: 0 8px 24px rgb(15 23 42 / 0.12);
+  }
+
+  .version-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  .version-menu a:hover,
+  .version-menu a[aria-current] {
+    background: var(--color-slate-100);
+  }
+
+  .version-current {
+    font-size: 11px;
+    color: var(--color-slate-500);
+  }
+</style>
 
 <script>
-  const picker = document.querySelector<HTMLSelectElement>(
+  const picker = document.querySelector<HTMLDetailsElement>(
     "#spec-version-picker",
   );
-  picker?.addEventListener("change", () => {
-    window.location.assign(`${picker.value}${window.location.hash}`);
-  });
+  const trigger = picker?.querySelector("summary");
+  if (picker && trigger) {
+    const links = Array.from(
+      picker.querySelectorAll<HTMLAnchorElement>("nav a"),
+    );
+    const updateLinks = () =>
+      links.forEach((link) => {
+        link.hash = window.location.hash;
+      });
+    const close = (restoreFocus = false) => {
+      picker.open = false;
+      if (restoreFocus) trigger.focus();
+    };
+    updateLinks();
+    window.addEventListener("hashchange", updateLinks);
+    picker.addEventListener("toggle", () => {
+      if (picker.open) updateLinks();
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!picker.contains(event.target as Node)) close();
+    });
+    picker.addEventListener("focusout", (event) => {
+      if (!picker.contains(event.relatedTarget as Node | null)) close();
+    });
+    links.forEach((link) => link.addEventListener("click", () => close()));
+    picker.addEventListener("keydown", (event) => {
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey)
+        return;
+      if (event.key === "Escape" && picker.open) {
+        event.preventDefault();
+        close(true);
+        return;
+      }
+      const index = links.indexOf(document.activeElement as HTMLAnchorElement);
+      let next: number;
+      if (event.key === "ArrowDown") next = (index + 1) % links.length;
+      else if (event.key === "ArrowUp")
+        next =
+          index < 0
+            ? links.length - 1
+            : (index - 1 + links.length) % links.length;
+      else if (event.key === "Home" && index >= 0) next = 0;
+      else if (event.key === "End" && index >= 0) next = links.length - 1;
+      else return;
+      event.preventDefault();
+      picker.open = true;
+      links[next]?.focus();
+    });
+  }
 </script>
