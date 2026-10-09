@@ -1,0 +1,465 @@
+.reference-layout {
+  --reference-rule: var(--color-slate-200);
+  --reference-muted: var(--color-slate-500);
+  --reference-accent: var(--color-amber-500);
+}
+
+.reference-subnav {
+  display: grid;
+  gap: 8px;
+  padding: 28px 12px 0;
+  font-size: 14px;
+  color: var(--color-slate-500);
+}
+
+.reference-subnav a[aria-current] {
+  color: var(--color-slate-900);
+  font-weight: 600;
+}
+
+.reference-masthead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  color: var(--reference-muted);
+}
+
+.reference-breadcrumb {
+  display: flex;
+  gap: 12px;
+}
+
+.openapi-link {
+  position: absolute;
+  right: 0;
+  top: 38px;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border: 1px solid var(--reference-rule);
+  border-radius: 5px;
+  color: var(--color-slate-600);
+}
+
+.reference-page h1 {
+  font-size: 48px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 150px 14px 0;
+}
+
+.reference-page h2 {
+  font-size: 24px;
+  line-height: 1.333;
+  font-weight: 500;
+  margin: 28px 0 8px;
+}
+
+.reference-page h3 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 24px 0 12px;
+}
+
+.reference-page code {
+  font-size: 0.875em;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+.reference-page a:hover,
+.reference-subnav a:hover {
+  color: var(--reference-accent);
+}
+
+.reference-layout :focus-visible {
+  outline: 2px solid var(--reference-accent);
+  outline-offset: 4px;
+}
+
+.reference-page [tabindex="-1"]:focus {
+  outline: none;
+}
+
+.endpoint-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.endpoint-label code {
+  background: transparent;
+  border: 0;
+  font-size: 14px;
+  padding: 0;
+}
+
+.http-method {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 3px 7px;
+  background: var(--color-emerald-50);
+  color: var(--color-emerald-700);
+  border-radius: 4px;
+}
+
+.reference-intro {
+  line-height: 1.75;
+  color: var(--color-slate-700);
+  margin-bottom: 24px;
+}
+
+.reference-tabs {
+  display: flex;
+  gap: 30px;
+  border-bottom: 1px solid var(--reference-rule);
+  margin-top: 26px;
+}
+
+.reference-tabs a {
+  padding: 0 0 13px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--reference-muted);
+}
+
+.reference-tabs a[aria-current] {
+  border-color: var(--reference-accent);
+  color: var(--color-slate-900);
+  font-weight: 500;
+}
+
+.headers-details {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--reference-rule);
+}
+
+.reference-page summary {
+  cursor: pointer;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.reference-page summary::marker {
+  color: var(--color-slate-400);
+  font-size: 11px;
+}
+
+.headers-details summary {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.headers-details summary span {
+  font-size: 13px;
+  color: var(--reference-muted);
+  font-weight: 400;
+  margin-left: 16px;
+}
+
+.header-values {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.header-values > div {
+  display: grid;
+  grid-template-columns: 28% 1fr;
+  gap: 24px;
+  padding: 10px 0;
+}
+
+.section-intro {
+  color: var(--reference-muted);
+  font-size: 16px;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.parameter-list {
+  border-top: 1px solid var(--reference-rule);
+}
+
+.parameter-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 31%) minmax(0, 1fr);
+  gap: 26px;
+  padding: 0 0 10px;
+  color: var(--reference-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.parameter-row {
+  display: grid;
+  grid-template-columns: minmax(0, 31%) minmax(0, 1fr);
+  gap: 26px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--reference-rule);
+  line-height: 1.65;
+}
+
+.parameter-meta {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  min-width: 0;
+}
+
+.parameter-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 90px;
+  max-width: 100%;
+}
+
+.parameter-name code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.parameter-presence {
+  color: var(--reference-muted);
+  font-size: 12px;
+}
+
+.parameter-presence.is-required {
+  color: var(--color-amber-700);
+}
+
+.parameter-type {
+  flex: 1;
+  min-width: 100px;
+  padding-top: 4px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--reference-muted);
+}
+
+.parameter-type code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.parameter-type a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-slate-300);
+}
+
+.parameter-description {
+  min-width: 0;
+  font-size: 16px;
+  color: var(--color-slate-700);
+}
+
+.parameter-description a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.field-details {
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.field-details > summary {
+  color: var(--color-slate-600);
+}
+
+.field-details > .parameter-list {
+  margin-top: 14px;
+}
+
+.field-details .parameter-row {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 16px 0;
+}
+
+.type-variants {
+  margin: 12px 0;
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.type-variants ul {
+  border-left: 1px solid var(--reference-rule);
+  padding-left: 16px;
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.type-variants a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.enum-values {
+  margin-top: 12px;
+}
+
+.enum-values > div {
+  display: grid;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--reference-rule);
+  font-size: 14px;
+}
+
+.reference-example {
+  margin-top: 18px;
+  border: 1px solid var(--reference-rule);
+  border-radius: 6px;
+  background: var(--color-slate-100);
+  overflow: hidden;
+}
+
+.example-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 9px 16px 0;
+  color: var(--reference-muted);
+  font-size: 12px;
+}
+
+.example-toolbar button {
+  margin-left: auto;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.example-toolbar button:hover {
+  background: var(--color-slate-200);
+}
+
+.reference-example pre {
+  padding: 10px 16px 18px;
+  line-height: 1.75;
+  overflow-x: auto;
+  font-size: 13px;
+  background: transparent !important;
+}
+
+.reference-example pre code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: inherit;
+}
+
+.event-details {
+  border-bottom: 1px solid var(--reference-rule);
+  padding: 20px 0;
+}
+
+.event-details > p {
+  margin: 16px 0;
+  line-height: 1.65;
+  color: var(--reference-muted);
+}
+
+.event-details > .parameter-list {
+  margin-top: 20px;
+}
+
+.schema-section {
+  margin: 32px 0 48px;
+}
+
+.schema-section > p {
+  margin: 12px 0 20px;
+  line-height: 1.65;
+  color: var(--reference-muted);
+}
+
+.schema-section h3 code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 15px;
+}
+
+.object-nav {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--reference-rule);
+  padding-bottom: 20px;
+}
+
+.object-nav a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.mobile-reference-links {
+  display: grid;
+  border-top: 1px solid var(--reference-rule);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.mobile-reference-links a {
+  padding: 7px 12px;
+  color: var(--reference-muted);
+  font-size: 13px;
+}
+
+.mobile-reference-links a[aria-current] {
+  color: var(--reference-accent);
+}
+
+.reference-layout #docs-mobile-nav-menu {
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
+}
+
+@media (max-width: 639px) {
+  .reference-masthead {
+    font-size: 11px;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .reference-page h1 {
+    font-size: 36px;
+    margin-right: 0;
+  }
+
+  .openapi-link {
+    position: static;
+  }
+
+  .parameter-columns {
+    display: none;
+  }
+
+  .parameter-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .header-values > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}

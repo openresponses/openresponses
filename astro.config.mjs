@@ -17,6 +17,11 @@ export default defineConfig({
       autoTheme: true,
     }),
   ],
+  server: {
+    allowedHosts: process.env.DEV_ALLOWED_HOSTS?.split(",")
+      .map((host) => host.trim())
+      .filter(Boolean),
+  },
   vite: {
     plugins: [tailwindcss()],
   },

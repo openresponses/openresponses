@@ -1,19 +1,38 @@
 ---
+import DocsLayout from "../../layouts/DocsLayout.astro";
 import AddedIn from "../AddedIn.astro";
 import Reference from "./Reference.astro";
 import ReferenceSections from "./ReferenceSections.astro";
+import {
+  getDescription,
+  getEnumValues,
+  getRefName,
+  getSchemaProperties,
+  getUnionVariants,
+} from "../../lib/openapi/schema";
+import { parseInlineMarkdown } from "../../lib/markdown";
 import type { OpenApiDocument } from "../../lib/openapi/types";
 
 type Props = {
   apiSpec: OpenApiDocument;
   openApiHref: string;
+  frontmatter: { title: string; specVersion: string; versionBasePath: string };
 };
 
-const { apiSpec, openApiHref } = Astro.props as Props;
+const { apiSpec, openApiHref, frontmatter } = Astro.props as Props;
 const schemas = apiSpec.components?.schemas ?? {};
-const websocketMetadata =
-  apiSpec.paths["/responses"]?.["x-openresponses-websocket"];
-const websocketAddedIn = websocketMetadata?.["x-openresponses-added-in"];
+const response = apiSpec.paths["/responses"]?.post?.responses?.["200"];
+const streamingSchema =
+  response && "content" in response
+    ? response.content?.["text/event-stream"]?.schema
+    : undefined;
+const eventNames = getUnionVariants(apiSpec, streamingSchema)
+  .map(getRefName)
+  .filter((name): name is string => Boolean(name && schemas[name]));
+const websocketAddedIn =
+  apiSpec.paths["/responses"]?.["x-openresponses-websocket"]?.[
+    "x-openresponses-added-in"
+  ];
 const compactionAddedIn =
   apiSpec.paths["/responses/compact"]?.post?.["x-openresponses-added-in"];
 const hasWebSocket = Boolean(
@@ -24,6 +43,18 @@ const hasCompaction = Boolean(
   schemas.CompactResponseMethodPublicBody &&
   schemas.CompactResource,
 );
+const referenceLinks = [
+  { label: "Create a response", href: "#request-parameters" },
+  { label: "Response object", href: "#response-parameters" },
+  ...(eventNames.length
+    ? [{ label: "Streaming events", href: "#streaming-events" }]
+    : []),
+  ...(hasWebSocket ? [{ label: "WebSocket", href: "#websocket-mode" }] : []),
+  ...(hasCompaction
+    ? [{ label: "Compact a response", href: "#compaction-endpoint" }]
+    : []),
+  { label: "API objects", href: "#api-objects" },
+];
 const apiObjectSchemaNames = [
   "CreateResponseBody",
   "ResponseResource",
@@ -31,179 +62,281 @@ const apiObjectSchemaNames = [
   "WebSocketErrorEvent",
   "CompactResponseMethodPublicBody",
   "CompactResource",
-].filter((name) => Boolean(schemas[name]));
+  ...eventNames,
+];
 ---
 
-<h1 class="page-title">Reference</h1>
+<DocsLayout frontmatter={frontmatter} referenceLinks={referenceLinks}>
+  <div class="reference-masthead">
+    <p class="reference-breadcrumb">
+      Reference <span aria-hidden="true">/</span>
+      <span data-reference-category>Endpoints</span>
+    </p>
+    <a class="openapi-link" href={openApiHref} target="_blank" rel="noreferrer"
+      >OpenAPI JSON</a
+    >
+  </div>
 
-<a href={openApiHref} class="text-slate-500" target="_blank" rel="noreferrer">
-  Full OpenAPI Schema
-</a>
+  <div data-create-heading>
+    <h1>Create a response</h1>
+    <div class="endpoint-label">
+      <span class="http-method">POST</span><code>/v1/responses</code>
+    </div>
+    <p class="reference-intro">
+      Generate text, execute tools, and handle multi-turn conversations.
+    </p>
+    <nav class="reference-tabs" aria-label="Response reference">
+      <a href="#request-parameters" data-reference-nav>Request</a>
+      <a href="#response-parameters" data-reference-nav>Response</a>
+      {
+        eventNames.length > 0 && (
+          <a href="#streaming-events" data-reference-nav>
+            Streaming
+          </a>
+        )
+      }
+    </nav>
+  </div>
 
-<div
-  class="not-prose mt-8 flex flex-row items-center gap-2 rounded-lg border-1 border-slate-300 bg-slate-100 p-2"
->
-  <span
-    class="rounded border-1 border-blue-400 bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600"
+  <section
+    id="request-parameters"
+    data-reference-panel
+    aria-label="Request parameters"
   >
-    POST
-  </span>
-  <span class="font-mono">/v1/responses</span>
-</div>
+    <details class="headers-details" id="request-headers">
+      <summary>Headers <span>2 required headers</span></summary>
+      <dl class="header-values">
+        <div>
+          <dt><code>Content-Type</code></dt><dd>
+            <code>application/json</code> or <code
+              >application/x-www-form-urlencoded</code
+            >
+          </dd>
+        </div>
+        <div>
+          <dt><code>Authorization</code></dt><dd>
+            Authorization token, usually <code>Bearer [secret token]</code>.
+          </dd>
+        </div>
+      </dl>
+    </details>
+    <h2 id="request-body">Body parameters</h2>
+    <p class="section-intro">
+      Supply parameters as <code>application/json</code> or <code
+        >application/x-www-form-urlencoded</code
+      >.
+    </p>
+    <Reference apiSpec={apiSpec} />
+  </section>
 
-<h2 id="request-parameters">Request Parameters</h2>
+  <section
+    id="response-parameters"
+    data-reference-panel
+    aria-label="Response parameters"
+  >
+    <details class="headers-details" id="response-headers">
+      <summary>Headers <span>1 required header</span></summary>
+      <dl class="header-values">
+        <div>
+          <dt><code>Content-Type</code></dt><dd>
+            <code>application/json</code> or <code>text/event-stream</code>
+          </dd>
+        </div>
+      </dl>
+    </details>
+    <h2 id="response-body">Response body</h2>
+    <Reference apiSpec={apiSpec} schemaName="ResponseResource" />
+  </section>
 
-<p>
-  The Responses API allows you to generate text, execute tools, and handle
-  multi-turn conversations. It supports both synchronous requests and streaming
-  for real-time output.
-</p>
+  {
+    eventNames.length > 0 && (
+      <section
+        id="streaming-events"
+        data-reference-panel
+        aria-label="Streaming events"
+      >
+        <h2>Streaming events</h2>
+        <p class="section-intro">
+          Set <code>stream</code> to <code>true</code> to receive server-sent
+          events as the response is generated.
+        </p>
+        {eventNames.map((name) => {
+          const schema = schemas[name];
+          const eventType =
+            getEnumValues(
+              apiSpec,
+              getSchemaProperties(apiSpec, schema).type,
+            )[0] ?? name;
+          return (
+            <details class="event-details" id={`event-${name}`}>
+              <summary>
+                <code>{String(eventType)}</code>
+              </summary>
+              {getDescription(apiSpec, schema) && (
+                <p
+                  set:html={parseInlineMarkdown(
+                    getDescription(apiSpec, schema),
+                  )}
+                />
+              )}
+              <Reference apiSpec={apiSpec} schemaName={name} />
+            </details>
+          );
+        })}
+      </section>
+    )
+  }
 
-<p>
-  Parameters may be supplied as either <code>application/json</code> or
-  <code>application/x-www-form-urlencoded</code>.
-</p>
+  {
+    hasWebSocket && (
+      <section id="websocket-mode" data-reference-panel aria-label="WebSocket">
+        <h1>WebSocket</h1>
+        <div class="endpoint-label">
+          <span class="http-method">WS</span>
+          <code>/v1/responses</code>
+          {websocketAddedIn && <AddedIn version={websocketAddedIn} compact />}
+        </div>
+        <p class="reference-intro">
+          Open a WebSocket connection and start each turn with a JSON{" "}
+          <code>response.create</code> client message. The message uses the
+          normal response creation body, except HTTP transport fields such as{" "}
+          <code>stream</code>, <code>stream_options</code>, and{" "}
+          <code>background</code> are not sent. Server progress messages use the
+          same streaming event objects as <code>text/event-stream</code>{" "}
+          responses, while WebSocket failures use an <code>error</code>{" "}
+          envelope.
+        </p>
+        <Reference
+          apiSpec={apiSpec}
+          schemaName="WebSocketResponseCreateEvent"
+          header="Client message"
+        />
+        <Reference
+          apiSpec={apiSpec}
+          schemaName="WebSocketErrorEvent"
+          header="Error message"
+        />
+      </section>
+    )
+  }
 
-<h3 id="request-headers">Headers</h3>
+  {
+    hasCompaction && (
+      <section
+        id="compaction-endpoint"
+        data-reference-panel
+        aria-label="Compaction"
+      >
+        <h1>Compact a response</h1>
+        <div class="endpoint-label">
+          <span class="http-method">POST</span>
+          <code>/v1/responses/compact</code>
+          {compactionAddedIn && <AddedIn version={compactionAddedIn} compact />}
+        </div>
+        <p class="reference-intro">
+          Return a compacted conversation state object that preserves
+          long-running context without asserting provider-specific compression
+          behavior.
+        </p>
+        <h2 id="compaction-body">Body parameters</h2>
+        <Reference
+          apiSpec={apiSpec}
+          schemaName="CompactResponseMethodPublicBody"
+        />
+        <h2 id="compaction-response">Response body</h2>
+        <Reference apiSpec={apiSpec} schemaName="CompactResource" />
+      </section>
+    )
+  }
 
-<table>
-  <thead>
-    <tr>
-      <th>Header</th>
-      <th>Values</th>
-      <th>Required?</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>Content-Type</code></td>
-      <td>
-        <code>application/json</code> or
-        <code>application/x-www-form-urlencoded</code>
-      </td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td><code>Authorization</code></td>
-      <td>
-        Authorization token, usually in the form of
-        <code>Bearer [secret token]</code>
-      </td>
-      <td>Yes</td>
-    </tr>
-  </tbody>
-</table>
+  <section id="api-objects" data-reference-panel aria-label="API objects">
+    <h1>API objects</h1>
+    <p class="reference-intro">
+      Types used by the request, response, and event schemas.
+    </p>
+    <nav class="object-nav" aria-label="Object categories">
+      <a href="#enums">Enums</a><a href="#unions">Unions</a><a href="#objects"
+        >Objects</a
+      >
+    </nav>
+    <ReferenceSections apiSpec={apiSpec} schemaNames={apiObjectSchemaNames} />
+  </section>
+</DocsLayout>
 
-<h3 id="request-body">Body</h3>
+<script>
+  const panels = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-reference-panel]"),
+  );
+  const heading = document.querySelector<HTMLElement>("[data-create-heading]");
+  const category = document.querySelector<HTMLElement>(
+    "[data-reference-category]",
+  );
+  const links = document.querySelectorAll<HTMLAnchorElement>(
+    "[data-reference-nav]",
+  );
 
-<Reference apiSpec={apiSpec} includeSections={false} />
+  function showReference(scroll = false) {
+    let id = location.hash.slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      /* Keep malformed fragments harmless. */
+    }
+    const target = document.getElementById(id);
+    const active =
+      target?.closest<HTMLElement>("[data-reference-panel]") ?? panels[0];
+    if (!active) return;
+    panels.forEach((panel) => {
+      panel.hidden = panel !== active;
+    });
+    if (heading)
+      heading.hidden = ![
+        "request-parameters",
+        "response-parameters",
+        "streaming-events",
+      ].includes(active.id);
+    if (category)
+      category.textContent =
+        active.id === "api-objects" ? "API objects" : "Endpoints";
+    links.forEach((link) => {
+      if (link.hash === `#${active.id}`)
+        link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    let ancestor = target;
+    while (ancestor && ancestor !== active) {
+      if (ancestor instanceof HTMLDetailsElement) ancestor.open = true;
+      ancestor = ancestor.parentElement;
+    }
+    if (scroll) {
+      const focusTarget = target ?? active;
+      focusTarget.setAttribute("tabindex", "-1");
+      focusTarget.focus({ preventScroll: true });
+      if (!target || target === active)
+        window.scrollTo({ top: 0, behavior: "instant" });
+      else target.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+  }
+  showReference(Boolean(location.hash));
+  window.addEventListener("hashchange", () => showReference(true));
 
-<h2 id="response-parameters">Response Parameters</h2>
-
-<h3 id="response-headers">Headers</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Header</th>
-      <th>Values</th>
-      <th>Required?</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>Content-Type</code></td>
-      <td><code>application/json</code> or <code>text/event-stream</code></td>
-      <td>Yes</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="response-body">Body</h3>
-
-<Reference
-  apiSpec={apiSpec}
-  schemaName="ResponseResource"
-  header="Response"
-  includeSections={false}
-/>
-
-{
-  hasWebSocket && (
-    <>
-      <h2 id="websocket-mode">WebSocket Mode</h2>
-
-      {websocketAddedIn && <AddedIn version={websocketAddedIn} />}
-
-      <p>
-        Open a WebSocket connection to <code>/v1/responses</code> and start each
-        turn with a JSON <code>response.create</code> client message. The
-        message uses the normal response creation body, except HTTP transport
-        fields such as <code>stream</code>, <code>stream_options</code>, and
-        <code>background</code> are not sent. Server progress messages use the
-        same streaming event objects as <code>text/event-stream</code>
-        responses, while WebSocket failures use an <code>error</code>
-        envelope.
-      </p>
-
-      <Reference
-        apiSpec={apiSpec}
-        schemaName="WebSocketResponseCreateEvent"
-        header="Client Message"
-        includeSections={false}
-      />
-
-      <Reference
-        apiSpec={apiSpec}
-        schemaName="WebSocketErrorEvent"
-        header="Error Message"
-        includeSections={false}
-      />
-    </>
-  )
-}
-
-{
-  hasCompaction && (
-    <>
-      <h2 id="compaction-endpoint">Compaction Endpoint</h2>
-
-      {compactionAddedIn && <AddedIn version={compactionAddedIn} />}
-
-      <div class="not-prose mt-8 flex flex-row items-center gap-2 rounded-lg border-1 border-slate-300 bg-slate-100 p-2">
-        <span class="rounded border-1 border-blue-400 bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600">
-          POST
-        </span>
-        <span class="font-mono">/v1/responses/compact</span>
-      </div>
-
-      <p>
-        The compaction endpoint returns a compacted conversation state object
-        that can be used to preserve long-running context without asserting
-        provider-specific compression behavior.
-      </p>
-
-      <h3 id="compaction-body">Body</h3>
-
-      <Reference
-        apiSpec={apiSpec}
-        schemaName="CompactResponseMethodPublicBody"
-        header="Body Parameters"
-        includeSections={false}
-      />
-
-      <h3 id="compaction-response">Response</h3>
-
-      <Reference
-        apiSpec={apiSpec}
-        schemaName="CompactResource"
-        header="Response"
-        includeSections={false}
-      />
-    </>
-  )
-}
-
-<h1 id="api-objects">API Objects</h1>
-
-<ReferenceSections apiSpec={apiSpec} schemaNames={apiObjectSchemaNames} />
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-copy-example]")
+    .forEach((button) => {
+      button.addEventListener("click", async () => {
+        const example = button.closest(".reference-example");
+        const code = example?.querySelector("pre code")?.textContent;
+        const status = example?.querySelector<HTMLElement>("[role=status]");
+        if (!code || !status) return;
+        try {
+          await navigator.clipboard.writeText(code);
+          button.textContent = "Copied";
+          status.textContent = "Request example copied.";
+        } catch {
+          status.textContent =
+            "Copy failed. Select and copy the example below.";
+          status.classList.remove("sr-only");
+        }
+      });
+    });
+</script>

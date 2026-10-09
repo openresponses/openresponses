@@ -109,6 +109,56 @@ export const getTypeLabel = (
   return "unknown";
 };
 
+export const getTypeSummary = (
+  doc: OpenApiDocument,
+  schema?: OpenApiSchemaExt | null,
+): string => {
+  const summarize = (value?: OpenApiSchemaExt | null): string[] => {
+    if (!value) return ["unknown"];
+    if (value.$ref) return [getRefName(value) || "unknown"];
+    if (value.enum?.length === 1) {
+      return [JSON.stringify(value.enum[0]) ?? "unknown"];
+    }
+
+    const variants = value.anyOf || value.oneOf;
+    if (variants) {
+      const objects = variants.filter((variant) => {
+        const resolved = resolveRef(doc, variant);
+        return resolved?.type === "object" || resolved?.properties;
+      });
+      return Array.from(
+        new Set(
+          variants.flatMap((variant) =>
+            objects.length > 1 && objects.includes(variant)
+              ? ["object"]
+              : summarize(variant),
+          ),
+        ),
+      );
+    }
+    if (value.allOf) {
+      const types = value.allOf
+        .map((variant) => summarize(variant))
+        .filter((type) => type.join() !== "unknown");
+      if (types.length === 1) return types[0];
+      return [
+        types
+          .map((type) => (type.length > 1 ? `(${type.join(" | ")})` : type[0]))
+          .join(" & ") || "unknown",
+      ];
+    }
+    if (value.type === "array" || value.items) {
+      const items = summarize(value.items).join(" | ");
+      const grouped = items.includes(" | ") || items.includes(" & ");
+      return [grouped ? `(${items})[]` : `${items}[]`];
+    }
+    if (value.properties || value.additionalProperties) return ["object"];
+    return [value.type || (value.enum?.length ? "enum" : "unknown")];
+  };
+
+  return summarize(schema).join(" | ");
+};
+
 export const getUnionVariants = (
   doc: OpenApiDocument,
   schema?: OpenApiSchemaExt | null,

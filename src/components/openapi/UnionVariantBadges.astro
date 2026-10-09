@@ -3,54 +3,39 @@ import type {
   ParameterUnionVariant,
   UnionVariantLink,
 } from "../../lib/openapi/referenceIndex";
-
-type Variant = ParameterUnionVariant | UnionVariantLink;
-
-type Props = {
-  variants: Variant[];
-};
-
+type Props = { variants: (ParameterUnionVariant | UnionVariantLink)[] };
 const { variants } = Astro.props as Props;
-const formatVariantLabel = (label: string, array: boolean) =>
-  array ? `${label}[]` : label;
+const label = (variant: ParameterUnionVariant | UnionVariantLink) =>
+  variant.label + (variant.array ? "[]" : "");
 ---
 
-{
-  variants.map((variant) =>
-    variant.groupVariants?.length ? (
-      <div class="flex flex-wrap gap-2">
-        <span class:list={["type-label", variant.typeClass]}>
-          {formatVariantLabel(variant.label, variant.array)}
-        </span>
-        {variant.groupVariants.map((group) =>
-          group.sectionId ? (
-            <a
-              class:list={[
-                "type-label transition hover:shadow",
-                group.typeClass,
-              ]}
-              href={`#${group.sectionId}`}
-            >
-              {formatVariantLabel(group.label, group.array)}
-            </a>
-          ) : (
-            <span class:list={["type-label", group.typeClass]}>
-              {formatVariantLabel(group.label, group.array)}
-            </span>
-          ),
+<ul class="type-variants">
+  {
+    variants.map((variant) => (
+      <li>
+        {variant.sectionId ? (
+          <a href={`#${variant.sectionId}`}>
+            <code>{label(variant)}</code>
+          </a>
+        ) : (
+          <code>{label(variant)}</code>
         )}
-      </div>
-    ) : variant.sectionId ? (
-      <a
-        class:list={["type-label transition hover:shadow", variant.typeClass]}
-        href={`#${variant.sectionId}`}
-      >
-        {formatVariantLabel(variant.label, variant.array)}
-      </a>
-    ) : (
-      <span class:list={["type-label", variant.typeClass]}>
-        {formatVariantLabel(variant.label, variant.array)}
-      </span>
-    ),
-  )
-}
+        {variant.groupVariants?.length > 0 && (
+          <ul>
+            {variant.groupVariants.map((group) => (
+              <li>
+                {group.sectionId ? (
+                  <a href={`#${group.sectionId}`}>
+                    <code>{label(group)}</code>
+                  </a>
+                ) : (
+                  <code>{label(group)}</code>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))
+  }
+</ul>
