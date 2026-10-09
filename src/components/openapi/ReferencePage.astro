@@ -43,17 +43,23 @@ const hasCompaction = Boolean(
   schemas.CompactResponseMethodPublicBody &&
   schemas.CompactResource,
 );
-const referenceLinks = [
-  { label: "Create a response", href: "#request-parameters" },
-  { label: "Response object", href: "#response-parameters" },
-  ...(eventNames.length
-    ? [{ label: "Streaming events", href: "#streaming-events" }]
-    : []),
-  ...(hasWebSocket ? [{ label: "WebSocket", href: "#websocket-mode" }] : []),
-  ...(hasCompaction
-    ? [{ label: "Compact a response", href: "#compaction-endpoint" }]
-    : []),
-  { label: "API objects", href: "#api-objects" },
+const referenceGroups = [
+  {
+    label: "Endpoints",
+    links: [
+      { label: "Create a response", href: "#request-parameters" },
+      ...(hasCompaction
+        ? [{ label: "Compact a response", href: "#compaction-endpoint" }]
+        : []),
+      ...(hasWebSocket
+        ? [{ label: "WebSocket", href: "#websocket-mode" }]
+        : []),
+    ],
+  },
+  {
+    label: "Objects",
+    links: [{ label: "API objects", href: "#api-objects" }],
+  },
 ];
 const apiObjectSchemaNames = [
   "CreateResponseBody",
@@ -66,7 +72,7 @@ const apiObjectSchemaNames = [
 ];
 ---
 
-<DocsLayout frontmatter={frontmatter} referenceLinks={referenceLinks}>
+<DocsLayout frontmatter={frontmatter} referenceGroups={referenceGroups}>
   <div class="reference-masthead">
     <p class="reference-breadcrumb">
       Reference <span aria-hidden="true">/</span>
@@ -289,17 +295,22 @@ const apiObjectSchemaNames = [
     panels.forEach((panel) => {
       panel.hidden = panel !== active;
     });
-    if (heading)
-      heading.hidden = ![
-        "request-parameters",
-        "response-parameters",
-        "streaming-events",
-      ].includes(active.id);
+    const isCreateResponse = [
+      "request-parameters",
+      "response-parameters",
+      "streaming-events",
+    ].includes(active.id);
+    if (heading) heading.hidden = !isCreateResponse;
     if (category)
       category.textContent =
-        active.id === "api-objects" ? "API objects" : "Endpoints";
+        active.id === "api-objects" ? "Objects" : "Endpoints";
     links.forEach((link) => {
-      if (link.hash === `#${active.id}`)
+      if (
+        link.hash === `#${active.id}` ||
+        (isCreateResponse &&
+          link.hash === "#request-parameters" &&
+          !link.closest(".reference-tabs"))
+      )
         link.setAttribute("aria-current", "location");
       else link.removeAttribute("aria-current");
     });

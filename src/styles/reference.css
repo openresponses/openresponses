@@ -17,6 +17,21 @@
   font-weight: 600;
 }
 
+.reference-nav-group {
+  display: grid;
+  gap: 8px;
+}
+
+.reference-nav-group + .reference-nav-group {
+  margin-top: 20px;
+}
+
+.reference-nav-heading {
+  color: var(--color-slate-900);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .reference-masthead {
   position: relative;
   display: flex;
@@ -429,6 +444,14 @@
   padding: 7px 12px;
   color: var(--reference-muted);
   font-size: 13px;
+}
+
+.mobile-reference-links .reference-nav-group {
+  gap: 0;
+}
+
+.mobile-reference-links .reference-nav-heading {
+  padding: 7px 12px;
 }
 
 .mobile-reference-links a[aria-current] {
