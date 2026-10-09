@@ -40,13 +40,16 @@ Create a proposal for any change that affects the specification, compatibility, 
    - Test or conformance plan
 2. After initial feedback, submit a PR that includes the spec change and related docs/tests.
 
-The OpenAPI source files under `schema/` are copied from OpenAI's first-party API, so keep those
-files pristine. Put Open Responses metadata, including `x-openresponses-added-in`, in
-`schema/openapi_additive_patches.yaml`, then regenerate the spec. Use the `AddedIn` component for
-matching prose. During development, `bun run spec` refreshes the canonical filtered schema. When
-the release is ready, `bun run spec:release` also writes
-`public/openapi/YYYY-MM-DD/openapi.json`. Dated artifacts are immutable: release generation stops
-if that release date already has a different snapshot.
+The contract is authored in TypeSpec under `schema/`. Add Open Responses metadata,
+including `x-openresponses-added-in`, to those definitions and run `bun run spec`.
+Use the `AddedIn` component for matching prose. `bun run spec:check` verifies that
+the generated schema matches the published file. See `schema/README.md` for the
+source layout and contract comparison tools.
+
+When the release is ready, update the version in `schema/routes.tsp` and run
+`bun run spec:release` to write `public/openapi/YYYY-MM-DD/openapi.json`.
+Dated artifacts are immutable: release generation stops if that release date
+already has a different snapshot.
 
 A release also gets an immutable prose snapshot, generated Specification and Reference routes,
 and an entry in `CHANGELOG.md`.

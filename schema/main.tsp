@@ -1,0 +1,10 @@
+import "@typespec/openapi";
+import "@typespec/openapi3";
+import "./helpers.tsp";
+import "./content.tsp";
+import "./items.tsp";
+import "./tools.tsp";
+import "./configuration.tsp";
+import "./responses.tsp";
+import "./events.tsp";
+import "./routes.tsp";

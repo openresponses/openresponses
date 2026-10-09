@@ -17,6 +17,30 @@ At a high level, the spec centers on:
 - Website documentation content (source): `src/pages`
 - Compliance tests: `bin/compliance-test.ts`
 
+## Generating the schema
+
+Use Bun, Node 22 or newer, and Python 3. Edit the TypeSpec files in `schema/`,
+then generate and check the OpenAPI document:
+
+```sh
+bun install
+bun run spec
+bun run spec:check
+```
+
+Prettier formats staged files, including `.tsp` files, on commit.
+See [schema/README.md](schema/README.md) for the source layout and comparison tools.
+
+To release a new version, update the version in `schema/routes.tsp` and run
+`bun run spec:release`. Dated releases in `public/openapi/<YYYY-MM-DD>/` are
+immutable.
+
+For the schema tests, install `pytest` and `jsonschema`, then run:
+
+```sh
+python3 -m pytest bin/compare_openapi_test.py bin/typespec_contract_test.py bin/openresponses_contract_test.py
+```
+
 ## Compliance testing
 
 This repo includes an interactive compliance tester in the docs site (`/compliance`) and a CLI runner for faster local iteration and CI (`bin/compliance-test.ts`).

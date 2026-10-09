@@ -1,5 +1,0 @@
-{
-  "type": "string",
-  "enum": ["concise", "detailed", "auto"],
-  "x-openai-class-name": "oai_api.params.reasoning_summary_param.ReasoningSummaryEnum"
-}

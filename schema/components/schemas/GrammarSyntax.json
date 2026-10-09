@@ -1,5 +1,0 @@
-{
-  "type": "string",
-  "enum": ["lark", "regex"],
-  "x-openai-class-name": "responses_common.api.params.tool_param.GrammarSyntax"
-}
