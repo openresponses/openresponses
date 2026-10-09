@@ -635,8 +635,7 @@
                   "discriminator": {
                     "propertyName": "type"
                   }
-                },
-                "description": "An array of output contents (images, files, text) for the function tool call."
+                }
               }
             ],
             "description": "The function tool call output, as a JSON string or an array of text, image,\nor file content."
@@ -3109,8 +3108,7 @@
                   "discriminator": {
                     "propertyName": "type"
                   }
-                },
-                "description": "An array of content outputs (text, image, file) for the function tool call."
+                }
               }
             ],
             "description": "The function tool call output, as a JSON string or an array of text, image,\nor file content."
@@ -3160,11 +3158,11 @@
             "$ref": "#/components/schemas/FunctionCallOutputItemParam"
           }
         ],
+        "x-unionTitle": "Input Item Types",
+        "x-unionDisplay": "section",
         "discriminator": {
           "propertyName": "type"
-        },
-        "x-unionTitle": "Input Item Types",
-        "x-unionDisplay": "section"
+        }
       },
       "IncludeEnum": {
         "type": "string",
@@ -3219,11 +3217,11 @@
       },
       "ResponsesToolParam": {
         "$ref": "#/components/schemas/FunctionToolParam",
+        "x-unionTitle": "Tool Types",
+        "x-unionDisplay": "section",
         "discriminator": {
           "propertyName": "type"
-        },
-        "x-unionTitle": "Tool Types",
-        "x-unionDisplay": "section"
+        }
       },
       "SpecificFunctionParam": {
         "type": "object",
@@ -3466,13 +3464,13 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/ResponsesToolParam"
-                },
-                "description": "A list of tools that the model may call while generating the response."
+                }
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "A list of tools that the model may call while generating the response."
           },
           "tool_choice": {
             "anyOf": [
@@ -3767,8 +3765,7 @@
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/ItemParam"
-                    },
-                    "description": "A list of one or many input items to the model, containing different content types."
+                    }
                   }
                 ]
               },
@@ -3776,7 +3773,7 @@
                 "type": "null"
               }
             ],
-            "description": "Text, image, or file inputs to the model, used to generate a response.\nA string is treated as text input with the `user` role."
+            "description": "Text, image, or file inputs to the model, used to generate a response.\nA string is treated as text input with the `user` role. An array can contain\none or more input items with different content types."
           },
           "previous_response_id": {
             "anyOf": [

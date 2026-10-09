@@ -198,7 +198,6 @@ model FunctionCallOutputItemParam {
    * or file content.
    */
   @oneOf
-  @arrayDoc("An array of content outputs (text, image, file) for the function tool call.")
   @oneOfItems(
     "type",
     "A piece of message content, such as text, an image, or a file."
@@ -220,7 +219,6 @@ model FunctionCallOutputItemParam {
 @extension("x-unionDisplay", "section")
 @extension("x-unionTitle", "Input Item Types")
 @oneOf
-@extension("discriminator", #{ propertyName: "type" })
 union ItemParam {
   ItemReferenceParam,
   ReasoningItemParam,
@@ -286,16 +284,7 @@ model Message {
 
   /** The content of the message */
   @oneOfItems("type", "A content part that makes up an input or output item.")
-  content: (
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent
-    | InputVideoContent)[];
+  content: (ContentPart | InputVideoContent)[];
 
   /**
    * Labels an `assistant` message as intermediate commentary (`commentary`) or the
@@ -374,7 +363,6 @@ model FunctionCallOutput {
    * or file content.
    */
   @oneOf
-  @arrayDoc("An array of output contents (images, files, text) for the function tool call.")
   @oneOfItems("type", "A content part that makes up an input or output item.")
   output: string | (InputTextContent | InputImageContent | InputFileContent)[];
 
@@ -396,27 +384,11 @@ model ReasoningBody {
 
   /** The reasoning content that was generated. */
   @oneOfItems("type", "A content part that makes up an input or output item.")
-  content?: (
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent)[];
+  content?: ContentPart[];
 
   /** The reasoning summary content that was generated. */
   @oneOfItems("type", "A content part that makes up an input or output item.")
-  summary: (
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent)[];
+  summary: ContentPart[];
 
   /** The encrypted reasoning content that was generated. */
   encrypted_content?: string;
@@ -448,7 +420,6 @@ model CompactionBody {
  */
 @extension("discriminator", #{ propertyName: "type" })
 @oneOf
-@extension("discriminator", #{ propertyName: "type" })
 union ItemField {
   Message,
   FunctionCall,

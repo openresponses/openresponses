@@ -2,6 +2,16 @@ using TypeSpec.OpenAPI;
 using OpenResponsesSchema;
 namespace OpenResponses;
 
+alias ContentPart =
+  | InputTextContent
+  | OutputTextContent
+  | TextContent
+  | SummaryTextContent
+  | ReasoningTextContent
+  | RefusalContent
+  | InputImageContent
+  | InputFileContent;
+
 model ReasoningSummaryContentParam {
   /** The content type. Always `summary_text`. */
   type: "summary_text" = "summary_text";
@@ -145,7 +155,6 @@ model UrlCitationBody {
 /** An annotation that applies to a span of output text. */
 @extension("discriminator", #{ propertyName: "type" })
 @oneOf
-@extension("discriminator", #{ propertyName: "type" })
 union Annotation {
   UrlCitationBody,
 }

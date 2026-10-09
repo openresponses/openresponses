@@ -23,16 +23,13 @@ function finishSchema(schema) {
     schema.anyOf = [{ oneOf: alternatives }, { type: "null" }];
   }
   const discriminator = schema["x-typespec-items-discriminator"];
-  const description = schema["x-typespec-array-description"];
   delete schema["x-typespec-items-discriminator"];
-  delete schema["x-typespec-array-description"];
   for (const array of arrays(schema)) {
     if (discriminator)
       array.items = {
         ...array.items,
         discriminator: { propertyName: discriminator },
       };
-    if (description) array.description = description;
   }
   // These records have no applicators that could evaluate additional properties.
   if (

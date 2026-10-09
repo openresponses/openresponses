@@ -11,7 +11,6 @@ extern dec oneOfItems(
 );
 extern dec oneOfBody(target: ModelProperty, discriminator?: valueof string);
 extern dec nestedOneOf(target: ModelProperty);
-extern dec arrayDoc(target: ModelProperty, description: valueof string);
 extern dec intersect(target: Model, base: Model);
 
 // Apply bounds to the scalar member of a union, rather than the whole property.

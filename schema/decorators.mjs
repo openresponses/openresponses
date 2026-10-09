@@ -41,15 +41,6 @@ export function $nestedOneOf(context, property) {
   setExtension(context.program, property, "x-typespec-nullable-one-of", true);
 }
 
-export function $arrayDoc(context, property, description) {
-  setExtension(
-    context.program,
-    property,
-    "x-typespec-array-description",
-    description,
-  );
-}
-
 export function $intersect(context, model, base) {
   setExtension(
     context.program,

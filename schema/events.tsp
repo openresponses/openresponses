@@ -2,11 +2,9 @@ using TypeSpec.OpenAPI;
 using OpenResponsesSchema;
 namespace OpenResponses;
 
-/** A streaming event that indicated the response was created. */
-@summary("Response created event")
-model ResponseCreatedStreamingEvent {
-  /** The type of the event, always `response.created`. */
-  type: "response.created" = "response.created";
+model ResponseEvent<EventType extends valueof string> {
+  @doc("The type of the event, always `${EventType}`.")
+  type: typeof EventType = EventType;
 
   /** The sequence number of the event that was emitted. */
   sequence_number: integer;
@@ -14,71 +12,30 @@ model ResponseCreatedStreamingEvent {
   /** The response snapshot that was emitted with the event. */
   response: ResponseResource;
 }
+
+/** A streaming event that indicated the response was created. */
+@summary("Response created event")
+model ResponseCreatedStreamingEvent is ResponseEvent<"response.created">;
 
 /** A streaming event that indicated the response was queued. */
 @summary("Response queued event")
-model ResponseQueuedStreamingEvent {
-  /** The type of the event, always `response.queued`. */
-  type: "response.queued" = "response.queued";
-
-  /** The sequence number of the event that was emitted. */
-  sequence_number: integer;
-
-  /** The response snapshot that was emitted with the event. */
-  response: ResponseResource;
-}
+model ResponseQueuedStreamingEvent is ResponseEvent<"response.queued">;
 
 /** A streaming event that indicated the response was in progress. */
 @summary("Response in progress event")
-model ResponseInProgressStreamingEvent {
-  /** The type of the event, always `response.in_progress`. */
-  type: "response.in_progress" = "response.in_progress";
-
-  /** The sequence number of the event that was emitted. */
-  sequence_number: integer;
-
-  /** The response snapshot that was emitted with the event. */
-  response: ResponseResource;
-}
+model ResponseInProgressStreamingEvent is ResponseEvent<"response.in_progress">;
 
 /** A streaming event that indicated the response was completed. */
 @summary("Response completed event")
-model ResponseCompletedStreamingEvent {
-  /** The type of the event, always `response.completed`. */
-  type: "response.completed" = "response.completed";
-
-  /** The sequence number of the event that was emitted. */
-  sequence_number: integer;
-
-  /** The response snapshot that was emitted with the event. */
-  response: ResponseResource;
-}
+model ResponseCompletedStreamingEvent is ResponseEvent<"response.completed">;
 
 /** A streaming event that indicated the response had failed. */
 @summary("Response failed event")
-model ResponseFailedStreamingEvent {
-  /** The type of the event, always `response.failed`. */
-  type: "response.failed" = "response.failed";
-
-  /** The sequence number of the event that was emitted. */
-  sequence_number: integer;
-
-  /** The response snapshot that was emitted with the event. */
-  response: ResponseResource;
-}
+model ResponseFailedStreamingEvent is ResponseEvent<"response.failed">;
 
 /** A streaming event that indicated the response was incomplete. */
 @summary("Response incomplete event")
-model ResponseIncompleteStreamingEvent {
-  /** The type of the event, always `response.incomplete`. */
-  type: "response.incomplete" = "response.incomplete";
-
-  /** The sequence number of the event that was emitted. */
-  sequence_number: integer;
-
-  /** The response snapshot that was emitted with the event. */
-  response: ResponseResource;
-}
+model ResponseIncompleteStreamingEvent is ResponseEvent<"response.incomplete">;
 
 /** A streaming event that indicated an output item was added to the response. */
 @summary("Response output item added event")
@@ -139,15 +96,7 @@ model ResponseReasoningSummaryPartAddedStreamingEvent {
   /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
-  part:
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent;
+  part: ContentPart;
 }
 
 /** A streaming event that indicated a reasoning summary part was completed. */
@@ -171,15 +120,7 @@ model ResponseReasoningSummaryPartDoneStreamingEvent {
   /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
-  part:
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent;
+  part: ContentPart;
 }
 
 /** A streaming event that indicated a content part was added. */
@@ -203,15 +144,7 @@ model ResponseContentPartAddedStreamingEvent {
   /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
-  part:
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent;
+  part: ContentPart;
 }
 
 /** A streaming event that indicated a content part was completed. */
@@ -235,15 +168,7 @@ model ResponseContentPartDoneStreamingEvent {
   /** A content part that makes up an input or output item. */
   @extension("discriminator", #{ propertyName: "type" })
   @oneOf
-  part:
-    | InputTextContent
-    | OutputTextContent
-    | TextContent
-    | SummaryTextContent
-    | ReasoningTextContent
-    | RefusalContent
-    | InputImageContent
-    | InputFileContent;
+  part: ContentPart;
 }
 
 /** A streaming event that indicated output text was incrementally added. */

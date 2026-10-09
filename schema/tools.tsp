@@ -20,7 +20,6 @@ model FunctionToolParam {
 @extension("x-unionDisplay", "section")
 @extension("x-unionTitle", "Tool Types")
 @oneOf
-@extension("discriminator", #{ propertyName: "type" })
 union ResponsesToolParam {
   FunctionToolParam,
 }
@@ -101,7 +100,6 @@ model FunctionTool {
 /** A tool that can be used to generate a response. */
 @extension("discriminator", #{ propertyName: "type" })
 @oneOf
-@extension("discriminator", #{ propertyName: "type" })
 union Tool {
   FunctionTool,
 }
@@ -113,9 +111,6 @@ model FunctionToolChoice {
 
 model AllowedToolChoice {
   type: "allowed_tools" = "allowed_tools";
-
-  @oneOfItems("", "")
   tools: FunctionToolChoice[];
-
   mode: ToolChoiceValueEnum;
 }

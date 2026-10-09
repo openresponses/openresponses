@@ -20,7 +20,7 @@ model CreateResponseBody {
 
   include?: IncludeEnum[];
 
-  @arrayDoc("A list of tools that the model may call while generating the response.")
+  /** A list of tools that the model may call while generating the response. */
   tools?: ResponsesToolParam[] | null;
 
   /** Controls which tool the model should use, if any. */
@@ -335,10 +335,10 @@ model CompactResponseMethodPublicBody {
 
   /**
    * Text, image, or file inputs to the model, used to generate a response.
-   * A string is treated as text input with the `user` role.
+   * A string is treated as text input with the `user` role. An array can contain
+   * one or more input items with different content types.
    */
   @nestedOneOf
-  @arrayDoc("A list of one or many input items to the model, containing different content types.")
   input?: BoundedString<10485760> | ItemParam[] | null;
 
   /**
