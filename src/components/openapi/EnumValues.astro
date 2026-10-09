@@ -12,7 +12,7 @@ const { values, descriptions = {} } = Astro.props as Props;
     values.map((value) => (
       <div>
         <dt>
-          <code>{JSON.stringify(value)}</code>
+          <code>{String(value)}</code>
         </dt>
         {descriptions[String(value)] && (
           <dd set:html={parseInlineMarkdown(descriptions[String(value)])} />
