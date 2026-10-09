@@ -6,7 +6,6 @@ import PropertyTable from "./PropertyTable.astro";
 import TypeBadgeGroup from "./TypeBadgeGroup.astro";
 import UnionVariantBadges from "./UnionVariantBadges.astro";
 import { buildReferenceIndex } from "../../lib/openapi/referenceIndex";
-import { getAddedIn } from "../../lib/openapi/schema";
 import type { OpenApiDocument } from "../../lib/openapi/types";
 import { parseInlineMarkdown } from "../../lib/markdown";
 
@@ -24,7 +23,6 @@ const {
 const schema = apiSpec.components?.schemas?.[schemaName];
 if (!schema) throw new Error(`Missing reference schema: ${schemaName}`);
 const { parameterRows } = buildReferenceIndex(apiSpec, schema);
-const addedIn = getAddedIn(apiSpec, schema);
 const example = JSON.stringify(
   { model: "your-model", input: "Say hello" },
   null,
@@ -32,13 +30,7 @@ const example = JSON.stringify(
 );
 ---
 
-{
-  header && (
-    <h3 class="parameter-heading">
-      {header} {addedIn && <AddedIn version={addedIn} compact />}
-    </h3>
-  )
-}
+{header && <h3 class="parameter-heading">{header}</h3>}
 <div class="parameter-columns" aria-hidden="true">
   <span>Parameter</span><span>Type</span><span>Description</span>
 </div>

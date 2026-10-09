@@ -11,7 +11,7 @@ type Props = {
   currentPath?: string;
   specVersion?: string | null;
   versionBasePath?: string | null;
-  referenceLinks?: SidebarItem[];
+  referenceGroups?: { label: string; links: SidebarItem[] }[];
 };
 
 const {
@@ -19,7 +19,7 @@ const {
   currentPath = "",
   specVersion = null,
   versionBasePath = null,
-  referenceLinks = [],
+  referenceGroups = [],
 } = Astro.props as Props;
 const getActiveHref = (href: string, path: string) => {
   const hrefPath = href.split("#")[0] || "/";
@@ -99,12 +99,25 @@ const activeItem =
                       {item.label}
                     </a>
                   ))}
-                  {referenceLinks.length > 0 && (
+                  {referenceGroups.length > 0 && (
                     <div class="mobile-reference-links">
-                      {referenceLinks.map((item) => (
-                        <a href={item.href} role="menuitem" data-reference-nav>
-                          {item.label}
-                        </a>
+                      {referenceGroups.map((group) => (
+                        <div
+                          class="reference-nav-group"
+                          role="group"
+                          aria-label={group.label}
+                        >
+                          <p class="reference-nav-heading">{group.label}</p>
+                          {group.links.map((item) => (
+                            <a
+                              href={item.href}
+                              role="menuitem"
+                              data-reference-nav
+                            >
+                              {item.label}
+                            </a>
+                          ))}
+                        </div>
                       ))}
                     </div>
                   )}

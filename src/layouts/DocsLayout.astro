@@ -5,8 +5,8 @@ import DocsNavbar from "../components/DocsNavbar.astro";
 import DocsLightboxRoot from "../components/DocsLightboxRoot.astro";
 import Analytics from "@vercel/analytics/astro";
 
-const { frontmatter, referenceLinks = [] } = Astro.props;
-const isReference = referenceLinks.length > 0;
+const { frontmatter, referenceGroups = [] } = Astro.props;
+const isReference = referenceGroups.length > 0;
 const title = frontmatter?.title ?? "Docs";
 const description = frontmatter?.description ?? "";
 const currentPath = Astro.url.pathname;
@@ -68,7 +68,7 @@ const renderLandingTitleHtml =
         currentPath={currentPath}
         specVersion={specVersion}
         versionBasePath={versionBasePath}
-        referenceLinks={referenceLinks}
+        referenceGroups={referenceGroups}
       />
 
       <main
@@ -112,10 +112,19 @@ const renderLandingTitleHtml =
                   <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase">
                     Reference
                   </p>
-                  {referenceLinks.map((link) => (
-                    <a href={link.href} data-reference-nav>
-                      {link.label}
-                    </a>
+                  {referenceGroups.map((group) => (
+                    <div
+                      class="reference-nav-group"
+                      role="group"
+                      aria-label={group.label}
+                    >
+                      <p class="reference-nav-heading">{group.label}</p>
+                      {group.links.map((link) => (
+                        <a href={link.href} data-reference-nav>
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
                   ))}
                 </nav>
               )
