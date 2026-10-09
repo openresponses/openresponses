@@ -1,10 +1,12 @@
 ---
 import "../styles/global.css";
+import "../styles/reference.css";
 import DocsNavbar from "../components/DocsNavbar.astro";
 import DocsLightboxRoot from "../components/DocsLightboxRoot.astro";
 import Analytics from "@vercel/analytics/astro";
 
-const { frontmatter } = Astro.props;
+const { frontmatter, referenceLinks = [] } = Astro.props;
+const isReference = referenceLinks.length > 0;
 const title = frontmatter?.title ?? "Docs";
 const description = frontmatter?.description ?? "";
 const currentPath = Astro.url.pathname;
@@ -23,7 +25,7 @@ const sidebar = [
   { label: "Governance", href: "/governance" },
   { label: "Changelog", href: "/changelog" },
 ];
-const showToc = frontmatter?.showToc ?? true;
+const showToc = !isReference && (frontmatter?.showToc ?? true);
 const landingTitleRaw = frontmatter?.landingTitle ?? "";
 const landingTitleHtml = frontmatter?.landingTitleHtml ?? "";
 const landingTitle = landingTitleHtml || landingTitleRaw;
@@ -54,17 +56,28 @@ const renderLandingTitleHtml =
     <link rel="icon" type="image/svg+xml" href="/svg/favicon.svg" />
     <Analytics />
   </head>
-  <body class="bg-orange-50 text-slate-900">
+  <body
+    class:list={[
+      "bg-orange-50 text-slate-900",
+      { "reference-layout": isReference },
+    ]}
+  >
     <div class="min-h-screen">
       <DocsNavbar
         sidebar={sidebar}
         currentPath={currentPath}
         specVersion={specVersion}
         versionBasePath={versionBasePath}
+        referenceLinks={referenceLinks}
       />
 
       <main
-        class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[200px_1fr_220px]"
+        class:list={[
+          "relative z-0 mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6",
+          isReference
+            ? "lg:grid-cols-[200px_minmax(0,1fr)]"
+            : "lg:grid-cols-[200px_1fr_220px]",
+        ]}
       >
         <aside class="hidden lg:block">
           <div class="sticky top-24 space-y-2 text-sm text-slate-600">
@@ -93,10 +106,27 @@ const renderLandingTitleHtml =
                 })
               }
             </nav>
+            {
+              isReference && (
+                <nav class="reference-subnav" aria-label="API reference">
+                  <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase">
+                    Reference
+                  </p>
+                  {referenceLinks.map((link) => (
+                    <a href={link.href} data-reference-nav>
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+              )
+            }
           </div>
         </aside>
 
-        <section class="min-w-0" data-toc-content>
+        <section
+          class="min-w-0"
+          data-toc-content={isReference ? undefined : true}
+        >
           {
             landingTitle && (
               <div class="mb-12">
@@ -109,7 +139,11 @@ const renderLandingTitleHtml =
             )
           }
 
-          <article class="prose prose-slate article-container max-w-none">
+          <article
+            class={isReference
+              ? "reference-page"
+              : "prose prose-slate article-container max-w-none"}
+          >
             <slot />
           </article>
         </section>

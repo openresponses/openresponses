@@ -5,77 +5,56 @@ import AddedIn from "../AddedIn.astro";
 import type { InlineRow } from "../../lib/openapi/referenceIndex";
 import { parseInlineMarkdown } from "../../lib/markdown";
 
-interface Props {
-  rows?: InlineRow[];
-  inline?: boolean;
-}
-
-const { rows = [], inline = false } = Astro.props as Props;
-
-const typeClass = (type: string) => {
-  if (type === "string") return "text-amber-500 bg-amber-100 border-amber-200";
-  if (type === "boolean")
-    return "text-emerald-500 bg-emerald-100 border-emerald-200";
-  if (type === "number" || type === "integer")
-    return "text-blue-500 bg-blue-100 border-blue-200";
-  return "text-purple-500 bg-purple-100 border-purple-200";
-};
+type Props = { rows: InlineRow[] };
+const { rows } = Astro.props as Props;
 ---
 
-{
-  rows.length > 0 && (
-    <div
-      class:list={[
-        "overflow-hidden rounded-lg border border-slate-200",
-        "divide-y divide-slate-200",
-        { "bg-white": !inline },
-      ]}
-    >
-      {rows.map((row) => (
-        <div class="flex flex-col gap-2 p-3">
-          <div class="flex items-center gap-2 text-sm">
-            <span class="code">{row.name}</span>
-            {row.literalValue ? (
-              <span class="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">
-                "{row.literalValue}"
-              </span>
-            ) : row.unionVariants.length > 0 ? (
-              <div class="flex flex-wrap gap-2">
-                <UnionVariantBadges variants={row.unionVariants} />
-              </div>
-            ) : (
+<div class="parameter-list">
+  {
+    rows.map((row) => (
+      <div class="parameter-row">
+        <div class="parameter-meta">
+          <div class="parameter-name">
+            <>
+              <code>{row.name}</code>
               <span
                 class:list={[
-                  "rounded border px-2 py-0.5 text-xs font-bold",
-                  typeClass(row.type),
+                  "parameter-presence",
+                  { "is-required": row.required },
                 ]}
               >
-                {row.type}
-                {row.array && "[]"}
+                {row.required ? "required" : "optional"}
               </span>
-            )}
-            {row.required && (
-              <span class="font-mono text-[10px] font-bold text-red-400">
-                required
-              </span>
-            )}
+            </>
             {row.addedIn && <AddedIn version={row.addedIn} compact />}
           </div>
+          <div class="parameter-type">
+            <code>{row.typeSummary}</code>
+          </div>
+        </div>
+        <div class="parameter-description">
           {row.description && (
-            <div
-              class="text-sm text-slate-600"
-              set:html={parseInlineMarkdown(row.description)}
-            />
+            <div set:html={parseInlineMarkdown(row.description)} />
           )}
-          {!row.literalValue && (
-            <EnumValues
-              inline
-              values={row.enumValues}
-              descriptions={row.enumDescriptions}
-            />
+          {row.unionVariants.some(
+            (variant) => variant.sectionId || variant.groupVariants?.length,
+          ) && (
+            <details class="field-details">
+              <summary>Accepted types</summary>
+              <UnionVariantBadges variants={row.unionVariants} />
+            </details>
+          )}
+          {!row.literalValue && row.enumValues.length > 0 && (
+            <details class="field-details">
+              <summary>Allowed values</summary>
+              <EnumValues
+                values={row.enumValues}
+                descriptions={row.enumDescriptions}
+              />
+            </details>
           )}
         </div>
-      ))}
-    </div>
-  )
-}
+      </div>
+    ))
+  }
+</div>

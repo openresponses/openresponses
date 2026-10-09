@@ -4,130 +4,92 @@ import EnumValues from "./EnumValues.astro";
 import PropertyTable from "./PropertyTable.astro";
 import UnionVariantBadges from "./UnionVariantBadges.astro";
 import { buildReferenceSections } from "../../lib/openapi/referenceIndex";
-import type { OpenApiDocument, OpenApiSchema } from "../../lib/openapi/types";
+import type { OpenApiDocument } from "../../lib/openapi/types";
 import { parseInlineMarkdown } from "../../lib/markdown";
 
-type Props = {
-  apiSpec: OpenApiDocument;
-  schemaNames: string[];
-};
-
-const { apiSpec: apispec, schemaNames } = Astro.props as Props;
+type Props = { apiSpec: OpenApiDocument; schemaNames: string[] };
+const { apiSpec, schemaNames } = Astro.props as Props;
 const schemas = schemaNames
-  .map((name) => apispec.components?.schemas?.[name] as OpenApiSchema | null)
-  .filter(Boolean);
-
-const sections = buildReferenceSections(apispec as OpenApiDocument, schemas);
+  .filter((name) => apiSpec.components?.schemas?.[name])
+  .map((name) => ({ $ref: `#/components/schemas/${name}` }));
+const sections = buildReferenceSections(apiSpec, schemas);
 ---
 
 {
   sections.enums.length > 0 && (
-    <>
+    <section aria-labelledby="enums">
       <h2 id="enums">Enums</h2>
-      <div class="mt-10 space-y-6">
-        {sections.enums.map((section) => (
-          <div>
-            <h3
-              id={`${section.id}-title`}
-              class="code w-fit text-lg font-semibold text-slate-900"
-            >
-              {section.name}
-            </h3>
-            {section.addedIn && <AddedIn version={section.addedIn} compact />}
-            <section
-              id={section.id}
-              aria-labelledby={`${section.id}-title`}
-              class="not-prose"
-            >
-              <div class="pb-4">
-                {section.description && (
-                  <div
-                    class="pt-4 text-sm text-slate-600"
-                    set:html={parseInlineMarkdown(section.description)}
-                  />
-                )}
-                <div class="pt-4">
-                  <EnumValues
-                    inline
-                    values={section.values}
-                    descriptions={section.descriptions}
-                  />
-                </div>
-              </div>
-            </section>
-          </div>
-        ))}
-      </div>
-    </>
+      {sections.enums.map((section) => (
+        <section
+          class="schema-section"
+          id={section.id}
+          aria-labelledby={`${section.id}-title`}
+        >
+          {section.addedIn && <AddedIn version={section.addedIn} compact />}
+          <h3 id={`${section.id}-title`}>
+            <a href={`#${section.id}`}>
+              <code>{section.name}</code>
+            </a>
+          </h3>
+          {section.description && (
+            <p set:html={parseInlineMarkdown(section.description)} />
+          )}
+          <EnumValues
+            values={section.values}
+            descriptions={section.descriptions}
+          />
+        </section>
+      ))}
+    </section>
   )
 }
 {
   sections.unions.length > 0 && (
-    <>
+    <section aria-labelledby="unions">
       <h2 id="unions">Unions</h2>
-      <div class="not-prose">
-        <div class="mt-10 space-y-6">
-          {sections.unions.map((section) => (
-            <div>
-              <h3
-                id={`${section.id}-title`}
-                class="code w-fit text-lg font-semibold text-slate-900"
-              >
-                {section.name}
-              </h3>
-              {section.addedIn && <AddedIn version={section.addedIn} compact />}
-              <div class="pb-4">
-                {section.description && (
-                  <div
-                    class="pt-4 text-sm text-slate-600"
-                    set:html={parseInlineMarkdown(section.description)}
-                  />
-                )}
-                <div class="flex flex-wrap gap-2 pt-4">
-                  <UnionVariantBadges variants={section.variants} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+      {sections.unions.map((section) => (
+        <section
+          class="schema-section"
+          id={section.id}
+          aria-labelledby={`${section.id}-title`}
+        >
+          {section.addedIn && <AddedIn version={section.addedIn} compact />}
+          <h3 id={`${section.id}-title`}>
+            <a href={`#${section.id}`}>
+              <code>{section.name}</code>
+            </a>
+          </h3>
+          {section.description && (
+            <p set:html={parseInlineMarkdown(section.description)} />
+          )}
+          <UnionVariantBadges variants={section.variants} />
+        </section>
+      ))}
+    </section>
   )
 }
 {
   sections.objects.length > 0 && (
-    <>
+    <section aria-labelledby="objects">
       <h2 id="objects">Objects</h2>
-      <div class="mt-10 space-y-6">
-        {sections.objects.map((section) => (
-          <div>
-            <h3
-              id={`${section.id}-title`}
-              class="code w-fit text-lg font-semibold text-slate-900"
-            >
-              {section.name}
-            </h3>
-            {section.addedIn && <AddedIn version={section.addedIn} compact />}
-            <section
-              id={section.id}
-              aria-labelledby={`${section.id}-title`}
-              class="not-prose"
-            >
-              <div class="pb-4">
-                {section.description && (
-                  <div
-                    class="pt-4 text-sm text-slate-600"
-                    set:html={parseInlineMarkdown(section.description)}
-                  />
-                )}
-                <div class="pt-4">
-                  <PropertyTable inline rows={section.rows} />
-                </div>
-              </div>
-            </section>
-          </div>
-        ))}
-      </div>
-    </>
+      {sections.objects.map((section) => (
+        <section
+          class="schema-section"
+          id={section.id}
+          aria-labelledby={`${section.id}-title`}
+        >
+          {section.addedIn && <AddedIn version={section.addedIn} compact />}
+          <h3 id={`${section.id}-title`}>
+            <a href={`#${section.id}`}>
+              <code>{section.name}</code>
+            </a>
+          </h3>
+          {section.description && (
+            <p set:html={parseInlineMarkdown(section.description)} />
+          )}
+          <PropertyTable rows={section.rows} />
+        </section>
+      ))}
+    </section>
   )
 }

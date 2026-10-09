@@ -1,5 +1,5 @@
 ---
-import Oas from "oas";
+import { Code } from "astro:components";
 import AddedIn from "../AddedIn.astro";
 import EnumValues from "./EnumValues.astro";
 import PropertyTable from "./PropertyTable.astro";
@@ -7,207 +7,110 @@ import TypeBadgeGroup from "./TypeBadgeGroup.astro";
 import UnionVariantBadges from "./UnionVariantBadges.astro";
 import { buildReferenceIndex } from "../../lib/openapi/referenceIndex";
 import { getAddedIn } from "../../lib/openapi/schema";
-import type { OpenApiDocument, OpenApiSchema } from "../../lib/openapi/types";
+import type { OpenApiDocument } from "../../lib/openapi/types";
 import { parseInlineMarkdown } from "../../lib/markdown";
 
 type Props = {
   apiSpec: OpenApiDocument;
   schemaName?: string;
   header?: string;
-  includeSections?: boolean;
 };
 
 const {
-  apiSpec: apispec,
-  schemaName: schemaNameProp,
-  header = "Body Parameters",
-  includeSections = true,
+  apiSpec,
+  schemaName = "CreateResponseBody",
+  header,
 } = Astro.props as Props;
-
-// @ts-ignore
-const ApiReference = new Oas(apispec);
-const operation = ApiReference.operation("/responses", "post");
-const schema = operation.getRequestBody("application/json");
-
-const schemaRef = schema?.schema?.$ref;
-const schemaName = schemaRef ? schemaRef.split("/").pop() : null;
-const resolvedSchemaName = schemaNameProp ?? schemaName;
-const requestSchema = resolvedSchemaName
-  ? (apispec.components?.schemas?.[resolvedSchemaName] as OpenApiSchema | null)
-  : null;
-if (!requestSchema) {
-  throw new Error(
-    `Missing reference schema: ${resolvedSchemaName ?? "request body"}`,
-  );
-}
-
-const { parameterRows, sections } = buildReferenceIndex(
-  apispec as OpenApiDocument,
-  requestSchema,
+const schema = apiSpec.components?.schemas?.[schemaName];
+if (!schema) throw new Error(`Missing reference schema: ${schemaName}`);
+const { parameterRows } = buildReferenceIndex(apiSpec, schema);
+const addedIn = getAddedIn(apiSpec, schema);
+const example = JSON.stringify(
+  { model: "your-model", input: "Say hello" },
+  null,
+  2,
 );
-const addedIn = getAddedIn(apispec as OpenApiDocument, requestSchema);
 ---
 
-<div class="reference-table not-prose">
-  <div class="reference-table__header flex items-center justify-between gap-3">
-    <span>{header}</span>
-    {addedIn && <AddedIn version={addedIn} compact />}
-  </div>
+{
+  header && (
+    <h3 class="parameter-heading">
+      {header} {addedIn && <AddedIn version={addedIn} compact />}
+    </h3>
+  )
+}
+<div class="parameter-columns" aria-hidden="true">
+  <span>Parameter</span><span>Type</span><span>Description</span>
+</div>
+<div class="parameter-list">
   {
     parameterRows.map((row) => (
-      <div class="reference-table__row">
-        <div class="reference-table__rowl1">
-          <span class="code">{row.name}</span>
-          <TypeBadgeGroup row={row} />
-          {row.required && (
-            <span class:list={["font-mono text-xs font-bold text-red-400"]}>
-              required
-            </span>
-          )}
-          {row.addedIn && <AddedIn version={row.addedIn} compact />}
-        </div>
-        {row.description && (
-          <div
-            class="reference-table__rowl2"
-            set:html={parseInlineMarkdown(row.description)}
-          />
-        )}
-        {!row.literalValue && !row.isUnion && (
-          <EnumValues
-            values={row.enumValues}
-            descriptions={row.enumDescriptions}
-          />
-        )}
-        {row.inlineable && row.inlineRows.length > 0 && (
-          <div class="reference-table__inline">
-            <div class="reference-table__inline-title">Fields</div>
-            <PropertyTable inline rows={row.inlineRows} />
+      <div class="parameter-row">
+        <div class="parameter-meta">
+          <div class="parameter-name">
+            <>
+              <code>{row.name}</code>
+              <span
+                class:list={[
+                  "parameter-presence",
+                  { "is-required": row.required },
+                ]}
+              >
+                {row.required ? "required" : "optional"}
+              </span>
+            </>
+            {row.addedIn && <AddedIn version={row.addedIn} compact />}
           </div>
-        )}
+          <TypeBadgeGroup row={row} />
+        </div>
+        <div class="parameter-description">
+          {row.description && (
+            <div set:html={parseInlineMarkdown(row.description)} />
+          )}
+          {schemaName === "CreateResponseBody" && row.name === "input" && (
+            <div class="reference-example">
+              <div class="example-toolbar">
+                <span>Example</span>
+                <button
+                  type="button"
+                  data-copy-example
+                  aria-label="Copy request example"
+                >
+                  Copy
+                </button>
+                <span class="sr-only" role="status" />
+              </div>
+              <Code code={example} lang="json" theme="github-light" />
+            </div>
+          )}
+          {row.isUnion &&
+            row.unionVariants.some(
+              (variant) => variant.sectionId || variant.groupVariants?.length,
+            ) && (
+              <details class="field-details">
+                <summary>
+                  {row.name === "input" ? "Input types" : "Accepted types"}
+                </summary>
+                <UnionVariantBadges variants={row.unionVariants} />
+              </details>
+            )}
+          {!row.literalValue && !row.isUnion && row.enumValues.length > 0 && (
+            <details class="field-details">
+              <summary>Allowed values</summary>
+              <EnumValues
+                values={row.enumValues}
+                descriptions={row.enumDescriptions}
+              />
+            </details>
+          )}
+          {row.inlineable && row.inlineRows.length > 0 && (
+            <details class="field-details">
+              <summary>Fields</summary>
+              <PropertyTable rows={row.inlineRows} />
+            </details>
+          )}
+        </div>
       </div>
     ))
   }
 </div>
-{
-  includeSections && sections.enums.length > 0 && (
-    <>
-      <h2 id="enums">Enums</h2>
-      <div class="mt-10 space-y-6">
-        {sections.enums.map((section) => (
-          <div>
-            <h3
-              id={`${section.id}-title`}
-              class="code w-fit text-2xl font-semibold text-slate-900"
-            >
-              {section.name}
-            </h3>
-            {section.addedIn && <AddedIn version={section.addedIn} compact />}
-            <section
-              id={section.id}
-              aria-labelledby={`${section.id}-title`}
-              class="not-prose rounded-xl border border-slate-200"
-            >
-              <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
-                {section.title}
-              </div>
-              <div class="px-4 pb-4">
-                {section.description && (
-                  <div
-                    class="pt-4 text-sm text-slate-600"
-                    set:html={parseInlineMarkdown(section.description)}
-                  />
-                )}
-                <div class="pt-4">
-                  <EnumValues
-                    values={section.values}
-                    descriptions={section.descriptions}
-                  />
-                </div>
-              </div>
-            </section>
-          </div>
-        ))}
-      </div>
-    </>
-  )
-}
-{
-  includeSections && sections.unions.length > 0 && (
-    <>
-      <h2 id="unions">Unions</h2>
-      <div class="mt-10 space-y-6">
-        {sections.unions.map((section) => (
-          <div>
-            <h3
-              id={`${section.id}-title`}
-              class="code w-fit text-2xl font-semibold text-slate-900"
-            >
-              {section.name}
-            </h3>
-            {section.addedIn && <AddedIn version={section.addedIn} compact />}
-            <section
-              id={section.id}
-              aria-labelledby={`${section.id}-title`}
-              class="not-prose rounded-xl border border-slate-200"
-            >
-              <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
-                {section.title}
-              </div>
-              <div class="px-4 pb-4">
-                {section.description && (
-                  <div
-                    class="pt-4 text-sm text-slate-600"
-                    set:html={parseInlineMarkdown(section.description)}
-                  />
-                )}
-                <div class="flex flex-wrap gap-2 pt-4">
-                  <UnionVariantBadges variants={section.variants} />
-                </div>
-              </div>
-            </section>
-          </div>
-        ))}
-      </div>
-    </>
-  )
-}
-{
-  includeSections && sections.objects.length > 0 && (
-    <>
-      <h2 id="objects">Objects</h2>
-      <div class="mt-10 space-y-6">
-        {sections.objects.map((section) => (
-          <div>
-            <h3
-              id={`${section.id}-title`}
-              class="code w-fit text-2xl font-semibold text-slate-900"
-            >
-              {section.name}
-            </h3>
-            {section.addedIn && <AddedIn version={section.addedIn} compact />}
-            <section
-              id={section.id}
-              aria-labelledby={`${section.id}-title`}
-              class="not-prose rounded-xl border border-slate-200"
-            >
-              <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
-                {section.title}
-              </div>
-              <div class="px-4 pb-4">
-                {section.description && (
-                  <div
-                    class="pt-4 text-sm text-slate-600"
-                    set:html={parseInlineMarkdown(section.description)}
-                  />
-                )}
-                <div class="pt-4">
-                  <PropertyTable rows={section.rows} />
-                </div>
-              </div>
-            </section>
-          </div>
-        ))}
-      </div>
-    </>
-  )
-}

@@ -1,6 +1,5 @@
 ---
 import ReferencePage from "../../components/openapi/ReferencePage.astro";
-import DocsLayout from "../../layouts/DocsLayout.astro";
 import { findOpenApiDocument } from "../../lib/openapiVersions";
 import {
   findSpecVersionMetadata,
@@ -27,6 +26,8 @@ const frontmatter = {
 };
 ---
 
-<DocsLayout frontmatter={frontmatter}>
-  <ReferencePage apiSpec={apiSpec} openApiHref={release.openApiHref} />
-</DocsLayout>
+<ReferencePage
+  frontmatter={frontmatter}
+  apiSpec={apiSpec}
+  openApiHref={release.openApiHref}
+/>

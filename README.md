@@ -17,6 +17,17 @@ At a high level, the spec centers on:
 - Website documentation content (source): `src/pages`
 - Compliance tests: `bin/compliance-test.ts`
 
+## Developing the site
+
+Run `bun run dev` to generate the schema and start Astro. For remote access,
+set `DEV_ALLOWED_HOSTS` to a comma-separated list of hostnames:
+
+```sh
+DEV_ALLOWED_HOSTS=docs.example.test bun run dev --host 0.0.0.0
+```
+
+The allowlist also applies to `bun run preview`.
+
 ## Generating the schema
 
 Use Bun, Node 22 or newer, and Python 3. Edit the TypeSpec files in `schema/`,

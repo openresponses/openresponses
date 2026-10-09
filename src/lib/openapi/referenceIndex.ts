@@ -10,6 +10,7 @@ import {
   getSchemaProperties,
   getSchemaRequired,
   getTypeLabel,
+  getTypeSummary,
   getUnionTitle,
   getUnionVariants,
   isArraySchema,
@@ -21,9 +22,8 @@ export type EnumValue = string | number | boolean | null;
 
 export type InlineRow = {
   name: string;
-  type: string;
+  typeSummary: string;
   description: string;
-  array: boolean;
   required: boolean;
   enumValues: EnumValue[];
   enumDescriptions: EnumDescriptions;
@@ -36,17 +36,14 @@ export type ParameterUnionVariant = {
   label: string;
   array: boolean;
   sectionId: string | null;
-  typeClass: string;
   groupVariants?: ParameterUnionVariant[];
 };
 
 export type ParameterRow = {
   name: string;
-  typeLabel: string;
-  typeClass: string;
+  typeSummary: string;
   description: string;
   required: boolean;
-  array: boolean;
   enumValues: EnumValue[];
   enumDescriptions: EnumDescriptions;
   literalValue: string | null;
@@ -85,7 +82,6 @@ export type UnionVariantLink = {
   label: string;
   array: boolean;
   sectionId: string | null;
-  typeClass: string;
   groupVariants?: UnionVariantLink[];
 };
 
@@ -123,19 +119,14 @@ const buildInlineRows = (
   return Object.entries(properties).map(([name, prop]) => {
     const enumValues = getEnumValues(doc, prop);
     const enumDescriptions = getEnumDescriptions(doc, prop);
-    let type = getTypeLabel(doc, prop);
     const literalValue = enumValues.length === 1 ? String(enumValues[0]) : null;
-    if (enumValues.length) {
-      type = "enum";
-    }
 
     const unionVariants = buildUnionVariants(doc, prop, sections);
 
     return {
       name,
-      type,
+      typeSummary: getTypeSummary(doc, prop),
       description: getDescription(doc, prop),
-      array: isArraySchema(doc, prop),
       required: requiredSet.has(name),
       enumValues,
       enumDescriptions,
@@ -178,24 +169,10 @@ const getSchemaKind = (
   return null;
 };
 
-const getTypeClass = (
-  doc: OpenApiDocument,
-  schema?: OpenApiSchemaExt | null,
-): string => {
-  if (!schema) return "object";
-  if (getEnumValues(doc, schema).length > 0) return "enum";
-  const label = getTypeLabel(doc, schema);
-  if (label === "string") return "string";
-  if (label === "boolean") return "boolean";
-  if (label === "number" || label === "integer") return label;
-  return "object";
-};
-
 type UnionVariantEntry = {
   schema: OpenApiSchemaExt;
   array: boolean;
   labelOverride?: string;
-  typeClassOverride?: string;
   groupVariants?: ParameterUnionVariant[];
 };
 
@@ -227,7 +204,6 @@ const expandUnionVariantEntries = (
           label: getVariantLabel(doc, variant),
           array: false,
           sectionId,
-          typeClass: getTypeClass(doc, variant),
         } satisfies ParameterUnionVariant;
       });
       return [
@@ -235,7 +211,6 @@ const expandUnionVariantEntries = (
           schema,
           array: false,
           labelOverride: "array of",
-          typeClassOverride: "object",
           groupVariants,
         },
       ];
@@ -256,13 +231,7 @@ const buildUnionVariants = (
   );
 
   return entries.map(
-    ({
-      schema: variant,
-      array,
-      labelOverride,
-      typeClassOverride,
-      groupVariants,
-    }) => {
+    ({ schema: variant, array, labelOverride, groupVariants }) => {
       const refName = getRefNameDeep(variant);
       const sectionId = refName
         ? (sections.byName.get(refName)?.id ?? null)
@@ -271,7 +240,6 @@ const buildUnionVariants = (
         label: labelOverride ?? getVariantLabel(doc, variant),
         array,
         sectionId,
-        typeClass: typeClassOverride ?? getTypeClass(doc, variant),
         groupVariants,
       } satisfies ParameterUnionVariant;
     },
@@ -378,13 +346,7 @@ const buildSectionsFromRefs = (
         expandUnionVariantEntries(doc, variant, sections),
       );
       const variants = variantEntries.map(
-        ({
-          schema: variant,
-          array,
-          labelOverride,
-          typeClassOverride,
-          groupVariants,
-        }) => {
+        ({ schema: variant, array, labelOverride, groupVariants }) => {
           const refName = getRefNameDeep(variant);
           const sectionId = refName ? (byName.get(refName)?.id ?? null) : null;
           const label = labelOverride ?? getVariantLabel(doc, variant);
@@ -393,7 +355,6 @@ const buildSectionsFromRefs = (
             label,
             array,
             sectionId,
-            typeClass: typeClassOverride ?? getTypeClass(doc, variant),
             groupVariants,
           } satisfies UnionVariantLink;
         },
@@ -447,8 +408,6 @@ const buildParameterRows = (
   return Object.entries(properties).map(([name, prop]) => {
     const enumValues = getEnumValues(doc, prop as OpenApiSchemaExt);
     const enumDescriptions = getEnumDescriptions(doc, prop as OpenApiSchemaExt);
-    const typeLabel = getTypeLabel(doc, prop as OpenApiSchemaExt);
-    const typeClass = enumValues.length ? "enum" : typeLabel;
     const literalValue = enumValues.length === 1 ? String(enumValues[0]) : null;
     const inlineable = getInlineable(doc, prop as OpenApiSchemaExt);
 
@@ -467,11 +426,9 @@ const buildParameterRows = (
 
     return {
       name,
-      typeLabel,
-      typeClass,
+      typeSummary: getTypeSummary(doc, prop),
       description: getDescription(doc, prop as OpenApiSchemaExt),
       required: requiredSet.has(name),
-      array: isArraySchema(doc, prop as OpenApiSchemaExt),
       enumValues,
       enumDescriptions,
       literalValue,
