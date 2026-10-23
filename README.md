@@ -76,6 +76,33 @@ Filter to specific tests:
 bun run test:compliance --base-url http://localhost:8000/v1 --api-key $API_KEY --filter basic-response,streaming-response
 ```
 
+The mid-conversation prompt-cache tests each send two sequential requests. They
+prime a long conversation, then append a `developer` or `system` message while
+preserving the entire earlier input. The follow-up must report
+`usage.input_tokens_details.cached_tokens > 0`; streaming cases read usage from
+the terminal `response.completed` event.
+
+Run these cases against a provider/model with prompt caching enabled and a
+minimum cacheable prefix below the fixture's length (roughly 8,000–12,000 tokens,
+depending on the tokenizer). The long prefix is in user history; the initial
+system message stays short so that hoisting a later instruction cannot pass just
+by reusing a long system prefix. Each invocation uses a fresh prefix marker and
+cache key. Caching availability, routing, and expiry can also cause misses, so
+first verify cache reuse with a separate unchanged-history control. A miss is a
+failed acceptance test, not proof of reordering by itself.
+
+For example, set `OPENRESPONSES_API_KEY` in the environment and run:
+
+```bash
+bun run test:compliance --base-url "$API_BASE_URL" --model "$MODEL" \
+  --filter mid-conversation-developer-cache,mid-conversation-system-cache,mid-conversation-developer-cache-streaming,mid-conversation-system-cache-streaming \
+  --json
+```
+
+Filter to one ID at a time when collecting live evidence to reduce routing and
+rate-limit noise. These tests make paid requests when used with a paid endpoint;
+the local runner regression tests use loopback fixtures and need no credentials.
+
 For all flags:
 
 ```bash

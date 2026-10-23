@@ -128,6 +128,18 @@ const completedStatus: ResponseValidator = (response) => {
   return [];
 };
 
+const cachedTokensGreaterThanZero: ResponseValidator = (response) => {
+  const cachedTokens =
+    "usage" in response
+      ? response.usage?.input_tokens_details?.cached_tokens
+      : undefined;
+  return typeof cachedTokens === "number" && cachedTokens > 0
+    ? []
+    : [
+        `Expected usage.input_tokens_details.cached_tokens > 0 but got ${cachedTokens ?? "missing"}. Check that the provider/model supports prompt caching and the shared prefix meets its minimum cacheable length.`,
+      ];
+};
+
 const compactObject: ResponseValidator = (response) => {
   if (response.object !== "response.compaction") {
     return [
@@ -243,6 +255,59 @@ function hasResponseId(response: unknown) {
     return formatZodIssues("", parseResult.error);
   }
   return parseResult.data.id ? [] : ["Warmup response did not include an id"];
+}
+
+function midConversationCacheTemplate(
+  role: "developer" | "system",
+  streaming: boolean,
+): TestTemplate {
+  return {
+    id: `mid-conversation-${role}-cache${streaming ? "-streaming" : ""}`,
+    name: `Mid-conversation ${role} Prompt Cache${streaming ? " (Streaming)" : ""}`,
+    description: `Primes a long conversation, then appends a ${role} message and requires cached input tokens on the second response. Sends two requests; requires a cache-capable provider/model.`,
+    streaming,
+    getRequest: (config) => {
+      const nonce = crypto.randomUUID();
+      return {
+        model: config.model,
+        store: false,
+        truncation: "disabled",
+        prompt_cache_key: `openresponses-cache-${nonce}`,
+        input: [
+          {
+            type: "message",
+            role: "system",
+            // A long system prefix could still hit the cache after a bad hoist.
+            content: `Run ${nonce}. Answer the latest user request briefly.`,
+          },
+          {
+            type: "message",
+            role: "user",
+            content: Array.from(
+              { length: 512 },
+              (_, index) =>
+                `Reference record ${index + 1}: A careful observer records the river level and checks the weather before each crossing.`,
+            ).join("\n"),
+          },
+          {
+            type: "message",
+            role: "assistant",
+            content: "I have read the reference records.",
+          },
+          // End on a user turn, avoiding assistant-prefill requirements.
+          { type: "message", role: "user", content: "Reply with OK." },
+        ],
+      };
+    },
+    validators: [
+      hasOutput,
+      completedStatus,
+      streamingEvents,
+      cachedTokensGreaterThanZero,
+    ],
+    run: (config, template) =>
+      runMidConversationCacheTest(config, template, role),
+  };
 }
 
 export const testTemplates: TestTemplate[] = [
@@ -624,6 +689,12 @@ export const testTemplates: TestTemplate[] = [
     }),
     validators: [hasOutput, completedStatus],
   },
+
+  ...(["developer", "system"] as const).flatMap((role) =>
+    [false, true].map((streaming) =>
+      midConversationCacheTemplate(role, streaming),
+    ),
+  ),
 
   {
     id: "compact-response",
@@ -1040,6 +1111,121 @@ function validateResponseData(
     response: parseResult.data,
     errors,
     streamEvents: context.sseResult?.events.length,
+  };
+}
+
+async function runMidConversationCacheTest(
+  config: TestConfig,
+  template: TestTemplate,
+  role: "developer" | "system",
+): Promise<TestResult> {
+  const startTime = Date.now();
+  const streaming = template.streaming ?? false;
+  const requests: Record<string, TestRequestBody> = {};
+  const responses: Record<string, unknown> = {};
+  const errors: string[] = [];
+  let stage: "prime" | "followup" = "prime";
+  let streamEvents = 0;
+
+  try {
+    const prime = template.getRequest(config);
+    if (!Array.isArray(prime.input)) {
+      throw new Error("Prompt cache test requires an input array");
+    }
+
+    for (const step of ["prime", "followup"] as const) {
+      stage = step;
+      const body: TestRequestBody =
+        stage === "prime"
+          ? prime
+          : {
+              ...prime,
+              input: [
+                ...prime.input,
+                {
+                  type: "message",
+                  role,
+                  content: "For the next reply, use a brief acknowledgement.",
+                },
+                {
+                  type: "message",
+                  role: "user",
+                  content: "Acknowledge this update.",
+                },
+              ],
+            };
+      requests[stage] = displayRequest(body, streaming);
+      const { response, rawData, sseResult } = await makeRequest(
+        config,
+        "/responses",
+        body,
+        streaming,
+      );
+      responses[stage] = rawData;
+      streamEvents += sseResult?.events.length ?? 0;
+      const stageErrors = [...(sseResult?.errors ?? [])];
+
+      if (sseResult) {
+        let terminalType: unknown;
+        for (const { data } of sseResult.events) {
+          const type =
+            data && typeof data === "object" && "type" in data
+              ? data.type
+              : undefined;
+          if (getTerminalResponse(data)) terminalType = type;
+          if (
+            type === "error" ||
+            type === "response.failed" ||
+            type === "response.incomplete"
+          ) {
+            stageErrors.push(`Received ${type} streaming event`);
+          }
+        }
+        if (terminalType !== "response.completed") {
+          stageErrors.push(
+            `Expected terminal response.completed event but got ${terminalType ?? "none"}`,
+          );
+        }
+      }
+
+      if (response.status !== 200) {
+        stageErrors.push(`HTTP ${response.status}: ${JSON.stringify(rawData)}`);
+      } else {
+        const validation = validateResponseData(
+          stage === "prime"
+            ? {
+                ...template,
+                validators: [hasOutput, completedStatus, streamingEvents],
+              }
+            : template,
+          body,
+          rawData,
+          Date.now() - startTime,
+          responseResourceSchema,
+          { streaming, sseResult, transport: "http" },
+        );
+        stageErrors.push(...(validation.errors ?? []));
+      }
+
+      errors.push(...stageErrors.map((error) => `${stage}: ${error}`));
+      if (errors.length > 0) break;
+    }
+  } catch (error) {
+    errors.push(
+      `${stage}: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  return {
+    id: template.id,
+    name: template.name,
+    description: template.description,
+    status: errors.length === 0 ? "passed" : "failed",
+    duration: Date.now() - startTime,
+    request: requests,
+    response: responses,
+    errors,
+    streamEvents: streaming ? streamEvents : undefined,
   };
 }
 
