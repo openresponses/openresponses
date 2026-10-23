@@ -111,7 +111,11 @@ model CreateResponseBody {
 /** Details about why the response was incomplete. */
 @summary("Incomplete details")
 model IncompleteDetails {
-  /** The reason the response could not be completed. */
+  /**
+   * The reason the response could not be completed. `steered` indicates that
+   * WebSocket steering ended the response at a safe output boundary before a
+   * continuation. Other reasons remain provider-defined.
+   */
   reason: string;
 }
 

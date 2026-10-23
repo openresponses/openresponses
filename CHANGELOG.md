@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-23
+
+[Specification](https://www.openresponses.org/specification/2026-10-23) · [Reference](https://www.openresponses.org/reference/2026-10-23) · [OpenAPI JSON](https://www.openresponses.org/openapi/2026-10-23/openapi.json)
+
+- Added WebSocket-only `response.steer` requests and `response.steer.accepted`, `response.steer.pending`, and `response.steer.failed` notifications.
+- Defined queued steering, automatic continuation, the `steered` incomplete reason, completion races, tool-result and approval handoffs, request-setting inheritance, and recovery after steering failures or disconnects.
+- Added compliance tests that follow steering through the continuation's completion and verify rejection of invalid targets and unsupported request fields.
+
 ## 2026-04-24
 
 [Specification](https://www.openresponses.org/specification/2026-04-24) · [Reference](https://www.openresponses.org/reference/2026-04-24) · [OpenAPI JSON](https://www.openresponses.org/openapi/2026-04-24/openapi.json)

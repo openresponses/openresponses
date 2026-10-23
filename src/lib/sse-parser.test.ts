@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { responseFixture } from "./compliance-test-fixtures";
-import { parseSSEStream } from "./sse-parser";
+import { parseSSEStream, parseStreamingEventData } from "./sse-parser";
 
 const encoder = new TextEncoder();
 const delta = {
@@ -19,6 +19,43 @@ const terminal = {
 const frame = (event: typeof delta | typeof terminal) =>
   `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`;
 const completeStream = frame(delta) + frame(terminal) + "data: [DONE]\n\n";
+
+it.each([
+  {
+    type: "response.steer.accepted",
+    sequence_number: 1,
+    steer: { id: "steer_test", previous_response_id: "resp_test" },
+  },
+  {
+    type: "response.steer.pending",
+    sequence_number: 2,
+    steer: { id: "steer_test", previous_response_id: "resp_test" },
+    reason: "waiting_for_required_input",
+    required_input: [
+      { type: "function_call_output", call_id: "call_test", name: "lookup" },
+    ],
+  },
+  {
+    type: "response.steer.failed",
+    sequence_number: 3,
+    steer: {
+      id: "steer_test",
+      previous_response_id: "resp_test",
+      input: "Change direction.",
+    },
+    error: {
+      type: "invalid_request_error",
+      code: "successor_creation_failed",
+      message: "The update could not be applied.",
+    },
+  },
+])("accepts $type only over WebSocket", (event) => {
+  expect(
+    parseStreamingEventData(event, undefined, { transport: "websocket" })
+      .validationResult.success,
+  ).toBe(true);
+  expect(parseStreamingEventData(event).validationResult.success).toBe(false);
+});
 
 function chunkedResponse(chunks: Uint8Array[]) {
   return new Response(

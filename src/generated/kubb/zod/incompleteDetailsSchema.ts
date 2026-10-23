@@ -12,6 +12,8 @@ export const incompleteDetailsSchema = z
   .object({
     reason: z
       .string()
-      .describe("The reason the response could not be completed."),
+      .describe(
+        "The reason the response could not be completed. `steered` indicates that\nWebSocket steering ended the response at a safe output boundary before a\ncontinuation. Other reasons remain provider-defined.",
+      ),
   })
   .describe("Details about why the response was incomplete.");
