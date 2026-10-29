@@ -4,22 +4,11 @@ Thanks for helping with Open Responses. This file focuses on how to make proposa
 
 ## Proposals
 
-We keep changes open, neutral, and interoperable, as described in the [technical charter](src/pages/governance.mdx).
+We keep changes open, neutral, and interoperable, as described in the [technical charter](CHARTER.md).
 
 ## Maintainers
 
-The Maintainers are the initial voting members of the Technical Steering Committee (TSC).
-
-- Steve Coffey, OpenAI
-- Ankit Mathur, Databricks
-- Anthony Liguori, Amazon
-- Ben Burtenshaw, HuggingFace
-- Devon Rifkin, Ollama
-- Ji Huang, OpenAI
-- Matt Apperson, OpenRouter
-- Shaun Smith, HuggingFace
-- Kedar Thakker, Ramp
-
+The [Maintainers](MAINTAINERS.md) are the initial voting members of the Technical Steering Committee (TSC).
 Maintainer selection and removal follow the technical charter.
 
 ### When to propose
