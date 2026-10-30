@@ -527,3 +527,193 @@ model WebSocketErrorEvent {
     ...Record<unknown>;
   };
 }
+
+/** A user message queued by a WebSocket steering request. */
+@summary("WebSocket steering user message")
+@extension("x-openresponses-added-in", "2026-10-23")
+@extension("additionalProperties", false)
+model WebSocketSteeringUserMessage {
+  /** The item type, when supplied. Always `message`. */
+  type?: "message";
+
+  /** The message role. Always `user`. */
+  role: "user";
+
+  /** User input, as text or an array of supported content parts. */
+  @oneOf
+  @oneOfItems
+  content: BoundedString<10485760> | (InputTextContentParam | InputImageContentParamAutoParam | InputFileContentParam)[];
+}
+
+/**
+ * Queues user input for a continuation of a response on the same WebSocket
+ * connection. Only `type`, `previous_response_id`, and `input` are accepted.
+ * The target response determines the WebSocket lane; do not send `stream_id`.
+ * Acceptance queues the input. The successor's `response.created` event marks
+ * its application to a continuation.
+ */
+@summary("WebSocket response steer event")
+@extension("x-openresponses-added-in", "2026-10-23")
+@extension("additionalProperties", false)
+model WebSocketResponseSteerEvent {
+  /** The client event type. Always `response.steer`. */
+  type: "response.steer";
+
+  /** The ID of the response to steer on this WebSocket connection. */
+  previous_response_id: string;
+
+  /**
+   * A user message string or a nonempty array of user messages. Other roles,
+   * tool outputs, item references, and additional message fields are not supported.
+   */
+  @oneOf
+  @minItems(1)
+  input: BoundedString<10485760> | WebSocketSteeringUserMessage[];
+}
+
+/** Identifies an accepted steering submission and its target response. */
+@summary("WebSocket steering submission")
+@extension("x-openresponses-added-in", "2026-10-23")
+model WebSocketSteeringSubmission {
+  /** The ID assigned to this steering submission. */
+  id: string;
+
+  /** The ID of the response being steered. */
+  previous_response_id: string;
+}
+
+/**
+ * A WebSocket-only event confirming that steering input is queued. It does not
+ * indicate that the model has applied the input. Keep reading through the
+ * continuation's terminal event. A later failure returns the same steering ID.
+ */
+@summary("WebSocket response steer accepted event")
+@extension("x-openresponses-added-in", "2026-10-23")
+model WebSocketResponseSteerAcceptedEvent {
+  /** The event type. Always `response.steer.accepted`. */
+  type: "response.steer.accepted";
+
+  /** The sequence number of this event. */
+  sequence_number: integer;
+
+  /** The steering submission whose input is queued. */
+  steer: WebSocketSteeringSubmission;
+
+  /** The target response's WebSocket lane, when one was supplied. */
+  stream_id?: string;
+}
+
+/** Identifies a function result needed before queued steering can be applied. */
+@summary("WebSocket steering required function result")
+@extension("x-openresponses-added-in", "2026-10-23")
+@extension("additionalProperties", false)
+model WebSocketSteeringRequiredFunctionOutput {
+  /** The required input type. Always `function_call_output`. */
+  type: "function_call_output";
+
+  /** The ID of the function call awaiting its result. */
+  call_id: string;
+
+  /** The name of the function that was called. */
+  name: string;
+}
+
+/**
+ * Identifies a provider-specific tool result or approval decision needed before
+ * queued steering can be applied. The type uses the provider's canonical slug
+ * prefix, such as `acme:approval_response`; identifying fields are defined by
+ * that provider. The stub does not supply a result or approval decision.
+ */
+@summary("WebSocket steering required extension input")
+@extension("x-openresponses-added-in", "2026-10-23")
+model WebSocketSteeringRequiredExtensionInput {
+  /** A required input type prefixed with the provider slug and a colon. */
+  @pattern("^[^:]+:.+$")
+  type: string;
+
+  ...Record<unknown>;
+}
+
+/**
+ * A WebSocket-only event indicating that accepted steering remains queued after
+ * the target response completes. With `waiting_for_required_input`, fill the
+ * identifying stubs with saved tool results or approval decisions and send one
+ * matching `response.create` per parent on the same connection and lane. Do not
+ * rerun tools or resend accepted steering. The server prepends queued steering
+ * in submission order, while the explicit request retains its own settings.
+ * This notification is emitted at most once per steering submission.
+ */
+@summary("WebSocket response steer pending event")
+@extension("x-openresponses-added-in", "2026-10-23")
+model WebSocketResponseSteerPendingEvent {
+  /** The event type. Always `response.steer.pending`. */
+  type: "response.steer.pending";
+
+  /** The sequence number of this event. */
+  sequence_number: integer;
+
+  /** The accepted steering submission that remains queued. */
+  steer: WebSocketSteeringSubmission;
+
+  /**
+   * Why the input remains queued. `waiting_for_required_input` means that tool
+   * results or approval decisions are needed. Clients must handle unknown reasons.
+   */
+  reason: string;
+
+  /** Identifying stubs for outstanding tool results or approval decisions. */
+  @oneOfItems
+  required_input: (WebSocketSteeringRequiredFunctionOutput | WebSocketSteeringRequiredExtensionInput)[];
+
+  /** The target response's WebSocket lane, when one was supplied. */
+  stream_id?: string;
+}
+
+/**
+ * A WebSocket-only event returning steering input that was rejected or could not
+ * be applied to a continuation. The server will not apply this input later.
+ * Failures after acceptance include the same steering ID; failures before ID
+ * allocation omit it. A disconnect or missing acknowledgement leaves the outcome
+ * unknown and does not establish that input was rejected.
+ */
+@summary("WebSocket response steer failed event")
+@extension("x-openresponses-added-in", "2026-10-23")
+model WebSocketResponseSteerFailedEvent {
+  /** The event type. Always `response.steer.failed`. */
+  type: "response.steer.failed";
+
+  /** The sequence number of this event. */
+  sequence_number: integer;
+
+  /** The original steering submission that could not be applied. */
+  steer: {
+    /** The ID assigned at acceptance, omitted if no ID was allocated. */
+    id?: string;
+
+    /** The target response ID from the steering request. */
+    previous_response_id: string;
+
+    /** The original input, including unsupported input returned by `invalid_input`. */
+    input: unknown;
+  };
+
+  /** Information about why the input could not be applied. */
+  error: {
+    /** The error type. Always `invalid_request_error`. */
+    type: "invalid_request_error";
+
+    /**
+     * An extensible machine-readable code. Known codes include `response_not_found`,
+     * `invalid_input`, `steering_not_supported`, `too_many_pending_steers`,
+     * `response_already_completed`, `response_not_active`, and
+     * `successor_creation_failed`.
+     */
+    code: string;
+
+    /** A human-readable description of the failure. */
+    message: string;
+  };
+
+  /** The target response's lane, when the target is known and a lane was supplied. */
+  stream_id?: string;
+}

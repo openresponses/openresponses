@@ -32,7 +32,7 @@ async function compile(entrypoint: string, output: string) {
   return { exitCode, output: stdout + stderr };
 }
 
-test("generated Zod preserves reference parsing and unknown-field behavior", async () => {
+test("generated Zod preserves reference parsing, unknown fields, and steering constraints", async () => {
   const temporary = await mkdtemp(join(tmpdir(), "openresponses-codegen-"));
   try {
     const result = await compile(join(root, "schema/main.tsp"), temporary);
@@ -61,6 +61,13 @@ test("generated Zod preserves reference parsing and unknown-field behavior", asy
     const { reasoningParamSchema } = await import(
       join(generated, "zod/reasoningParamSchema.ts")
     );
+    const { webSocketResponseSteerEventSchema: steerSchema } = await import(
+      join(generated, "zod/webSocketResponseSteerEventSchema.ts")
+    );
+    const { webSocketResponseSteerFailedEventSchema: steerFailedSchema } =
+      await import(
+        join(generated, "zod/webSocketResponseSteerFailedEventSchema.ts")
+      );
 
     const text = {
       format: { type: "text", future_format_option: true },
@@ -128,6 +135,80 @@ test("generated Zod preserves reference parsing and unknown-field behavior", asy
     for (const effort of ["invalid", 1, {}, []]) {
       expect(reasoningParamSchema.safeParse({ effort }).success).toBe(false);
     }
+
+    const steer = {
+      type: "response.steer",
+      previous_response_id: "resp_original",
+      input: "Focus on database changes.",
+    };
+    const inputLimit = "x".repeat(10_485_760);
+    for (const input of [
+      steer.input,
+      inputLimit,
+      `${inputLimit.slice(1)}🦉`,
+      [{ role: "user", content: "Keep the API unchanged." }],
+      [
+        {
+          type: "message",
+          role: "user",
+          content: [
+            { type: "input_text", text: "Use this example." },
+            { type: "input_image", image_url: "https://example.com/db.png" },
+            { type: "input_file", file_url: "https://example.com/schema.sql" },
+          ],
+        },
+      ],
+    ]) {
+      const request = { ...steer, input };
+      expect(steerSchema.parse(request)).toEqual(request);
+    }
+
+    const rejectedRequests = {
+      emptyInput: { ...steer, input: [] },
+      requestOverride: { ...steer, model: "other-model" },
+      laneOverride: { ...steer, stream_id: "other-lane" },
+      extraMessageField: {
+        ...steer,
+        input: [{ role: "user", content: "hello", id: "msg_other" }],
+      },
+      overlongInput: { ...steer, input: `${inputLimit}x` },
+      overlongContent: {
+        ...steer,
+        input: [{ role: "user", content: `${inputLimit}x` }],
+      },
+    };
+    const failure = {
+      type: "response.steer.failed",
+      sequence_number: 1,
+      steer: { previous_response_id: steer.previous_response_id },
+      error: {
+        type: "invalid_request_error",
+        code: "invalid_input",
+        message: "Unsupported steering input.",
+      },
+    };
+    for (const input of [null, [{ role: "assistant", content: "hello" }]]) {
+      const event = { ...failure, steer: { ...failure.steer, input } };
+      expect(steerFailedSchema.parse(event)).toEqual(event);
+    }
+    const steeringResults: Record<string, boolean> = {
+      ...Object.fromEntries(
+        Object.entries(rejectedRequests).map(([name, request]) => [
+          name,
+          steerSchema.safeParse(request).success,
+        ]),
+      ),
+      missingFailureInput: steerFailedSchema.safeParse(failure).success,
+    };
+    expect(steeringResults).toEqual({
+      emptyInput: false,
+      requestOverride: false,
+      laneOverride: false,
+      extraMessageField: false,
+      overlongInput: false,
+      overlongContent: false,
+      missingFailureInput: false,
+    });
   } finally {
     await rm(temporary, { recursive: true, force: true });
   }

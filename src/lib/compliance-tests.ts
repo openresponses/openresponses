@@ -3,6 +3,7 @@ import { compactResourceSchema } from "../generated/kubb/zod/compactResourceSche
 import type { createResponseBodySchema } from "../generated/kubb/zod/createResponseBodySchema";
 import { responseResourceSchema } from "../generated/kubb/zod/responseResourceSchema";
 import { webSocketResponseCreateEventSchema } from "../generated/kubb/zod/webSocketResponseCreateEventSchema";
+import { webSocketResponseSteerEventSchema } from "../generated/kubb/zod/webSocketResponseSteerEventSchema";
 import {
   getTerminalResponse,
   parseSSEStream,
@@ -163,6 +164,31 @@ const formatZodIssues = (prefix: string, error: z.ZodError) =>
     return `${prefix}${path}: ${issue.message}`;
   });
 
+function equalJSONValues(left: unknown, right: unknown): boolean {
+  if (left === right) return true;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return (
+      Array.isArray(left) &&
+      Array.isArray(right) &&
+      left.length === right.length &&
+      left.every((value, index) => equalJSONValues(value, right[index]))
+    );
+  }
+  if (!left || !right || typeof left !== "object" || typeof right !== "object")
+    return false;
+  const leftRecord = left as Record<string, unknown>;
+  const rightRecord = right as Record<string, unknown>;
+  const keys = Object.keys(leftRecord);
+  return (
+    keys.length === Object.keys(rightRecord).length &&
+    keys.every(
+      (key) =>
+        Object.hasOwn(rightRecord, key) &&
+        equalJSONValues(leftRecord[key], rightRecord[key]),
+    )
+  );
+}
+
 const validateWebSocketCreateEvent = (body: TestRequestBody) => {
   const parseResult = webSocketResponseCreateEventSchema.safeParse(body);
   if (parseResult.success) return [];
@@ -243,6 +269,41 @@ function hasResponseId(response: unknown) {
     return formatZodIssues("", parseResult.error);
   }
   return parseResult.data.id ? [] : ["Warmup response did not include an id"];
+}
+
+function steeringSeed(config: TestConfig, needsTool = false): TestRequestBody {
+  return {
+    type: "response.create",
+    model: config.model,
+    store: false,
+    instructions:
+      "Follow the user's latest update and preserve requested markers verbatim.",
+    input: needsTool
+      ? "Call get_project_status before drafting the project plan."
+      : "Draft a detailed project plan for building a task-tracking application.",
+    max_output_tokens: 1024,
+    max_tool_calls: 3,
+    metadata: { compliance: "steering" },
+    tools: needsTool
+      ? [
+          {
+            type: "function",
+            name: "get_project_status",
+            description: "Get the current project status.",
+            parameters: {
+              type: "object",
+              properties: {},
+              required: [],
+              additionalProperties: false,
+            },
+            strict: true,
+          },
+        ]
+      : [],
+    tool_choice: needsTool
+      ? { type: "function", name: "get_project_status" }
+      : "auto",
+  };
 }
 
 export const testTemplates: TestTemplate[] = [
@@ -527,6 +588,51 @@ export const testTemplates: TestTemplate[] = [
   },
 
   {
+    id: "websocket-steering",
+    name: "WebSocket Steering",
+    description:
+      "Queues a user update after response.created and follows the automatic successor through completion with inherited settings",
+    transport: "websocket",
+    streaming: true,
+    unsupportedReason: webSocketBrowserUnsupported,
+    getRequest: steeringSeed,
+    run: runWebSocketSteeringTest,
+  },
+  {
+    id: "websocket-steering-tool-output",
+    name: "WebSocket Steering Pending Tool Output",
+    description:
+      "Returns required function output on the same connection without replaying accepted steering and validates the updated response",
+    transport: "websocket",
+    streaming: true,
+    unsupportedReason: webSocketBrowserUnsupported,
+    getRequest: (config) => steeringSeed(config, true),
+    run: runWebSocketSteeringTest,
+  },
+  {
+    id: "websocket-steering-invalid-target",
+    name: "WebSocket Steering Missing Response",
+    description:
+      "Verifies steering an unavailable response returns response_not_found and the original input",
+    transport: "websocket",
+    streaming: true,
+    unsupportedReason: webSocketBrowserUnsupported,
+    getRequest: steeringSeed,
+    run: runWebSocketSteeringTest,
+  },
+  {
+    id: "websocket-steering-invalid-input",
+    name: "WebSocket Steering Invalid Request",
+    description:
+      "Verifies a steering request with unsupported fields returns invalid_input and the original input",
+    transport: "websocket",
+    streaming: true,
+    unsupportedReason: webSocketBrowserUnsupported,
+    getRequest: steeringSeed,
+    run: runWebSocketSteeringTest,
+  },
+
+  {
     id: "system-prompt",
     name: "System Prompt",
     description: "Include system role message in input",
@@ -746,121 +852,42 @@ function createEmptyWebSocketTurn(): WebSocketTurnResult {
   };
 }
 
-async function makeWebSocketSession(
+interface WebSocketConnection {
+  send: (body: TestRequestBody) => void;
+  receive: (deadline: number) => Promise<string>;
+  close: () => void;
+}
+
+async function openWebSocketConnection(
   config: TestConfig,
-  steps: WebSocketRequestStep[],
-  options: WebSocketSessionOptions = {},
-): Promise<WebSocketTurnResult[]> {
-  const authValue = config.useBearerPrefix
-    ? `Bearer ${config.apiKey}`
-    : config.apiKey;
-
+): Promise<WebSocketConnection> {
   return new Promise((resolve, reject) => {
-    const turns = steps.map(() => createEmptyWebSocketTurn());
-    let turnIndex = 0;
-    let timeout: ReturnType<typeof setTimeout> | null = null;
-    let ws: WebSocket | null = null;
-    let settled = false;
-
-    const clearPendingTimeout = () => {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
-    };
-
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      clearPendingTimeout();
-      try {
-        ws?.close();
-      } catch {
-        // Ignore close errors after a terminal event.
-      }
-      resolve(turns);
-    };
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let pending:
+      | {
+          resolve: (data: string) => void;
+          reject: (error: Error) => void;
+        }
+      | undefined;
+    const messages: string[] = [];
+    let failure: Error | undefined;
+    let opened = false;
+    let ws: WebSocket;
 
     const fail = (error: Error) => {
-      if (settled) return;
-      settled = true;
-      clearPendingTimeout();
+      failure ??= error;
+      clearTimeout(timeout);
+      pending?.reject(failure);
+      pending = undefined;
+      if (!opened) reject(failure);
+    };
+    const close = () => {
+      fail(new Error("WebSocket closed before a terminal response event"));
       try {
         ws?.close();
       } catch {
-        // Ignore close errors while rejecting the request.
+        // A failed handshake may already have closed the socket.
       }
-      reject(error);
-    };
-
-    const currentTurn = () => turns[turnIndex];
-
-    const armTimeout = (message: string) => {
-      clearPendingTimeout();
-      timeout = setTimeout(
-        () => fail(new Error(message)),
-        config.timeoutMs ?? 30000,
-      );
-    };
-
-    const sendCurrentRequest = () => {
-      if (!ws || turnIndex >= steps.length) {
-        finish();
-        return;
-      }
-      const turn = currentTurn();
-      if (!turn) {
-        finish();
-        return;
-      }
-      let body: TestRequestBody;
-      try {
-        const step = steps[turnIndex];
-        body =
-          typeof step === "function" ? step(turns.slice(0, turnIndex)) : step;
-      } catch (error) {
-        fail(error instanceof Error ? error : new Error(String(error)));
-        return;
-      }
-      if (options.validateRequests !== false) {
-        const requestValidationErrors = validateWebSocketCreateEvent(body);
-        if (requestValidationErrors.length > 0) {
-          fail(
-            new Error(
-              requestValidationErrors
-                .map((error) => `Request ${turnIndex + 1}: ${error}`)
-                .join("\n"),
-            ),
-          );
-          return;
-        }
-      }
-      turn.request = body;
-      armTimeout("Timed out waiting for terminal WebSocket response event");
-      try {
-        ws.send(JSON.stringify(body));
-      } catch (error) {
-        fail(error instanceof Error ? error : new Error(String(error)));
-      }
-    };
-
-    const completeCurrentTurn = () => {
-      clearPendingTimeout();
-      turnIndex += 1;
-      if (turnIndex >= steps.length) {
-        finish();
-      } else {
-        sendCurrentRequest();
-      }
-    };
-
-    const messageDataToString = (data: MessageEvent["data"]) => {
-      if (typeof data === "string") return data;
-      if (data instanceof ArrayBuffer) return new TextDecoder().decode(data);
-      if (ArrayBuffer.isView(data)) {
-        return new TextDecoder().decode(data);
-      }
-      return String(data);
     };
 
     try {
@@ -871,11 +898,12 @@ async function makeWebSocketSession(
       // Bun supports headers for client WebSockets; browser runs skip this path.
       const WebSocketWithHeaders =
         WebSocket as unknown as WebSocketConstructorWithHeaders;
-
       ws = new WebSocketWithHeaders(toWebSocketUrl(config.baseUrl), {
         headers: {
           "Content-Type": "application/json",
-          [config.authHeaderName]: authValue,
+          [config.authHeaderName]: config.useBearerPrefix
+            ? `Bearer ${config.apiKey}`
+            : config.apiKey,
         },
       });
     } catch (error) {
@@ -883,75 +911,141 @@ async function makeWebSocketSession(
       return;
     }
 
-    armTimeout("Timed out opening WebSocket connection");
+    timeout = setTimeout(() => {
+      fail(new Error("Timed out opening WebSocket connection"));
+      close();
+    }, config.timeoutMs ?? 30000);
     ws.addEventListener("open", () => {
-      if (settled) return;
-      sendCurrentRequest();
+      opened = true;
+      clearTimeout(timeout);
+      resolve({
+        send(body) {
+          if (failure) throw failure;
+          ws.send(JSON.stringify(body));
+        },
+        receive(deadline) {
+          if (Date.now() >= deadline) {
+            return Promise.reject(
+              new Error(
+                "Timed out waiting for terminal WebSocket response event",
+              ),
+            );
+          }
+          const message = messages.shift();
+          if (message !== undefined) return Promise.resolve(message);
+          if (failure) return Promise.reject(failure);
+          return new Promise((resolveMessage, rejectMessage) => {
+            pending = { resolve: resolveMessage, reject: rejectMessage };
+            timeout = setTimeout(() => {
+              fail(
+                new Error(
+                  "Timed out waiting for terminal WebSocket response event",
+                ),
+              );
+              close();
+            }, deadline - Date.now());
+          });
+        },
+        close,
+      });
     });
-
-    ws.addEventListener("message", (message) => {
-      if (settled) return;
-      const turn = currentTurn();
-      if (!turn) return;
-
-      const data = messageDataToString(message.data);
-      if (data === "[DONE]") {
-        if (!turn.finalResponse && !turn.errorCode) {
-          turn.errors.push("Received [DONE] before a terminal WebSocket event");
-        }
-        completeCurrentTurn();
-        return;
+    ws.addEventListener("message", ({ data }) => {
+      if (failure) return;
+      const message =
+        typeof data === "string"
+          ? data
+          : data instanceof ArrayBuffer || ArrayBuffer.isView(data)
+            ? new TextDecoder().decode(data)
+            : String(data);
+      if (pending) {
+        clearTimeout(timeout);
+        pending.resolve(message);
+        pending = undefined;
+      } else {
+        messages.push(message);
       }
+    });
+    ws.addEventListener("error", () => {
+      fail(new Error("WebSocket connection failed"));
+      close();
+    });
+    ws.addEventListener("close", () => {
+      fail(new Error("WebSocket closed before a terminal response event"));
+    });
+  });
+}
 
-      try {
-        const parsed = JSON.parse(data);
-        const parsedEvent = parseStreamingEventData(parsed, undefined, {
-          transport: "websocket",
-        });
-        turn.rawMessages.push(parsed);
-        turn.events.push(parsedEvent);
+function recordWebSocketEvent(turn: WebSocketTurnResult, data: unknown) {
+  const event = parseStreamingEventData(data, undefined, {
+    transport: "websocket",
+  });
+  turn.rawMessages.push(data);
+  turn.events.push(event);
+  if (!event.validationResult.success) {
+    turn.errors.push(
+      `Event validation failed for ${event.event}: ${JSON.stringify(event.validationResult.error.issues)}`,
+    );
+  }
+  return event;
+}
 
-        if (!parsedEvent.validationResult.success) {
-          turn.errors.push(
-            `Event validation failed for ${parsedEvent.event}: ${JSON.stringify(parsedEvent.validationResult.error.issues)}`,
+async function makeWebSocketSession(
+  config: TestConfig,
+  steps: WebSocketRequestStep[],
+  options: WebSocketSessionOptions = {},
+): Promise<WebSocketTurnResult[]> {
+  const connection = await openWebSocketConnection(config);
+  const turns: WebSocketTurnResult[] = [];
+  try {
+    for (const [index, step] of steps.entries()) {
+      const body = typeof step === "function" ? step(turns) : step;
+      if (options.validateRequests !== false) {
+        const errors = validateWebSocketCreateEvent(body);
+        if (errors.length) {
+          throw new Error(
+            errors.map((error) => `Request ${index + 1}: ${error}`).join("\n"),
           );
         }
-
-        const terminalResponse = getTerminalResponse(parsed);
-        if (terminalResponse) {
-          turn.finalResponse = terminalResponse;
-          completeCurrentTurn();
-          return;
+      }
+      const turn = { ...createEmptyWebSocketTurn(), request: body };
+      turns.push(turn);
+      connection.send(body);
+      const deadline = Date.now() + (config.timeoutMs ?? 30000);
+      while (true) {
+        const data = await connection.receive(deadline);
+        if (data === "[DONE]") {
+          turn.errors.push("Received [DONE] before a terminal WebSocket event");
+          break;
         }
-
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(data);
+        } catch {
+          turn.errors.push(`Failed to parse WebSocket event data: ${data}`);
+          continue;
+        }
+        const event = recordWebSocketEvent(turn, parsed);
+        const terminal = getTerminalResponse(parsed);
+        if (terminal) {
+          turn.finalResponse = terminal;
+          break;
+        }
         const errorCode = getStreamingErrorCode(parsed);
-        if (parsedEvent.event === "error" || errorCode) {
+        if (event.event === "error" || errorCode) {
           turn.errorCode = errorCode;
           turn.errorEvent = parsed;
-          if (!errorCode) {
+          if (!errorCode)
             turn.errors.push(
               `WebSocket error event: ${JSON.stringify(parsed)}`,
             );
-          }
-          completeCurrentTurn();
+          break;
         }
-      } catch {
-        turn.errors.push(`Failed to parse WebSocket event data: ${data}`);
       }
-    });
-
-    ws.addEventListener("error", () => {
-      fail(new Error("WebSocket connection failed"));
-    });
-
-    ws.addEventListener("close", () => {
-      const turn = currentTurn();
-      if (!settled && turn && !turn.finalResponse && !turn.errorCode) {
-        turn.errors.push("WebSocket closed before a terminal response event");
-      }
-      finish();
-    });
-  });
+    }
+    return turns;
+  } finally {
+    connection.close();
+  }
 }
 
 async function makeWebSocketRequest(
@@ -1060,6 +1154,333 @@ function getCompactedOutput(response: unknown): {
   }
 
   return { output, errors: [] };
+}
+
+async function runWebSocketSteeringTest(
+  config: TestConfig,
+  template: TestTemplate,
+): Promise<TestResult> {
+  const startTime = Date.now();
+  const seed = template.getRequest(config);
+  const requests: TestRequestBody[] = [seed];
+  const turn = createEmptyWebSocketTurn();
+  const needsTool = template.id === "websocket-steering-tool-output";
+  const expectedFailure =
+    template.id === "websocket-steering-invalid-target"
+      ? "response_not_found"
+      : template.id === "websocket-steering-invalid-input"
+        ? "invalid_input"
+        : null;
+  let initialId: string | undefined;
+  let initial: ResponseResource | null = null;
+  let successorId: string | undefined;
+  let successor: ResponseResource | null = null;
+  let acceptedId: string | undefined;
+  let lane: string | undefined;
+  let steer: TestRequestBody | undefined;
+  let continuation: TestRequestBody | undefined;
+  let connection: WebSocketConnection | undefined;
+
+  try {
+    const seedErrors = validateWebSocketCreateEvent(seed);
+    if (seedErrors.length) throw new Error(seedErrors.join("\n"));
+    connection = await openWebSocketConnection(config);
+    connection.send(seed);
+    let deadline = Date.now() + (config.timeoutMs ?? 30000);
+    while (true) {
+      const raw = await connection.receive(deadline);
+      if (raw === "[DONE]") {
+        throw new Error(
+          "Received [DONE] before the steered response completed",
+        );
+      }
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object") {
+        throw new Error("WebSocket event was not an object");
+      }
+
+      // Correlate before validation: a shared connection may contain unrelated
+      // events, including extensions outside this test's response contract.
+      if (lane && typeof data.stream_id === "string" && data.stream_id !== lane)
+        continue;
+      if (
+        typeof data.type === "string" &&
+        data.type.startsWith("response.steer.")
+      ) {
+        if (
+          !steer ||
+          data.steer?.previous_response_id !== steer.previous_response_id
+        )
+          continue;
+        if (acceptedId && data.steer?.id !== acceptedId) continue;
+        if (
+          !acceptedId &&
+          data.type === "response.steer.failed" &&
+          !equalJSONValues(data.steer?.input, steer.input)
+        )
+          continue;
+      } else if (initialId) {
+        const responseId = data.response?.id ?? data.response_id;
+        const isSuccessor =
+          data.type === "response.created" &&
+          data.response?.previous_response_id === initialId;
+        const identifiers = [data.response?.id, data.response_id].filter(
+          (id) => typeof id === "string",
+        );
+        const isKnownResponse = identifiers.some(
+          (id) => id === initialId || id === successorId,
+        );
+        if (responseId && !isKnownResponse && !isSuccessor) continue;
+        if (identifiers.length === 2 && identifiers[0] !== identifiers[1]) {
+          throw new Error(
+            "WebSocket event contained conflicting response identifiers",
+          );
+        }
+      }
+
+      const parsed = recordWebSocketEvent(turn, data);
+      if (!parsed.validationResult.success) break;
+      const event = parsed.validationResult.data;
+      if (event.type === "error") {
+        throw new Error(`WebSocket error event: ${JSON.stringify(data)}`);
+      }
+
+      if (event.type === "response.created") {
+        if (!initialId) {
+          initialId = event.response.id;
+          lane =
+            typeof data.stream_id === "string" ? data.stream_id : undefined;
+          steer = {
+            type: "response.steer",
+            previous_response_id:
+              expectedFailure === "response_not_found"
+                ? `resp_openresponses_missing_${Date.now()}`
+                : initialId,
+            input:
+              "Update the plan and include the exact marker openresponses-steering-applied in your answer.",
+            ...(expectedFailure === "invalid_input"
+              ? { model: config.model }
+              : {}),
+          };
+          if (!expectedFailure) {
+            const validation =
+              webSocketResponseSteerEventSchema.safeParse(steer);
+            if (!validation.success)
+              throw new Error(
+                formatZodIssues("Steering request ", validation.error).join(
+                  "\n",
+                ),
+              );
+          }
+          requests.push(steer);
+          connection.send(steer);
+        } else if (event.response.id !== initialId) {
+          if (!acceptedId || !initial)
+            throw new Error(
+              "Steering successor started before acceptance and the original terminal event",
+            );
+          if (needsTool && !continuation)
+            throw new Error(
+              "Steering continued before the required tool result was returned",
+            );
+          if (event.response.previous_response_id !== initialId)
+            throw new Error(
+              "Steering successor did not reference the original response",
+            );
+          if (successorId && successorId !== event.response.id)
+            throw new Error(
+              "A second steering successor started before the first completed",
+            );
+          if (!successorId && !continuation)
+            deadline = Date.now() + (config.timeoutMs ?? 30000);
+          successorId = event.response.id;
+        }
+      } else if (event.type === "response.steer.accepted") {
+        if (expectedFailure)
+          throw new Error(
+            `Expected ${expectedFailure}, but the invalid steering request was accepted`,
+          );
+        acceptedId = event.steer.id;
+      } else if (event.type === "response.steer.failed") {
+        if (!equalJSONValues(event.steer.input, steer?.input)) {
+          throw new Error("Steering failure did not return the original input");
+        }
+        if (acceptedId && event.steer.id !== acceptedId) {
+          throw new Error(
+            "Steering failure did not preserve the accepted steering id",
+          );
+        }
+        if (event.error.code !== expectedFailure) {
+          throw new Error(
+            `Steering failed: ${event.error.code}: ${event.error.message}`,
+          );
+        }
+        break;
+      } else if (event.type === "response.steer.pending") {
+        if (event.steer.id !== acceptedId)
+          throw new Error(
+            "Pending steering did not preserve the accepted steering id",
+          );
+        if (!needsTool || !initial || initial.status !== "completed") {
+          throw new Error(
+            "Unexpected pending steering without a completed client tool call",
+          );
+        }
+        if (continuation)
+          throw new Error(
+            "Received duplicate pending steering for the same submission",
+          );
+        if (event.reason !== "waiting_for_required_input")
+          throw new Error(
+            `Unsupported pending steering reason: ${event.reason}`,
+          );
+        const calls = initial.output.filter(
+          (item) => item.type === "function_call",
+        );
+        const remainingCalls = new Map(
+          calls.map((call) => [call.call_id, call]),
+        );
+        if (
+          !calls.length ||
+          remainingCalls.size !== calls.length ||
+          event.required_input.length !== calls.length
+        ) {
+          throw new Error(
+            "Pending steering did not identify all required function results",
+          );
+        }
+        const input = event.required_input.map((required) => {
+          const call = remainingCalls.get(required.call_id);
+          if (
+            required.type !== "function_call_output" ||
+            !call ||
+            call.name !== required.name
+          ) {
+            throw new Error(
+              "Pending steering identified an unknown or duplicate function call",
+            );
+          }
+          remainingCalls.delete(call.call_id);
+          return {
+            type: "function_call_output" as const,
+            call_id: call.call_id,
+            output: "Design is complete. Development has not started.",
+          };
+        });
+        continuation = {
+          type: "response.create",
+          model: config.model,
+          store: false,
+          previous_response_id: initialId,
+          input,
+          instructions:
+            "Use the supplied project status when answering the user's latest update.",
+          tools: [],
+          tool_choice: "none",
+        };
+        const errors = validateWebSocketCreateEvent(continuation);
+        if (errors.length) throw new Error(errors.join("\n"));
+        requests.push(continuation);
+        connection.send(continuation);
+        deadline = Date.now() + (config.timeoutMs ?? 30000);
+      }
+
+      const terminal = getTerminalResponse(event);
+      if (!terminal) continue;
+      if (event.type !== `response.${terminal.status}`)
+        throw new Error(
+          `Terminal event ${event.type} did not match response status ${terminal.status}`,
+        );
+      if (terminal.id === initialId) {
+        if (initial)
+          throw new Error(
+            "Received multiple terminal events for the original response",
+          );
+        initial = terminal;
+        const reason = terminal.incomplete_details?.reason;
+        if (
+          terminal.status !== "completed" &&
+          !(terminal.status === "incomplete" && reason === "steered")
+        ) {
+          throw new Error(
+            `Original response ended with status ${terminal.status} and reason ${reason}`,
+          );
+        }
+      } else if (terminal.id === successorId) {
+        successor = terminal;
+        if (terminal.previous_response_id !== initialId)
+          throw new Error(
+            "Steering successor did not reference the original response",
+          );
+        if (terminal.status !== "completed")
+          throw new Error(
+            `Steering successor ended with status ${terminal.status}`,
+          );
+        const text = terminal.output
+          .flatMap((item) =>
+            item.type === "message"
+              ? item.content
+                  .filter((part) => part.type === "output_text")
+                  .map((part) => part.text)
+              : [],
+          )
+          .join("");
+        if (!text.includes("openresponses-steering-applied"))
+          throw new Error(
+            "Steering successor output did not contain the requested marker",
+          );
+        const settings = continuation ?? initial;
+        const fields = continuation
+          ? ["instructions", "tools", "tool_choice", "store"]
+          : [
+              "model",
+              "instructions",
+              "tools",
+              "tool_choice",
+              "text",
+              "max_output_tokens",
+              "max_tool_calls",
+              "store",
+              "metadata",
+            ];
+        for (const field of fields) {
+          if (!equalJSONValues(terminal[field], settings?.[field])) {
+            throw new Error(
+              `Steering successor did not preserve ${field} from ${continuation ? "the explicit continuation request" : "the original response"}`,
+            );
+          }
+        }
+        break;
+      }
+    }
+    if (!expectedFailure && (!acceptedId || !successor)) {
+      throw new Error(
+        "Steering did not produce an accepted, completed successor",
+      );
+    }
+  } catch (error) {
+    turn.errors.push(error instanceof Error ? error.message : String(error));
+  } finally {
+    connection?.close();
+  }
+
+  return {
+    id: template.id,
+    name: template.name,
+    description: template.description,
+    status: turn.errors.length === 0 ? "passed" : "failed",
+    duration: Date.now() - startTime,
+    request: requests,
+    response: {
+      initial,
+      successor,
+      steering: turn.rawMessages.filter((event) =>
+        (event as { type?: string }).type?.startsWith("response.steer."),
+      ),
+    },
+    errors: turn.errors,
+    streamEvents: turn.events.length,
+  };
 }
 
 async function runWebSocketSequentialResponsesTest(

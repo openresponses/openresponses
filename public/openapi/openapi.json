@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Open Responses",
-    "version": "2026-04-24"
+    "version": "2026-10-23"
   },
   "tags": [],
   "paths": {
@@ -122,9 +122,36 @@
         }
       },
       "x-openresponses-websocket": {
-        "description": "Open a WebSocket connection to `/v1/responses`. Send client events using the WebSocketResponseCreateEvent schema. Server progress messages use the same streaming event schemas as `text/event-stream` responses. WebSocket failures use the WebSocketErrorEvent schema.",
+        "description": "Open a WebSocket connection to `/v1/responses`. Client messages either start a response with `response.create` or queue user input with WebSocket-only `response.steer`. Server progress messages use the same streaming event schemas as `text/event-stream` responses. The steeringMessage schemas describe WebSocket-only steering acceptance, pending input, and failure notifications; WebSocket transport failures use WebSocketErrorEvent. Steering targets a response on the same connection and inherits its lane. Acceptance queues input; the continuation's `response.created` event marks application. Automatic continuations inherit the original request settings, with token and tool-call limits applied separately per response. Steering does not rewrite earlier output, undo actions, or cancel tools already running.",
         "clientMessage": {
-          "$ref": "#/components/schemas/WebSocketResponseCreateEvent"
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/WebSocketResponseCreateEvent"
+            },
+            {
+              "$ref": "#/components/schemas/WebSocketResponseSteerEvent"
+            }
+          ],
+          "discriminator": {
+            "propertyName": "type"
+          }
+        },
+        "steeringMessage": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/WebSocketResponseSteerAcceptedEvent"
+            },
+            {
+              "$ref": "#/components/schemas/WebSocketResponseSteerPendingEvent"
+            },
+            {
+              "$ref": "#/components/schemas/WebSocketResponseSteerFailedEvent"
+            }
+          ],
+          "discriminator": {
+            "propertyName": "type"
+          },
+          "x-openresponses-added-in": "2026-10-23"
         },
         "errorMessage": {
           "$ref": "#/components/schemas/WebSocketErrorEvent"
@@ -172,7 +199,7 @@
         "properties": {
           "reason": {
             "type": "string",
-            "description": "The reason the response could not be completed."
+            "description": "The reason the response could not be completed. `steered` indicates that\nWebSocket steering ended the response at a safe output boundary before a\ncontinuation. Other reasons remain provider-defined."
           }
         },
         "description": "Details about why the response was incomplete.",
@@ -3905,6 +3932,283 @@
         "description": "A WebSocket error envelope returned for Responses WebSocket mode failures.",
         "title": "WebSocket error event",
         "x-openresponses-added-in": "2026-04-24"
+      },
+      "WebSocketSteeringUserMessage": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["message"],
+            "description": "The item type, when supplied. Always `message`."
+          },
+          "role": {
+            "type": "string",
+            "enum": ["user"],
+            "description": "The message role. Always `user`."
+          },
+          "content": {
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 10485760
+              },
+              {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/InputTextContentParam"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InputImageContentParamAutoParam"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InputFileContentParam"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "type"
+                  }
+                }
+              }
+            ],
+            "description": "User input, as text or an array of supported content parts."
+          }
+        },
+        "description": "A user message queued by a WebSocket steering request.",
+        "title": "WebSocket steering user message",
+        "additionalProperties": false,
+        "x-openresponses-added-in": "2026-10-23"
+      },
+      "WebSocketResponseSteerEvent": {
+        "type": "object",
+        "required": ["type", "previous_response_id", "input"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["response.steer"],
+            "description": "The client event type. Always `response.steer`."
+          },
+          "previous_response_id": {
+            "type": "string",
+            "description": "The ID of the response to steer on this WebSocket connection."
+          },
+          "input": {
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 10485760
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/WebSocketSteeringUserMessage"
+                }
+              }
+            ],
+            "minItems": 1,
+            "description": "A user message string or a nonempty array of user messages. Other roles,\ntool outputs, item references, and additional message fields are not supported."
+          }
+        },
+        "description": "Queues user input for a continuation of a response on the same WebSocket\nconnection. Only `type`, `previous_response_id`, and `input` are accepted.\nThe target response determines the WebSocket lane; do not send `stream_id`.\nAcceptance queues the input. The successor's `response.created` event marks\nits application to a continuation.",
+        "title": "WebSocket response steer event",
+        "additionalProperties": false,
+        "x-openresponses-added-in": "2026-10-23"
+      },
+      "WebSocketSteeringSubmission": {
+        "type": "object",
+        "required": ["id", "previous_response_id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID assigned to this steering submission."
+          },
+          "previous_response_id": {
+            "type": "string",
+            "description": "The ID of the response being steered."
+          }
+        },
+        "description": "Identifies an accepted steering submission and its target response.",
+        "title": "WebSocket steering submission",
+        "x-openresponses-added-in": "2026-10-23"
+      },
+      "WebSocketResponseSteerAcceptedEvent": {
+        "type": "object",
+        "required": ["type", "sequence_number", "steer"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["response.steer.accepted"],
+            "description": "The event type. Always `response.steer.accepted`."
+          },
+          "sequence_number": {
+            "type": "integer",
+            "description": "The sequence number of this event."
+          },
+          "steer": {
+            "$ref": "#/components/schemas/WebSocketSteeringSubmission",
+            "description": "The steering submission whose input is queued."
+          },
+          "stream_id": {
+            "type": "string",
+            "description": "The target response's WebSocket lane, when one was supplied."
+          }
+        },
+        "description": "A WebSocket-only event confirming that steering input is queued. It does not\nindicate that the model has applied the input. Keep reading through the\ncontinuation's terminal event. A later failure returns the same steering ID.",
+        "title": "WebSocket response steer accepted event",
+        "x-openresponses-added-in": "2026-10-23"
+      },
+      "WebSocketSteeringRequiredFunctionOutput": {
+        "type": "object",
+        "required": ["type", "call_id", "name"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["function_call_output"],
+            "description": "The required input type. Always `function_call_output`."
+          },
+          "call_id": {
+            "type": "string",
+            "description": "The ID of the function call awaiting its result."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the function that was called."
+          }
+        },
+        "description": "Identifies a function result needed before queued steering can be applied.",
+        "title": "WebSocket steering required function result",
+        "additionalProperties": false,
+        "x-openresponses-added-in": "2026-10-23"
+      },
+      "WebSocketSteeringRequiredExtensionInput": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "pattern": "^[^:]+:.+$",
+            "description": "A required input type prefixed with the provider slug and a colon."
+          }
+        },
+        "description": "Identifies a provider-specific tool result or approval decision needed before\nqueued steering can be applied. The type uses the provider's canonical slug\nprefix, such as `acme:approval_response`; identifying fields are defined by\nthat provider. The stub does not supply a result or approval decision.",
+        "title": "WebSocket steering required extension input",
+        "x-openresponses-added-in": "2026-10-23",
+        "additionalProperties": {}
+      },
+      "WebSocketResponseSteerPendingEvent": {
+        "type": "object",
+        "required": [
+          "type",
+          "sequence_number",
+          "steer",
+          "reason",
+          "required_input"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["response.steer.pending"],
+            "description": "The event type. Always `response.steer.pending`."
+          },
+          "sequence_number": {
+            "type": "integer",
+            "description": "The sequence number of this event."
+          },
+          "steer": {
+            "$ref": "#/components/schemas/WebSocketSteeringSubmission",
+            "description": "The accepted steering submission that remains queued."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Why the input remains queued. `waiting_for_required_input` means that tool\nresults or approval decisions are needed. Clients must handle unknown reasons."
+          },
+          "required_input": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WebSocketSteeringRequiredFunctionOutput"
+                },
+                {
+                  "$ref": "#/components/schemas/WebSocketSteeringRequiredExtensionInput"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type"
+              }
+            },
+            "description": "Identifying stubs for outstanding tool results or approval decisions."
+          },
+          "stream_id": {
+            "type": "string",
+            "description": "The target response's WebSocket lane, when one was supplied."
+          }
+        },
+        "description": "A WebSocket-only event indicating that accepted steering remains queued after\nthe target response completes. With `waiting_for_required_input`, fill the\nidentifying stubs with saved tool results or approval decisions and send one\nmatching `response.create` per parent on the same connection and lane. Do not\nrerun tools or resend accepted steering. The server prepends queued steering\nin submission order, while the explicit request retains its own settings.\nThis notification is emitted at most once per steering submission.",
+        "title": "WebSocket response steer pending event",
+        "x-openresponses-added-in": "2026-10-23"
+      },
+      "WebSocketResponseSteerFailedEvent": {
+        "type": "object",
+        "required": ["type", "sequence_number", "steer", "error"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["response.steer.failed"],
+            "description": "The event type. Always `response.steer.failed`."
+          },
+          "sequence_number": {
+            "type": "integer",
+            "description": "The sequence number of this event."
+          },
+          "steer": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID assigned at acceptance, omitted if no ID was allocated."
+              },
+              "previous_response_id": {
+                "type": "string",
+                "description": "The target response ID from the steering request."
+              },
+              "input": {
+                "description": "The original input, including unsupported input returned by `invalid_input`."
+              }
+            },
+            "required": ["previous_response_id", "input"],
+            "description": "The original steering submission that could not be applied."
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["invalid_request_error"],
+                "description": "The error type. Always `invalid_request_error`."
+              },
+              "code": {
+                "type": "string",
+                "description": "An extensible machine-readable code. Known codes include `response_not_found`,\n`invalid_input`, `steering_not_supported`, `too_many_pending_steers`,\n`response_already_completed`, `response_not_active`, and\n`successor_creation_failed`."
+              },
+              "message": {
+                "type": "string",
+                "description": "A human-readable description of the failure."
+              }
+            },
+            "required": ["type", "code", "message"],
+            "description": "Information about why the input could not be applied."
+          },
+          "stream_id": {
+            "type": "string",
+            "description": "The target response's lane, when the target is known and a lane was supplied."
+          }
+        },
+        "description": "A WebSocket-only event returning steering input that was rejected or could not\nbe applied to a continuation. The server will not apply this input later.\nFailures after acceptance include the same steering ID; failures before ID\nallocation omit it. A disconnect or missing acknowledgement leaves the outcome\nunknown and does not establish that input was rejected.",
+        "title": "WebSocket response steer failed event",
+        "x-openresponses-added-in": "2026-10-23"
       },
       "DetailEnum": {
         "type": "string",

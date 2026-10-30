@@ -116,3 +116,11 @@ export { userMessageItemParamSchema } from "./zod/userMessageItemParamSchema.ts"
 export { verbosityEnumSchema } from "./zod/verbosityEnumSchema.ts";
 export { webSocketErrorEventSchema } from "./zod/webSocketErrorEventSchema.ts";
 export { webSocketResponseCreateEventSchema } from "./zod/webSocketResponseCreateEventSchema.ts";
+export { webSocketResponseSteerAcceptedEventSchema } from "./zod/webSocketResponseSteerAcceptedEventSchema.ts";
+export { webSocketResponseSteerEventSchema } from "./zod/webSocketResponseSteerEventSchema.ts";
+export { webSocketResponseSteerFailedEventSchema } from "./zod/webSocketResponseSteerFailedEventSchema.ts";
+export { webSocketResponseSteerPendingEventSchema } from "./zod/webSocketResponseSteerPendingEventSchema.ts";
+export { webSocketSteeringRequiredExtensionInputSchema } from "./zod/webSocketSteeringRequiredExtensionInputSchema.ts";
+export { webSocketSteeringRequiredFunctionOutputSchema } from "./zod/webSocketSteeringRequiredFunctionOutputSchema.ts";
+export { webSocketSteeringSubmissionSchema } from "./zod/webSocketSteeringSubmissionSchema.ts";
+export { webSocketSteeringUserMessageSchema } from "./zod/webSocketSteeringUserMessageSchema.ts";

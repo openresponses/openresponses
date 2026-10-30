@@ -25,6 +25,9 @@ import { responseRefusalDeltaStreamingEventSchema } from "../generated/kubb/zod/
 import { responseRefusalDoneStreamingEventSchema } from "../generated/kubb/zod/responseRefusalDoneStreamingEventSchema";
 import type { responseResourceSchema } from "../generated/kubb/zod/responseResourceSchema";
 import { webSocketErrorEventSchema } from "../generated/kubb/zod/webSocketErrorEventSchema";
+import { webSocketResponseSteerAcceptedEventSchema } from "../generated/kubb/zod/webSocketResponseSteerAcceptedEventSchema";
+import { webSocketResponseSteerFailedEventSchema } from "../generated/kubb/zod/webSocketResponseSteerFailedEventSchema";
+import { webSocketResponseSteerPendingEventSchema } from "../generated/kubb/zod/webSocketResponseSteerPendingEventSchema";
 
 export const streamingEventSchema = z.union([
   responseCreatedStreamingEventSchema,
@@ -55,6 +58,9 @@ export const streamingEventSchema = z.union([
 export const webSocketStreamingEventSchema = z.union([
   streamingEventSchema,
   webSocketErrorEventSchema,
+  webSocketResponseSteerAcceptedEventSchema,
+  webSocketResponseSteerFailedEventSchema,
+  webSocketResponseSteerPendingEventSchema,
 ]);
 
 export type StreamingEvent = z.infer<typeof streamingEventSchema>;
