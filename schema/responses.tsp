@@ -10,6 +10,15 @@ model CreateResponseBody {
    * Context to provide to the model for the scope of this request. May either be a
    * string or an array of input items. If a string is provided, it is interpreted as a
    * user message.
+   *
+   * A `system` or `developer` message appearing after earlier conversation items MUST
+   * be honored in place. Providers MUST NOT change the order or content of preceding
+   * items to accommodate that message, including hoisting it into an earlier system
+   * or developer block. Message position does not change instruction priority. If the
+   * selected model cannot support this placement while preserving preceding items,
+   * the provider MUST return an explicit request error rather than silently reorder
+   * the conversation. Preserving the prefix does not guarantee a cache hit when
+   * prompt caching is unavailable or its other eligibility requirements are not met.
    */
   @nestedOneOf
   input?: BoundedString<10485760> | ItemParam[] | null;

@@ -3438,7 +3438,7 @@
                 "type": "null"
               }
             ],
-            "description": "Context to provide to the model for the scope of this request. May either be a\nstring or an array of input items. If a string is provided, it is interpreted as a\nuser message."
+            "description": "Context to provide to the model for the scope of this request. May either be a\nstring or an array of input items. If a string is provided, it is interpreted as a\nuser message.\n\nA `system` or `developer` message appearing after earlier conversation items MUST\nbe honored in place. Providers MUST NOT change the order or content of preceding\nitems to accommodate that message, including hoisting it into an earlier system\nor developer block. Message position does not change instruction priority. If the\nselected model cannot support this placement while preserving preceding items,\nthe provider MUST return an explicit request error rather than silently reorder\nthe conversation. Preserving the prefix does not guarantee a cache hit when\nprompt caching is unavailable or its other eligibility requirements are not met."
           },
           "previous_response_id": {
             "anyOf": [
